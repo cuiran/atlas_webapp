@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Fancy App</title>
+</head>
+<body>
+    <ul>
+    {% for number in numbers %}
+        <li>
+            {% if number % 3 ==0 and number % 5 ==0 %}
+                {{ fizz }}{{ buzz }}
+            {% elif number % 3 == 0 %}
+                {{ fizz }}
+            {% elif number % 5 == 0 %}
+                {{ buzz }}
+            {% else %}
+                {{ number }}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+
+</body>
+</html>
