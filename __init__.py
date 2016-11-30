@@ -10,7 +10,7 @@ atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
 def main_page():
     cmd = ["../atlas"]
     p = subprocess.Popen(cmd, cwd=atlas_dir+"atlas-scripts", stdout = subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
-    output,err = p.communicate(input="<basic")
+    output,err = p.communicate(input="set x=0")
     return render_template("main.html", out=output)
 
 @app.route('/hello')
