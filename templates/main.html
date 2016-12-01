@@ -10,34 +10,41 @@
     <link rel="stylesheet" href="../static/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
   </head>
+  
+  
   <body>
-
+  
+    <!-- Title of the page -->
     <div class="jumbotron text-center">
       <h1>Atlas Web Interface</h1>
     </div>
-
+    
+    <!-- Main content of the page, currently contains two columns, left column contains dropdown menus; right column contains atlas output -->
     <div class="container">
         <div class="row">
             <div class="col-sm-6">
-                <select name="first_options" class="selectpicker" title="Options" data-live-search="true">
-                    <option>set x=1</option>
-                    <option>whattype length ?</option></select>
+                <form method="POST">
+                    <select name="first_options" id="first_options" onchange="this.form.submit()" class="selectpicker" title="Options" data-live-search="true">
+                        <option value="set x=1">set x=1</option>
+                        <option value="whattype length ?">whattype length ?</option>
+                        <option value="set A=mat:[[2,4],[1,3]]\n A">set A=mat:[[2,4],[1,3]]</option></select>
+                </form>
             </div>
             
             <div class="col-sm-6">
+                <p><h3>atlas input:</h3></p>
+                <p style="white-space: pre-line">{{ atlas_input }}</p>
                 <p><h3>atlas output:</h3></p>
-                <p style="white-space: pre-line">{{ out }}</p>
+                <p style="white-space: pre-line">{{ atlas_output }}</p>
             </div>
         </div>
     </div>
-
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
-    
     
   </body>
 </html>
