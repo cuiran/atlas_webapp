@@ -17,7 +17,7 @@ def main_page():
     usr_request = str(request.form.get("first_options"))
     modified_input = input_to_at(usr_request)
     feed_to_atlas = "<"+"\""+str(os.getcwd())+"/"+"input_file.at"+"\""
-    output,err = p.communicate(input=feed_to_atlas)
+    output,err = p.communicate(input="<\"/tmp/input_file.at\"")
     return render_template("main.html", atlas_input=modified_input, atlas_output=trim_output(output)+'\n'+err)
 
 @app.route('/hello')

@@ -3,9 +3,9 @@ import os
 def input_to_at(some_input):
     modified_input = some_input.split('\\n')
     modified_input = "\n".join(modified_input)
-    #input_file = open("input_file.at",'w')
-    #input_file.write(modified_input)
-    #input_file.close()
+    input_file = open("/tmp/input_file.at","w")
+    input_file.write(modified_input)
+    input_file.close()
     return modified_input
 
 def trim_output(some_output):
