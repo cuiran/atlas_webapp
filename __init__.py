@@ -16,9 +16,9 @@ def main_page():
     p = subprocess.Popen(cmd, cwd=atlas_dir+"atlas-scripts", stdout = subprocess.PIPE,stderr=subprocess.PIPE,stdin=subprocess.PIPE)
     usr_request = str(request.form.get("first_options"))
     modified_input = input_to_at(usr_request)
-    feed_to_atlas = "<"+"\""+str(os.getcwd())+"/"+"input_file.at"+"\""
+    feed_to_atlas = "<"+"\""+str(os.getcwd())+"/inputs/"+"input_file.at"+"\""
     output,err = p.communicate(input="<\"/tmp/input_file.at\"")
-    return render_template("main.html", atlas_input=modified_input, atlas_output=trim_output(output)+'\n'+err)
+    return render_template("main.html", selected = usr_request.split('\\n')[0], atlas_input=modified_input, atlas_output=trim_output(output)+'\n'+err)
 
 @app.route('/hello')
 def hello():
