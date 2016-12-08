@@ -25,10 +25,31 @@
             <div class="col-sm-6">
                 <form method="POST">
                     <select name="first_options" id="first_options" onchange="this.form.submit()" class="selectpicker" title="{{ selected }}" data-live-search="true">
-                        <option value="set x=1\n x">set x=1</option>
-                        <option value="whattype length ?">whattype length ?</option>
-                        <option value="set A=mat:[[2,4],[1,3]]\n A">set A=mat:[[2,4],[1,3]]</option></select>
+                        <option value="set G=SL(2,R)">SL(2,R)</option>
+                        <option value="set G=GL(3,R)">GL(3,R)</option>
+                        <option value="set G=Sp(4,R)">Sp(4,R)</option></select>
                 </form>
+                <!--
+                <select id="opts" onchange="showForm()" class="selectpicker">
+                    <option value="0">Select Option</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                </select>
+                <form name="form1" id="f1" style="display:none">
+                    <select id="opts" onchange="showForm()" class="selectpicker">
+                        <option value="0">Select Option</option>
+                        <option value="1">Option 1A</option>
+                        <option value="2">Option 1B</option>
+                    </select>
+                </form>
+                <form name="form2" id="f2" style="display:none">
+                    <select id="opts" onchange="showForm()" class="selectpicker">
+                        <option value="0">Select Option</option>
+                        <option value="1">Option 2A</option>
+                        <option value="2">Option 2B</option>
+                    </select>
+                </form>
+                -->
             </div>
             
             <div class="col-sm-6">
@@ -39,6 +60,25 @@
             </div>
         </div>
     </div>
+    
+    <!-- self defined scripts -->
+    <script type="text/javascript">
+        function showForm() {
+            var selopt = document.getElementById("opts").value;
+            if (selopt == 1) {
+                document.getElementById("f1").style.display = "block";
+                document.getElementById("f2").style.display = "none";
+            }
+            if (selopt == 2) {
+                document.getElementById("f2").style.display = "block";
+                document.getElementById("f1").style.display = "none";
+            }
+            if (selopt == 0) {
+                document.getElementById("f2").style.display = "none";
+                document.getElementById("f1").style.display = "none";
+            }
+        }
+    </script>
 
     <!-- jQuery first, then Tether, then Bootstrap JS. -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
