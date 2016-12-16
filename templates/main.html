@@ -9,6 +9,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="../static/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../static/css/custom.css">
   </head>
   
@@ -24,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-3 text-center">
-		<h3>Select a topic:</h3>
+		<h4>Select a topic:</h4>
                 <form method="POST">
 		    <button type = "button" onclick="show(['spec-str-thy','show-str-thy','other-str-thy'])" class = "btn btn-default btn-lg">
 			Structure Theory
@@ -81,27 +82,27 @@
             </div>
             
 	    <div id="spec-str-thy" class="col-sm-3 text-center" style="display:none">
-		<h3> Specify: </h3>
-		<select class = "selectpicker" data-width="200px" title="Pick a group">
+		<h4> Specify: </h4>
+		<select class = "selectpicker" data-width="85%" title="Pick a group">
 		    <option>Option 1</option>
 		    <option>Option 2</option></select><br><br>
-		<select class = "selectpicker" data-width="200px" title="Pick a Cartan">
+		<select class = "selectpicker" data-width="85%" title="Pick a Cartan">
 		    <option>Option 1</option>
 		    <option>Option 2</option></select><br><br>
 
 	    </div>
 
 	    <div id="other-str-thy" class="col-sm-3 text-center" style="display:none">
-		<h3> Another Column </h3>
+		<h4> Another Column </h4>
 	    </div>
 
 
 	    <div id="show-str-thy" class="col-sm-3 text-center" style="display:none">
-		<h3> Show: </h3>
+		<h4> Show: </h4>
 		    <button type = "button" class = "btn btn-default btn-md">
 			Cartan Subgroups
 		    </button><br>
-		    <button type = "button" class = "btn btn-default btn-md">
+		    <button type = "button" class = "btn btn-default btn-md disabled">
 			Real Forms
 		    </button><br>
 		    <button type = "button" class = "btn btn-default btn-md">
@@ -113,7 +114,7 @@
 		    <button type = "button" class = "btn btn-default btn-md">
 			KGB Elements
 		    </button><br>
-		    <button type = "button" class = "btn btn-default btn-md">
+		    <button type = "button" class = "btn btn-default btn-md disabled">
 			KGB Orbits of Real Weyl Group
 		    </button><br>	
 	    </div>   
@@ -122,10 +123,15 @@
         </div>
 	<hr>
 	<div class="container" clear:both>
-            <div class="col-sm-6"><p><h4>atlas input:</h4></p>
-            <p style="white-space: pre-line">{{ atlas_input }}</p></div>
-            <div class="col-sm-6"><p><h4>atlas output:</h4></p>
-            <p style="white-space: pre-line">{{ atlas_output }}</p></div>
+            <div class="col-sm-6">
+		<p><h4>atlas input:</h4></p>
+                <p style="white-space: pre-line">{{ atlas_input }}</p>
+	    </div>
+            <div class="col-sm-6">
+		<p><h4>atlas output:</h4></p>
+		<input type="checkbox" data-width="200px" data-toggle="toggle" data-on="Show Formatted Output" data-off="Show Raw Output">
+                <p style="white-space: pre-line">{{ atlas_output }}</p>
+	    </div>
         </div>
 	    
 
@@ -160,5 +166,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
     <script src="../static/js/myjavascript.js"></script> 
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
   </body>
 </html>
