@@ -1,4 +1,4 @@
-import os
+
 
 # this function takes user request and make a file in tmp folder for atlas to use
 # the return value of this function is user input formated to be displayed on the website
@@ -10,7 +10,8 @@ def input_to_at(some_input, rand_int):
     input_file.close()
     return modified_input
 
+
 def trim_output(some_output):
     output_array = some_output.split('\n')
-    trimed_output = "\n".join(output_array[4:-3])
-    return trimed_output
+    trimmed_output = "\n".join(output_array[4:-3])
+    return trimmed_output
