@@ -6,8 +6,8 @@ function show(targets){
 
 // fill in the dropdown manu with options of groups
 $(function() {
-	var g = $.getJSON("../json/groups.json", function(json) { console.log(json); })
-		data = JSON.parse(g); 
+	var json = $.getJSON("groups.json", function(json) { console.log("success"); })
+		data = JSON.parse(json); 
 	$.each(data, function(i,option) {
 		$("#groups").append($('<option>').text(option.name));
 		});
