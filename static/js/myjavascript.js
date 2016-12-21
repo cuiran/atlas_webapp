@@ -4,12 +4,7 @@ function show(targets){
     }
 }
 
-// fill in the dropdown manu with options of groups
+// populate dropdown menu with id="groups"
 $(function() {
-	var json = $.getJSON("groups.json", function(json) { console.log("success"); })
-		data = JSON.parse(json); 
-	$.each(data, function(i,option) {
-		$("#groups").append($('<option>').text(option.name));
-		});
-})
-	
+	$('#cartans').append($("<option/>").text("Option 3"));
+});

@@ -1,6 +1,7 @@
 .jumbotron {
   border-radius: 6px;
-  background-color:#eee;
+  padding-left:30px;
+  padding-right:30px;
 }
 
 hr {
