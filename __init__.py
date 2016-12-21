@@ -13,8 +13,8 @@ from queries import process_input, check_query_status
 app = Flask(__name__)
 
 # set atlas directory
-# atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
-atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
+atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
+#atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
 
 
 @app.route("/", methods=['GET', 'POST'])
@@ -63,10 +63,6 @@ def check_on_query():
 
     return json.dumps(response)
 
-
-@app.route('/bootstrap')
-def bs():
-    return render_template("bootstrap.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
