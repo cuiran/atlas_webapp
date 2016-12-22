@@ -1,8 +1,17 @@
-{
-	"id":"set G=group1",
-	"name":"group1"
-},
-{
-	"id":"set G=group2",
-	"name":"group2"
-}
+[
+	{"id":"SL(n,R)",
+	"name":"SL(n,\\mathbb{R})"},
+	{"id":"GL(n,R)",
+	"name":"GL(n,\\mathbb{R})"},
+	{"id":"SU(p,q)",
+	"name":"SU(p,q)"},
+	{"id":"U(p,q)",
+	"name":"U(p,q)"},
+	{"id":"GL(n,H)",
+	"name":"GL(n,\\mathbb{H})"},
+	{"id":"Sp(2*n,R)",
+	"name":"Sp(2n,\\mathbb{R})"},
+	{"id":"SO(p,q)",
+	"name":"SO(p,q)"}
+]
+

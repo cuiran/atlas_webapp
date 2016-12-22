@@ -15,7 +15,7 @@ app = Flask(__name__)
 # set atlas directory
 atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
 #atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
-
+#atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/"
 
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
