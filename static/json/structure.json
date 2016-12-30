@@ -1,0 +1,99 @@
+[
+	{"topic":"Structure Theory",
+	"id":"str_thy",
+	"specify":["group","Cartan"],
+	"third-column": " ",
+	"show":[
+		{"name":"Cartan Subgroups",
+		"require":"group"},
+		{"name":"Real Forms",
+		"require":"group"},
+		{"name":"Distinguished Involution",
+		"require":"group"},
+		{"name":"Simple Roots",
+		"require":"group"},
+		{"name":"KGB Elements",
+		"require":"group"},
+		{"name":"KGB Orbits of Real Weyl Group",
+		"require":["group","Cartan"]}
+		]
+	},
+	{"topic":"K Types & Branching",
+	"id":"branching",
+	"specify":["group","K","Borel"],
+	"third-column":"some detail",
+	"show":[
+		{"name":"branching",
+		"require":["group","K"]},
+		{"name":"other",
+		"require":["group","Borel"]},
+		{"name":"example",
+		"require":["group","K","Borel"]},
+		{"name":"bar",
+		"require":"group"}
+		]
+	},
+	{"topic":"Representations",
+	"id":"reps",
+	"specify":["a","b","c"],
+	"third-column":"some details",
+	"show":[
+		{"name":"Parameter",
+		"require":"a"},
+		{"name":"Unitarity",
+		"require":["a","b"]},
+		{"name":"Dual",
+		"require":["b","c"]}
+		]
+	},
+	{"topic":"KLV Polynomials",
+	"id":"klv",
+	"specify":["d","e"],
+	"third-column":"details",
+	"show":[
+		{"name":"foo",
+		"require":"d"},
+		{"name":"bar",
+		"require":["d","e"]}
+		]
+	},
+	{"topic":"Unitary Representations",
+	"id":"unitary_reps",
+	"specify":["group","parameter"],
+	"third-column":"parameter details",
+	"show":[
+		{"name":"Unitarity",
+		"require":["group","parameter"]},
+		{"name":"Hermitian Forms",
+		"require":["group","parameter"]},
+		{"name":"foo",
+		"require":"group"},
+		{"name":"bar",
+		"require":"parameter"}
+		]
+	},
+	{"topic":"Induction",
+	"id":"induction",
+	"specify":["group","Borel","parameter"],
+	"third-column":"parameter details",
+	"show":[
+		{"name":"something",
+		"require":["group","Borel"]},
+		{"name":"a good question",
+		"require":"group"},
+		{"name":"another good question",
+		"require":"Borel"}
+		]
+	},
+	{"topic":"Complex Groups",
+	"id":"complex_grps",
+	"specify":["group"],
+	"third-column":"group details",
+	"show":[
+		{"name":"type",
+		"require":"group"},
+		{"name":"Lie Algebra",
+		"require":"group"}
+		]
+	}
+]
