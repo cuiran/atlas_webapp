@@ -5,19 +5,19 @@
 }
 
 hr {
-  border-top: 2px solid #bee1ec;
+  border-top: 2px solid #eee;
 }
 
 .btn-lg {
   border-radius:0px;
-  width: 95%;
+  width: 93%;
   height: 55px;
   font-size:90%;
 }
 
 .btn-md {
   border-radius:0px;
-  width: 90%;
+  width: 93%;
   height: 45px;
   font-size:90%;
 }

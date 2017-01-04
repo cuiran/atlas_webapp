@@ -21,36 +21,38 @@
 	"id":"branching",
 	"specify":["group","K","Borel"],
 	"show":[
-		{"name":"branching",
+		{"name":"choice1",
 		"require":["group","K"]},
-		{"name":"other",
+		{"name":"choice2",
 		"require":["group","Borel"]},
 		{"name":"example",
 		"require":["group","K","Borel"]},
-		{"name":"bar",
+		{"name":"choice3",
 		"require":"group"}
 		]
 	},
 	{"topic":"Representations",
 	"id":"reps",
-	"specify":["a","b","c"],
+	"specify":["spec1","other","another"],
 	"show":[
 		{"name":"Parameter",
-		"require":"a"},
+		"require":"spec1"},
 		{"name":"Unitarity",
-		"require":["a","b"]},
+		"require":["spec1","other"]},
 		{"name":"Dual",
-		"require":["b","c"]}
+		"require":["other","another"]}
 		]
 	},
 	{"topic":"KLV Polynomials",
 	"id":"klv",
-	"specify":["d","e"],
+	"specify":["thing1","thing2"],
 	"show":[
-		{"name":"foo",
-		"require":"d"},
-		{"name":"bar",
-		"require":["d","e"]}
+		{"name":"choice4",
+		"require":"thing1"},
+		{"name":"choice5",
+		"require":["thing1","thing2"]},
+		{"name":"choice6",
+		"require":["thing2"]}
 		]
 	},
 	{"topic":"Unitary Representations",
@@ -61,9 +63,9 @@
 		"require":["group","parameter"]},
 		{"name":"Hermitian Forms",
 		"require":["group","parameter"]},
-		{"name":"foo",
+		{"name":"choice8",
 		"require":"group"},
-		{"name":"bar",
+		{"name":"choice7",
 		"require":"parameter"}
 		]
 	},

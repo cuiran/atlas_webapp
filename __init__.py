@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 import uuid
 
 from flask import Flask
@@ -29,8 +28,19 @@ def main_page():
 def get_Cartan():
 	data=request.data
 	data_dict = json.loads(request.data)
-	print(data_dict["rank"])
-	return str(data_dict)
+	rank = data_dict["rank"]
+	group = data_dict["group"]
+	atlas_input = (
+		"set n="+rank+"\n"+
+		"set G="+group+"\n"+
+		"set cartans=Cartan_classes(G)\n"+
+		"for i : nr_of_Cartan_classes (G) from 0 do print(\"Cartan number \"+ i); print_Cartan_info (cartans[i]) od")
+	[output,err]=run_atlas(atlas_input)
+	output_json = json.dumps(output)
+	out_file = open("test/Cartans/"+group+"_"+rank+".json","w")
+	out_file.write(output_json)
+	out_file.close()
+	return output_json
 	
 
 @app.route("/newquery", methods=['POST'])

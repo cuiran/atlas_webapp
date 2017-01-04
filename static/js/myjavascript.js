@@ -1,16 +1,10 @@
-//function show(targets){
-//    for (i = 0; i < targets.length; i++) { 
- //       document.getElementById(targets[i]).style.display = 'block';
-  //  }
-//};
-
 // load structure.json file and add topics to the main page
-$.getJSON('static/json/structure.json')
+$( document ).ready($.getJSON('static/json/structure.json')
 	.done(function (data) {
 		var structure = data;
 		console.log(structure);
 		addTopic('#topics',structure);
-})
+}))
 
 // this function append one button to each topic listed in structure.json
 // it also attach a function to the click event
@@ -66,8 +60,8 @@ function populateGroupDropdown() {
 			var group_list = data;
 			$.each(group_list, function(i,group) {
 				$('#group').append($("<option>").attr("value",group.id).text("\$"+group.name+"\$"))});
+			MathJax.Hub.Queue(["Typeset",MathJax.Hub,"group"]);
 			$('.selectpicker').selectpicker('refresh');
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 	});
 }
 
@@ -92,10 +86,10 @@ function groupPickRank() {
 			}); 
 		$('#specify').append(pick_rank).append("<br><br>");
 		for (i=1;i<9;i++){
-			$('#pick_rank').append($("<option>").attr("value",i).text("\$n = \$"+i));
+			$('#pick_rank').append($("<option>").attr("value",i).text("\$n = "+i+"\$"));
 		}
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"pick_rank"]);
 		$('.selectpicker').selectpicker('refresh');
-		MathJax.Hub.Typeset();
 	}
 }
 
@@ -106,12 +100,6 @@ function postGroupInfo(){
 	console.log(rank,group);
 	return ajax_post(rank,group);
 }
-
-function post_data(id){
-	return function(){
-		ajax_post();
-	}
-};
 
 function ajax_post(rank,group){	
 		console.log("posting");
