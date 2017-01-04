@@ -2,7 +2,6 @@
 	{"topic":"Structure Theory",
 	"id":"str_thy",
 	"specify":["group","Cartan"],
-	"third-column": " ",
 	"show":[
 		{"name":"Cartan Subgroups",
 		"require":"group"},
@@ -21,7 +20,6 @@
 	{"topic":"K Types & Branching",
 	"id":"branching",
 	"specify":["group","K","Borel"],
-	"third-column":"some detail",
 	"show":[
 		{"name":"branching",
 		"require":["group","K"]},
@@ -36,7 +34,6 @@
 	{"topic":"Representations",
 	"id":"reps",
 	"specify":["a","b","c"],
-	"third-column":"some details",
 	"show":[
 		{"name":"Parameter",
 		"require":"a"},
@@ -49,7 +46,6 @@
 	{"topic":"KLV Polynomials",
 	"id":"klv",
 	"specify":["d","e"],
-	"third-column":"details",
 	"show":[
 		{"name":"foo",
 		"require":"d"},
@@ -60,7 +56,6 @@
 	{"topic":"Unitary Representations",
 	"id":"unitary_reps",
 	"specify":["group","parameter"],
-	"third-column":"parameter details",
 	"show":[
 		{"name":"Unitarity",
 		"require":["group","parameter"]},
@@ -75,7 +70,6 @@
 	{"topic":"Induction",
 	"id":"induction",
 	"specify":["group","Borel","parameter"],
-	"third-column":"parameter details",
 	"show":[
 		{"name":"something",
 		"require":["group","Borel"]},
@@ -88,7 +82,6 @@
 	{"topic":"Complex Groups",
 	"id":"complex_grps",
 	"specify":["group"],
-	"third-column":"group details",
 	"show":[
 		{"name":"type",
 		"require":"group"},
