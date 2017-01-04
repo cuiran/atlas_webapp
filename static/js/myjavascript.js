@@ -109,13 +109,47 @@ function ajax_post(rank,group){
 			contentType: 'json',
 			data: JSON.stringify({"rank": rank, "group": group}),
 			success: function(){
-				alert('form was submitted \"'+rank+" "+group+'\" end');
+				console.log('form was submitted \"'+rank+" "+group+'\" end');
 			}
 		})
 }
 
 function groupPickCartan(){
-	console.log("pick Cartan not ready")
+	if($('#pick_Cartan').length == 0){
+		console.log("appending pick Cartan dropdown");
+		const pick_Cartan = $("<select>").attr({
+			"id": "pick_Cartan",
+			"class": "selectpicker",
+			"data-width": "85%",
+			"title": "choose Cartan",
+			"method": "POST",
+			"onchange": "postCartanInfo()"
+		});
+		$('#specify').append(pick_Cartan).append("<br><br>");
+		
+	} else {
+		$("#pick_Cartan").empty();
+
+	}
+	$('#details').empty();
+	$('#details').append("<h4>Available Cartans</h4>");
+	var group = document.getElementById("group").value;
+	var rank = document.getElementById("pick_rank").value;
+	$.getJSON('static/test/Cartans/'+group+'_'+rank+'.json')
+		.done(function (data) {
+			var Cartan_info = data;
+			$('#pick_Cartan').empty();
+			$.each(Cartan_info, function(i,item) {
+				$('#pick_Cartan').append($("<option>").attr({
+						"value": "Cartan_number_"+i
+						}).text("Cartan number "+i)
+					);
+				$('#details').append("<p>"+item.name+"</p>");
+				$('#details').append("<p>"+item.info+"</p>");
+			})
+		$('.selectpicker').selectpicker('refresh');	
+		})
+	$('.selectpicker').selectpicker('refresh');
 }
 
 

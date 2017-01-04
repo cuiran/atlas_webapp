@@ -1,4 +1,5 @@
 import subprocess
+import re
 
 atlas_dir="/home/ran/atlas_project/latest/atlasofliegroups/" 
 #atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/" 
@@ -32,3 +33,19 @@ def run_atlas(some_input):
 		stdin=subprocess.PIPE)
 	output,err=p.communicate(input=some_input)
 	return output,err
+
+# take raw atlas output and parse it into a dictionary, with keys the Cartan numbers
+# and content the Cartan infos
+def parse_Cartan_list(atlas_output):
+	Cartan_text_block = re.findall(r'\[CartanClass\](.*)Value',atlas_output,re.DOTALL)[0]
+	Cartan_text_noquotes = Cartan_text_block.replace('"','')
+	Cartan_text_list = Cartan_text_noquotes.split("Cartan")[1:]
+	Cartan_text_list = [x.strip() for x in Cartan_text_list]
+	Cartan_list = [x.split("\n") for x in Cartan_text_list]
+	Cartan_list_json = list()
+	for x in Cartan_list:
+		Cartan_dict = dict()
+		Cartan_dict["name"] = x[0]
+		Cartan_dict["info"] = "\n".join(x[1:])
+		Cartan_list_json.append(Cartan_dict)
+	return Cartan_list_json

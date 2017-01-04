@@ -28,16 +28,17 @@ def main_page():
 def get_Cartan():
 	data=request.data
 	data_dict = json.loads(request.data)
-	rank = data_dict["rank"]
-	group = data_dict["group"]
+	rank = str(data_dict["rank"])
+	group = str(data_dict["group"])
 	atlas_input = (
 		"set n="+rank+"\n"+
 		"set G="+group+"\n"+
 		"set cartans=Cartan_classes(G)\n"+
 		"for i : nr_of_Cartan_classes (G) from 0 do print(\"Cartan number \"+ i); print_Cartan_info (cartans[i]) od")
 	[output,err]=run_atlas(atlas_input)
-	output_json = json.dumps(output)
-	out_file = open("test/Cartans/"+group+"_"+rank+".json","w")
+	parsed_out = parse_Cartan_list(output)
+	output_json = json.dumps(parsed_out)
+	out_file = open("static/test/Cartans/"+group+"_"+rank+".json","w")
 	out_file.write(output_json)
 	out_file.close()
 	return output_json
