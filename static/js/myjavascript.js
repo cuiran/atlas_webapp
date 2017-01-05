@@ -1,14 +1,21 @@
 function getStruc() {
-  return $.getJSON('static/json/structure.json');
+	return $.getJSON('static/json/structure.json');
+}
+function getGrp(){
+	return $.getJSON('static/json/groups.json');
 }
 
 var struc;
+var grp;
 // load json objects into variable struc and populate the topics column
 $.when(getStruc()).then(function (data) {
 	console.log("json data is ");
 	console.log(data);
 	struc = data;
 	addTopic('#topics');
+})
+$.when(getGrp()).then(function(data){
+	grp = data;
 })
 
 
@@ -62,33 +69,30 @@ function addToSpecify(list) {
 		"id": item,
 		"class": "selectpicker",
 		"data-width": "85%",
-		"title": "pick a "+item,
+		"title": "choose "+item,
 		"method": "POST",
 		"onchange": "react(\""+item+"\")"
 	});
 	$('#specify').append(dropdown).append("<br><br>");
 	if ($('#group').length != 0){
 		populateGroupDropdown();
-		groupPickRank();
 	}
 	$('.selectpicker').selectpicker('refresh');
 }
 
 // get the list of groups in groups.json and use it to populate the "pick a group" dropdown menu
 function populateGroupDropdown() {
-	$.getJSON('static/json/groups.json')
-		.done(function (data) {
-			var group_list = data;
-			$.each(group_list, function(i,group) {
-				$('#group').append($("<option>").attr("value",group.id).text("\$"+group.name+"\$"))});
-			MathJax.Hub.Queue(["Typeset",MathJax.Hub,"group"]);
-			$('.selectpicker').selectpicker('refresh');
-	});
+	console.log(grp);
+	$.each(grp, function(i,group){
+		$('#group').append($("<option>").attr("value",group.id).text("\$"+group.name+"\$"))})
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,"group"]);
+	$('.selectpicker').selectpicker('refresh');
 }
 
 function react(select_id,structure_item_id) {
 	if (select_id == "group"){
 		console.log(select_id+" selected");
+		groupPickRank()
 	} else {
 		console.log("not ready")
 	}
@@ -100,7 +104,7 @@ function groupPickRank() {
 			"id": "pick_rank",
 			"class": "selectpicker",
 			"data-width": "85%",
-			"title": "choose n",
+			"title": "choose rank",
 			"method": "POST",
 			"onchange": "postGroupInfo(), groupPickCartan(), changeLastCol()"
 			}); 
