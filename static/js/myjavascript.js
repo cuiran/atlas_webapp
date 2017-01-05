@@ -1,15 +1,21 @@
-// load structure.json file and add topics to the main page
-$( document ).ready($.getJSON('static/json/structure.json')
-	.done(function (data) {
-		var structure = data;
-		console.log(structure);
-		addTopic('#topics',structure);
-}))
+function getStruc() {
+  return $.getJSON('static/json/structure.json');
+}
 
-// this function append one button to each topic listed in structure.json
+var struc;
+// load json objects into variable struc and populate the topics column
+$.when(getStruc()).then(function (data) {
+	console.log("json data is ");
+	console.log(data);
+	struc = data;
+	addTopic('#topics');
+})
+
+
+// append one button to each topic listed in structure.json
 // it also attach a function to the click event
-function addTopic(appendTo, structure) {
-	$.each(structure, function(i,item) {
+function addTopic(appendTo) {
+	$.each(struc, function(i,item) {
 		const button = $("<button>").attr({"id":item.id,"type":"button","class":"btn btn-default btn-lg"}).text(item.topic).click(clickCallback(item));
 		$(appendTo).append(button);
 	})
@@ -19,37 +25,52 @@ function addTopic(appendTo, structure) {
 // the inside functions execute whenever the button is clicked
 function clickCallback(item) {
     return function() {
-        addToLastcol(item.show);
+		highlightTopicsButton(item.id);
 		addToSpecify(item.specify);
-		populateGroupDropdown();
-//		displayDetails(item.specify);
+		addToLastcol(item.show);
     }
 }
 
-// this function dynamically change the list of buttons on the last column of the page
+// keep topic button highlighted
+function highlightTopicsButton(id){
+	$.each(struc, function(i,item){
+		if (item.id === id){
+			console.log(item.id);
+			$('#'+item.id).addClass('active');
+		} else {
+			$('#'+item.id).removeClass('active');
+		}
+	})
+}
+
+// dynamically change the list of buttons in the last column after topic selection
 function addToLastcol(list) {
 	$('#lastcol').empty();
 	$('#lastcol').append("<h4>Show:</h4>");
 	$.each(list, function(i, item) {
-		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md"}).text(item.name)
+		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md"}).text(item.name).prop('disabled',true);
 		$('#lastcol').append(button);
 	})
 }
 
-// this function dynamically change the list of specifications on the second column of the page
+// dynamically change the list of specifications in the second column after topic selection
 function addToSpecify(list) {
 	$('#specify').empty();
 	$('#specify').append("<h4>Specify:</h4>");
-	$.each(list.slice(0,1), function(i,item) {
-		const dropdown = $("<select>").attr({
-			"id":item, 
-			"class":"selectpicker", 
-			"data-width":"85%", 
-			"title":"pick a "+item, 
-			"method":"POST", 
-			"onchange":"react(\""+item+"\")"});
-		$('#specify').append(dropdown).append("<br><br>");
-	})
+	var item = list[0];
+	const dropdown = $("<select>").attr({
+		"id": item,
+		"class": "selectpicker",
+		"data-width": "85%",
+		"title": "pick a "+item,
+		"method": "POST",
+		"onchange": "react(\""+item+"\")"
+	});
+	$('#specify').append(dropdown).append("<br><br>");
+	if ($('#group').length != 0){
+		populateGroupDropdown();
+		groupPickRank();
+	}
 	$('.selectpicker').selectpicker('refresh');
 }
 
@@ -65,10 +86,9 @@ function populateGroupDropdown() {
 	});
 }
 
-function react(select_id) {
+function react(select_id,structure_item_id) {
 	if (select_id == "group"){
 		console.log(select_id+" selected");
-		return groupPickRank();
 	} else {
 		console.log("not ready")
 	}
@@ -82,7 +102,7 @@ function groupPickRank() {
 			"data-width": "85%",
 			"title": "choose n",
 			"method": "POST",
-			"onchange": "postGroupInfo(), groupPickCartan()"
+			"onchange": "postGroupInfo(), groupPickCartan(), changeLastCol()"
 			}); 
 		$('#specify').append(pick_rank).append("<br><br>");
 		for (i=1;i<9;i++){
@@ -152,17 +172,8 @@ function groupPickCartan(){
 	$('.selectpicker').selectpicker('refresh');
 }
 
-
-//function displayDetails(specify) {
-//	console.log(specify);
-//	$.each(specify, function(i,item) {
-//		if (item == "Cartan") {
-//			$('#details').empty();
-//			var element = document.getElementById("group");
-//			var group_selected = element.options[element.selectedIndex].text;
-//			$('#details').append("<h4>Available Cartans:</h4>");
-//		}
-//	})
-//}
+function changeLastCol() {
+	console.log("changeLastCol has argument ");
+}
 
 
