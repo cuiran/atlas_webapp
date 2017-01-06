@@ -118,7 +118,7 @@ def check_query_status(query_id):
 
     found = queries_collection.find_one(search)
     if found:
-        err = None
+        err = found.get(ERROR)
     else:
         return "", "", "Unrecognized query_id: {}".format(query_id)
 
