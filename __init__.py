@@ -46,7 +46,8 @@ def get_Cartan():
 
 @app.route("/newquery", methods=['POST'])
 def get_queried():
-    user_input = str(request.form.get('query'))
+    user_input = json.loads(request.data)
+    user_input = to_atlas_input(user_input)
     query_id = process_input(user_input, atlas_dir)
     output = {
         'query_id': query_id
@@ -54,9 +55,9 @@ def get_queried():
     return json.dumps(output)
 
 
-@app.route("/checkquery", methods=['GET'])
+@app.route("/checkquery", methods=['GET','POST'])
 def check_on_query():
-    query_id = str(request.args.get('query_id'))
+    query_id = json.loads(request.data)["query_id"]
     status, output, err = check_query_status(query_id)
 
     response = {
