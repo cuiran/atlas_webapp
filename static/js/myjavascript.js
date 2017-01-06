@@ -23,14 +23,14 @@ $.when(getGrp()).then(function(data){
 // it also attach a function to the click event
 function addTopic(appendTo) {
 	$.each(struc, function(i,item) {
-		const button = $("<button>").attr({"id":item.id,"type":"button","class":"btn btn-default btn-lg"}).text(item.topic).click(clickCallback(item));
+		const button = $("<button>").attr({"id":item.id,"type":"button","class":"btn btn-default btn-lg"}).text(item.topic).click(topicCallback(item));
 		$(appendTo).append(button);
 	})
 }
 
 // this is the click callback function
 // the inside functions execute whenever the button is clicked
-function clickCallback(item) {
+function topicCallback(item) {
     return function() {
 		highlightTopicsButton(item.id);
 		addToSpecify(item.specify);
@@ -55,9 +55,15 @@ function addToLastcol(list) {
 	$('#lastcol').empty();
 	$('#lastcol').append("<h4>Show:</h4>");
 	$.each(list, function(i, item) {
-		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md"}).text(item.name).prop('disabled',true);
+		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md"}).text(item.name).prop('disabled',true).click(showCallback(item));
 		$('#lastcol').append(button);
 	})
+}
+
+function showCallback(item){
+	return function(){
+		runAtlas(item);
+	}
 }
 
 // dynamically change the list of specifications in the second column after topic selection
@@ -113,7 +119,11 @@ function changeSpecify(item_changed){
 	}
 	func_dict = {"rank": addRank, "Cartan": addCartan}
 	removeOutdate(item_changed,index_changed,specs)
-	func_dict[next_spec](val_dict)
+	if (next_spec != "EndOfSpecs"){
+		func_dict[next_spec](val_dict)
+	} else {
+		activateLastCol(selected_topic);
+	}
 }
 
 function removeOutdate(item_changed,index_changed,specs){
@@ -123,7 +133,6 @@ function removeOutdate(item_changed,index_changed,specs){
 			$("#"+specs[i]+"_div").remove();
 		}
 	}
-	$('#details').empty();
 }
 
 function addRank(val_dict){
@@ -231,10 +240,20 @@ function addCartanOptions(output){
 	$('#specify').append(div);
 	$('#Cartan_div').append(choose_Cartan)
 	for (i=0; i<nr_Cartans; i++){
-		$('#Cartan').append($("<option>").attr("value", "Cartan_"+i).text("Cartan number "+i))
+		$('#Cartan').append($("<option>").attr({"value":"Cartan_"+i, "title":"Cartan "+i}).text("Cartan number "+i))
 	}
 	$('.selectpicker').selectpicker('refresh');
 
 }
 
+function activateLastCol(struc_item){
+	last_col = document.getElementById('lastcol').children
+	for (i=1;i<last_col.length;i++){
+		last_col[i].disabled = false
+	}
+}
 
+function runAtlas(item){
+	console.log("selected show item ")
+	console.log(item)
+}

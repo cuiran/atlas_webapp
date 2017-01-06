@@ -11,9 +11,9 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/css/bootstrap-select.min.css">
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="../static/css/custom.css">
-		<link rel="shortcut icon" href="favicon.ico">
-
-	   <!-- jQuery first, then Tether, then Bootstrap JS. -->
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+	   
+		<!-- jQuery first, then Tether, then Bootstrap JS. -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js"></script>
 		<script src="../static/js/myjavascript.js"></script>
@@ -68,7 +68,7 @@
 			</div>
 			<div class="col-sm-6">
 				<p><h4>atlas output:</h4></p>
-				<input type="checkbox" data-width="200px" data-toggle="toggle" data-on="Show Formatted Output" data-off="Show Raw Output">
+				<input type="checkbox" data-width="150px" data-toggle="toggle" data-on="Formatted Output" data-off="Raw Output">
 				<p style="white-space: pre-line">{{ atlas_output }}</p>
 			</div>
 		</div>
