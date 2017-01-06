@@ -63,16 +63,28 @@ function addToLastcol(list) {
 function addToSpecify(list) {
 	$('#specify').empty();
 	$('#specify').append("<h4>Specify:</h4>");
+//	$('#specify').append($("<div>").attr({"id":"spec_div","class":"form-group"}))
+//	$('#specify').append($("<div>").attr({"id":"spec_div2","class":"form-group"}))
+
+//	$('#spec_div').append($("<select>").attr({"class":"selectpicker","title":"select1"}))
+//	$('#spec_div2').append($("<select>").attr({"class":"selectpicker","title":"select2"}))
+
 	var item = list[0];
+	const div = $("<div>").attr({
+		"id": item+"_div",
+		"class": "form-group"
+	})
 	const dropdown = $("<select>").attr({
 		"id": item,
 		"class": "selectpicker",
 		"data-width": "85%",
+		"data-windowPadding": "[5px,25px,5px,5px]",
 		"title": "choose "+item,
 		"method": "POST",
-		"onchange": "changeSpecify()"
+		"onchange": "changeSpecify(\""+item+"\")"
 	});
-	$('#specify').append(dropdown).append("<br><br>");
+	$('#specify').append(div);
+	$('#'+item+'_div').append(dropdown);
 	//$('#specify').append($("<select>").attr({"id":"fake","title":"fake dropdown"}))
 	if ($('#group').length != 0){
 		populateGroupDropdown();
@@ -88,34 +100,70 @@ function populateGroupDropdown() {
 	$('.selectpicker').selectpicker('refresh');
 }
 
-function changeSpecify(){
+function changeSpecify(item_changed){
 	topics_div = document.getElementById("topics")
 	active_button = topics_div.getElementsByClassName("active")[0];
 	active_button_id = active_button.id;
-	selected_item = $.grep(struc, function(e){return e.id === active_button_id})[0];
-	on_screen_specs = document.getElementsByTagName("select")
-	var on_screen_ids = [];
-	for (i=0; i<on_screen_specs.length; i++) {
-		on_screen_ids.push(on_screen_specs[i].id);
-	}
-	last_on_screen_id = on_screen_ids[on_screen_ids.length - 1] 
-	specs = selected_item.specify
-	index_last_on_screen = specs.indexOf(last_on_screen_id)
+	selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
+	specs = selected_topic.specify
+	index_changed = specs.indexOf(item_changed)
 	var next_spec;
-	if (specs.length == index_last_on_screen + 1){
+	if (specs.length == index_changed + 1){
 		next_spec = "EndOfSpecs"
 	} else{
-		next_spec = specs[index_last_on_screen+1]
+		next_spec = specs[index_changed+1]
 	}
-	console.log(next_spec)
-	on_screen_value_dict = 
-	func_dict = {"rank": addRank}
-	func_dict[next_spec](next_spec)
+	val_dict ={};
+	for (i=0; i<=index_changed; i++) {
+		val_dict[specs[i]] = document.getElementById(specs[i]).value; 
+	}
+	func_dict = {"rank": addRank, "Cartan": addCartan}
+	removeOutdate(item_changed,index_changed,specs)
+	func_dict[next_spec](val_dict)
 }
 
-function addRank(arg){
-	console.log("addRank executed"+arg);
+function removeOutdate(item_changed,index_changed,specs){
+	for (i=index_changed+1; i<specs.length; i++) {
+		if ($('#'+specs[i]+'_div').length != 0){
+			console.log(specs[i]+" not empty, removing ");
+			$("#"+specs[i]+"_div").remove();
+		}
+	}
 }
+
+function addRank(val_dict){
+	group_selected = val_dict["group"]
+	grp_item = $.grep(grp, function(g){return g.id === group_selected})[0]
+	input_needed = grp_item.need_rank
+	if (input_needed.length === 1) {
+		const div = $("<div>").attr({
+			"id": "rank_div",
+			"class": "form-group"
+		})
+		const choose_rank = $("<select>").attr({
+			"id": "rank",
+			"class": "selectpicker rank",
+			"data-width": "85%",
+			"title" : "choose rank",
+			"method": "POST",
+			"onchange": "changeSpecify(\"rank\")"
+		});
+		$('#specify').append(div);
+		$('#rank_div').append(choose_rank);
+		for (i=1; i<9; i++){
+			$('#rank').append($("<option>").attr("value", i).text("\$n="+i+"\$"));
+		}
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"rank"]);
+		$('.selectpicker').selectpicker('refresh');
+	} else {
+		console.log("not ready yet");
+	}	
+}
+
+function addCartan(val_dict){
+	console.log("addCartan is in construction");
+}
+
 function react(select_id,structure_item_id) {
 	if (select_id == "group"){
 		console.log(select_id+" selected");
