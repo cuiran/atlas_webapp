@@ -4,6 +4,19 @@ import re
 atlas_dir="/home/ran/atlas_project/latest/atlasofliegroups/" 
 #atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/" 
 
+
+def to_atlas_input(user_input):
+	request = str(user_input["request"])
+	if request == "Cartan":
+		group = str(user_input["group"])
+		rank = str(user_input["rank"])
+		atlas_input = (
+			"set n="+rank+"\n"+
+			"set G="+group+"\n"+
+			"set cartans = Cartan_classes(G)\n"+
+			"for i : nr_of_Cartan_classes (G) from 0 do print(\"Cartan number \"+i); print_Cartan_info(cartans[i]) od")
+	return atlas_input
+
 # this function takes user request and make a file in tmp folder for atlas to use
 # the return value of this function is user input formatted to be displayed on the website
 def input_to_at(some_input, rand_int):
@@ -17,7 +30,7 @@ def input_to_at(some_input, rand_int):
 
 def trim_output(some_output):
     output_array = some_output.split('\n')
-    trimmed_output = "\n".join(output_array[4:-3])
+    trimmed_output = "\n".join(output_array[4:])
     return trimmed_output
 
 

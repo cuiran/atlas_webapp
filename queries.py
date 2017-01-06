@@ -28,8 +28,8 @@ queries_collection = database.queries  # type: pymongo.collection.Collection
 
 def process_input(user_input, atlas_dir):
     # make the line breaks work properly. no clue why this helps
-    user_input = user_input.split('\\n')
-    user_input = "\n".join(user_input)
+    #user_input = user_input.split('\\n')
+    #user_input = "\n".join(user_input)
 
     # if there's already a non-failed query with this input, just look at that one
     query_id = try_find_existing_query(user_input)
@@ -140,10 +140,9 @@ def run_atlas_query(user_input, atlas_dir):
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
 
-    output, err = p.communicate(input=user_input.encode())
+    output, err = p.communicate(input=user_input)
     output = output.decode('UTF-8')
     err = err.decode('UTF-8')
-
     if not err:
         output = trim_output(output)
 

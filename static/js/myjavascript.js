@@ -63,12 +63,6 @@ function addToLastcol(list) {
 function addToSpecify(list) {
 	$('#specify').empty();
 	$('#specify').append("<h4>Specify:</h4>");
-//	$('#specify').append($("<div>").attr({"id":"spec_div","class":"form-group"}))
-//	$('#specify').append($("<div>").attr({"id":"spec_div2","class":"form-group"}))
-
-//	$('#spec_div').append($("<select>").attr({"class":"selectpicker","title":"select1"}))
-//	$('#spec_div2').append($("<select>").attr({"class":"selectpicker","title":"select2"}))
-
 	var item = list[0];
 	const div = $("<div>").attr({
 		"id": item+"_div",
@@ -85,7 +79,6 @@ function addToSpecify(list) {
 	});
 	$('#specify').append(div);
 	$('#'+item+'_div').append(dropdown);
-	//$('#specify').append($("<select>").attr({"id":"fake","title":"fake dropdown"}))
 	if ($('#group').length != 0){
 		populateGroupDropdown();
 	}
@@ -161,7 +154,62 @@ function addRank(val_dict){
 }
 
 function addCartan(val_dict){
-	console.log("addCartan is in construction");
+	val_dict["request"]="Cartan"
+	$.ajax({
+		type: 'POST',
+		url: '/newquery',
+		contentType: 'json',
+		data: JSON.stringify(val_dict),
+		success: function(){
+			console.log("group and rank information posted");
+		},
+		complete: function(output){
+			query_id = JSON.parse(output.responseText).query_id;
+			ajax_get(query_id);
+		}
+	})
+}
+
+
+function timeOutCallBack(query_id){
+	return function() {
+		ajax_get(query_id);
+	}
+}
+
+function ajax_get(query_id){
+	console.log("the query id is "+JSON.stringify({"query_id":query_id}));
+	$.ajax({
+		type: 'POST',
+		url: '/checkquery',
+		contentType: 'json',
+		data: JSON.stringify({"query_id":query_id}),
+		success: function(){
+			console.log("query id posted")
+		},
+		complete: function(output){
+			out= JSON.parse(output.responseText) 
+			out_stat = out.status
+			if (out_stat === "SUCCESS") {
+				console.log(out)
+				addCartanOptions(out)
+				addAvailCartans(out)
+			} else if (out_stat === "FAILED") {
+				console.log("failed")
+				console.log(out)
+			} else {
+				setTimeout(timeOutCallBack(query_id),1000)
+			}
+		}
+	})
+}
+
+function addCartanOptions(output){
+	console.log("addCartanOptions is under construction.")
+}
+
+function addAvailCartans(output){
+	console.log("addAvailCartans is under construction.")
 }
 
 function react(select_id,structure_item_id) {
@@ -172,26 +220,6 @@ function react(select_id,structure_item_id) {
 		console.log("not ready")
 	}
 }
-
-function groupPickRank() {
-	if($('#pick_rank').length == 0){
-		const pick_rank = $("<select>").attr({
-			"id": "pick_rank",
-			"class": "selectpicker",
-			"data-width": "85%",
-			"title": "choose rank",
-			"method": "POST",
-			"onchange": "postGroupInfo(), changeSpecify(), changeLastCol()"
-			}); 
-		$('#specify').append(pick_rank).append("<br><br>");
-		for (i=1;i<9;i++){
-			$('#pick_rank').append($("<option>").attr("value",i).text("\$n = "+i+"\$"));
-		}
-		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"pick_rank"]);
-		$('.selectpicker').selectpicker('refresh');
-	}
-}
-
 
 function postGroupInfo(){
 	var rank = document.getElementById("pick_rank").value;
