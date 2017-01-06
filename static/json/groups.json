@@ -1,17 +1,24 @@
 [
 	{"id":"SL(n,R)",
-	"name":"SL(n,\\mathbb{R})"},
+	"name":"SL(n,\\mathbb{R})",
+	"need_rank": ["n"]},
 	{"id":"GL(n,R)",
-	"name":"GL(n,\\mathbb{R})"},
+	"name":"GL(n,\\mathbb{R})",
+	"need_rank":["n"]},
 	{"id":"SU(p,q)",
-	"name":"SU(p,q)"},
+	"name":"SU(p,q)",
+	"need_rank":["p","q"]},
 	{"id":"U(p,q)",
-	"name":"U(p,q)"},
+	"name":"U(p,q)",
+	"need_rank":["p","q"]},
 	{"id":"GL(n,H)",
-	"name":"GL(n,\\mathbb{H})"},
+	"name":"GL(n,\\mathbb{H})",
+	"need_rank":["n"]},
 	{"id":"Sp(2*n,R)",
-	"name":"Sp(2n,\\mathbb{R})"},
+	"name":"Sp(2n,\\mathbb{R})",
+	"need_rank":["n"]},
 	{"id":"SO(p,q)",
-	"name":"SO(p,q)"}
+	"name":"SO(p,q)",
+	"need_rank":["p","q"]}
 ]
 

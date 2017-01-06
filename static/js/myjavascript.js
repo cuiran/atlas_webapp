@@ -8,12 +8,12 @@ function getGrp(){
 var struc;
 var grp;
 // load json objects into variable struc and populate the topics column
-$.when(getStruc()).then(function (data) {
+$($.when(getStruc()).then(function (data) {
 	console.log("json data is ");
 	console.log(data);
 	struc = data;
 	addTopic('#topics');
-})
+}))
 $.when(getGrp()).then(function(data){
 	grp = data;
 })
@@ -42,7 +42,6 @@ function clickCallback(item) {
 function highlightTopicsButton(id){
 	$.each(struc, function(i,item){
 		if (item.id === id){
-			console.log(item.id);
 			$('#'+item.id).addClass('active');
 		} else {
 			$('#'+item.id).removeClass('active');
@@ -71,9 +70,10 @@ function addToSpecify(list) {
 		"data-width": "85%",
 		"title": "choose "+item,
 		"method": "POST",
-		"onchange": "react(\""+item+"\")"
+		"onchange": "changeSpecify()"
 	});
 	$('#specify').append(dropdown).append("<br><br>");
+	//$('#specify').append($("<select>").attr({"id":"fake","title":"fake dropdown"}))
 	if ($('#group').length != 0){
 		populateGroupDropdown();
 	}
@@ -82,13 +82,40 @@ function addToSpecify(list) {
 
 // get the list of groups in groups.json and use it to populate the "pick a group" dropdown menu
 function populateGroupDropdown() {
-	console.log(grp);
 	$.each(grp, function(i,group){
 		$('#group').append($("<option>").attr("value",group.id).text("\$"+group.name+"\$"))})
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,"group"]);
 	$('.selectpicker').selectpicker('refresh');
 }
 
+function changeSpecify(){
+	topics_div = document.getElementById("topics")
+	active_button = topics_div.getElementsByClassName("active")[0];
+	active_button_id = active_button.id;
+	selected_item = $.grep(struc, function(e){return e.id === active_button_id})[0];
+	on_screen_specs = document.getElementsByTagName("select")
+	var on_screen_ids = [];
+	for (i=0; i<on_screen_specs.length; i++) {
+		on_screen_ids.push(on_screen_specs[i].id);
+	}
+	last_on_screen_id = on_screen_ids[on_screen_ids.length - 1] 
+	specs = selected_item.specify
+	index_last_on_screen = specs.indexOf(last_on_screen_id)
+	var next_spec;
+	if (specs.length == index_last_on_screen + 1){
+		next_spec = "EndOfSpecs"
+	} else{
+		next_spec = specs[index_last_on_screen+1]
+	}
+	console.log(next_spec)
+	on_screen_value_dict = 
+	func_dict = {"rank": addRank}
+	func_dict[next_spec](next_spec)
+}
+
+function addRank(arg){
+	console.log("addRank executed"+arg);
+}
 function react(select_id,structure_item_id) {
 	if (select_id == "group"){
 		console.log(select_id+" selected");
@@ -106,7 +133,7 @@ function groupPickRank() {
 			"data-width": "85%",
 			"title": "choose rank",
 			"method": "POST",
-			"onchange": "postGroupInfo(), groupPickCartan(), changeLastCol()"
+			"onchange": "postGroupInfo(), changeSpecify(), changeLastCol()"
 			}); 
 		$('#specify').append(pick_rank).append("<br><br>");
 		for (i=1;i<9;i++){

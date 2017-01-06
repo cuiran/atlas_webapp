@@ -1,7 +1,7 @@
 [
 	{"topic":"Structure Theory",
 	"id":"str_thy",
-	"specify":["group","Cartan"],
+	"specify":["group","rank","Cartan"],
 	"show":[
 		{"name":"Cartan Subgroups",
 		"require":"group"},
@@ -19,7 +19,7 @@
 	},
 	{"topic":"K Types & Branching",
 	"id":"branching",
-	"specify":["group","K","Borel"],
+	"specify":["group","rank","K","Borel"],
 	"show":[
 		{"name":"choice1",
 		"require":["group","K"]},
@@ -57,7 +57,7 @@
 	},
 	{"topic":"Unitary Representations",
 	"id":"unitary_reps",
-	"specify":["group","parameter"],
+	"specify":["group","rank","parameter"],
 	"show":[
 		{"name":"Unitarity",
 		"require":["group","parameter"]},
@@ -71,7 +71,7 @@
 	},
 	{"topic":"Induction",
 	"id":"induction",
-	"specify":["group","Borel","parameter"],
+	"specify":["group","rank","Borel","parameter"],
 	"show":[
 		{"name":"something",
 		"require":["group","Borel"]},
@@ -83,7 +83,7 @@
 	},
 	{"topic":"Complex Groups",
 	"id":"complex_grps",
-	"specify":["group"],
+	"specify":["group","rank"],
 	"show":[
 		{"name":"type",
 		"require":"group"},
