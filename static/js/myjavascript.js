@@ -35,6 +35,7 @@ function clickCallback(item) {
 		highlightTopicsButton(item.id);
 		addToSpecify(item.specify);
 		addToLastcol(item.show);
+		$('#details').empty();
     }
 }
 
@@ -122,6 +123,7 @@ function removeOutdate(item_changed,index_changed,specs){
 			$("#"+specs[i]+"_div").remove();
 		}
 	}
+	$('#details').empty();
 }
 
 function addRank(val_dict){
@@ -135,7 +137,7 @@ function addRank(val_dict){
 		})
 		const choose_rank = $("<select>").attr({
 			"id": "rank",
-			"class": "selectpicker rank",
+			"class": "selectpicker",
 			"data-width": "85%",
 			"title" : "choose rank",
 			"method": "POST",
@@ -178,7 +180,6 @@ function timeOutCallBack(query_id){
 }
 
 function ajax_get(query_id){
-	console.log("the query id is "+JSON.stringify({"query_id":query_id}));
 	$.ajax({
 		type: 'POST',
 		url: '/checkquery',
@@ -191,96 +192,49 @@ function ajax_get(query_id){
 			out= JSON.parse(output.responseText) 
 			out_stat = out.status
 			if (out_stat === "SUCCESS") {
-				console.log(out)
-				addCartanOptions(out)
-				addAvailCartans(out)
+				addCartanOptions(out.output)
+				addAvailCartans(out.output)
 			} else if (out_stat === "FAILED") {
 				console.log("failed")
 				console.log(out)
 			} else {
-				setTimeout(timeOutCallBack(query_id),1000)
+				setTimeout(timeOutCallBack(query_id),500)
 			}
 		}
 	})
 }
 
-function addCartanOptions(output){
-	console.log("addCartanOptions is under construction.")
-}
-
 function addAvailCartans(output){
-	console.log("addAvailCartans is under construction.")
-}
-
-function react(select_id,structure_item_id) {
-	if (select_id == "group"){
-		console.log(select_id+" selected");
-		groupPickRank()
-	} else {
-		console.log("not ready")
-	}
-}
-
-function postGroupInfo(){
-	var rank = document.getElementById("pick_rank").value;
-	var group = document.getElementById("group").value;
-	console.log(rank,group);
-	return ajax_post(rank,group);
-}
-
-function ajax_post(rank,group){	
-		console.log("posting");
-		$.ajax({
-			type: 'POST',
-			url: '/getCartan',
-			contentType: 'json',
-			data: JSON.stringify({"rank": rank, "group": group}),
-			success: function(){
-				console.log('form was submitted \"'+rank+" "+group+'\" end');
-			}
-		})
-}
-
-function groupPickCartan(){
-	if($('#pick_Cartan').length == 0){
-		console.log("appending pick Cartan dropdown");
-		const pick_Cartan = $("<select>").attr({
-			"id": "pick_Cartan",
-			"class": "selectpicker",
-			"data-width": "85%",
-			"title": "choose Cartan",
-			"method": "POST",
-			"onchange": "postCartanInfo()"
-		});
-		$('#specify').append(pick_Cartan).append("<br><br>");
-		
-	} else {
-		$("#pick_Cartan").empty();
-
-	}
 	$('#details').empty();
-	$('#details').append("<h4>Available Cartans</h4>");
-	var group = document.getElementById("group").value;
-	var rank = document.getElementById("pick_rank").value;
-	$.getJSON('static/test/Cartans/'+group+'_'+rank+'.json')
-		.done(function (data) {
-			var Cartan_info = data;
-			$('#pick_Cartan').empty();
-			$.each(Cartan_info, function(i,item) {
-				$('#pick_Cartan').append($("<option>").attr({
-						"value": "Cartan_number_"+i
-						}).text("Cartan number "+i)
-					);
-				$('#details').append("<p>"+item.name+"</p>");
-				$('#details').append("<p>"+item.info+"</p>");
-			})
-		$('.selectpicker').selectpicker('refresh');	
-		})
-	$('.selectpicker').selectpicker('refresh');
+	$('#details').append("<h4>Available Cartans</h4>")
+	text_list = output.split("\n")
+	for (i=3; i<text_list.length-1; i++){
+		$('#details').append($("<p>").text(text_list[i]))
+	}
 }
 
-function changeLastCol() {
-	console.log("changeLastCol has argument ");
+function addCartanOptions(output){
+	Cartan_list = output.split("\"Cartan number")
+	nr_Cartans = Cartan_list.length-1
+	const div = $('<div>').attr({
+		"id": "Cartan_div",
+		"class": "form-group"
+	})
+	const choose_Cartan = $('<select>').attr({
+		"id": "Cartan",
+		"class": "selectpicker",
+		"data-width": "85%",
+		"title": "choose Cartan",
+		"method": "POST",
+		"onchange": "changeSpecify(\"Cartan\")"
+	})
+	$('#specify').append(div);
+	$('#Cartan_div').append(choose_Cartan)
+	for (i=0; i<nr_Cartans; i++){
+		$('#Cartan').append($("<option>").attr("value", "Cartan_"+i).text("Cartan number "+i))
+	}
+	$('.selectpicker').selectpicker('refresh');
+
 }
 
 
