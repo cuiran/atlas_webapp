@@ -4,17 +4,17 @@
 	"specify":["group","rank","Cartan"],
 	"show":[
 		{"name":"Cartan Subgroups",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"Real Forms",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"Distinguished Involution",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"Simple Roots",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"KGB Elements",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"KGB Orbits of Real Weyl Group",
-		"require":["group","Cartan"]}
+		"require":["group","rank","Cartan"]}
 		]
 	},
 	{"topic":"K Types & Branching",
@@ -22,13 +22,13 @@
 	"specify":["group","rank","K","Borel"],
 	"show":[
 		{"name":"choice1",
-		"require":["group","K"]},
+		"require":["group","rank","K"]},
 		{"name":"choice2",
-		"require":["group","Borel"]},
+		"require":["group","rank","Borel"]},
 		{"name":"example",
-		"require":["group","K","Borel"]},
+		"require":["group","rank","K","Borel"]},
 		{"name":"choice3",
-		"require":["group"]}
+		"require":["group","rank"]}
 		]
 	},
 	{"topic":"Representations",
@@ -60,11 +60,11 @@
 	"specify":["group","rank","parameter"],
 	"show":[
 		{"name":"Unitarity",
-		"require":["group","parameter"]},
+		"require":["group","rank","parameter"]},
 		{"name":"Hermitian Forms",
-		"require":["group","parameter"]},
+		"require":["group","rank","parameter"]},
 		{"name":"choice8",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"choice7",
 		"require":["parameter"]}
 		]
@@ -74,11 +74,11 @@
 	"specify":["group","rank","Borel","parameter"],
 	"show":[
 		{"name":"something",
-		"require":["group","Borel"]},
+		"require":["group","rank","Borel"]},
 		{"name":"a good question",
-		"require":["group"]},
+		"require":["group","rank"]},
 		{"name":"another good question",
-		"require":["Borel"]}
+		"require":["group","rank","Borel"]}
 		]
 	},
 	{"topic":"Complex Groups",

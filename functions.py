@@ -15,8 +15,16 @@ def to_atlas_input(user_input):
 			"set G="+group+"\n"+
 			"set cartans = Cartan_classes(G)\n"+
 			"for i : nr_of_Cartan_classes (G) from 0 do print(\"Cartan number \"+i); print_Cartan_info(cartans[i]) od")
+	elif request == "Cartan Subgroups":
+		group = str(user_input["group"])
+		rank = str(user_input["rank"])
+		atlas_input = (
+			"set n="+rank+"\n"+
+			"set G="+group+"\n"+
+			"set cartans = Cartan_classes(G)\n"+
+			"for i : nr_of_Cartan_classes (G) from 0 do print(\"Cartan number \"+i); print_Cartan_info(cartans[i]) od")
 	else:
-		atlas_input = "set n=100"
+		atlas_input = "n=11"
 	return atlas_input
 
 # this function takes user request and make a file in tmp folder for atlas to use

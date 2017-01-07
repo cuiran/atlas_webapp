@@ -82,7 +82,7 @@ function addToSpecify(list) {
 		"data-windowPadding": "[5px,25px,5px,5px]",
 		"title": "choose "+item,
 		"method": "POST",
-		"onchange": "changeSpecify(\""+item+"\")"
+		"onchange": "changeSpecify(\""+item+"\"),changeLastCol(\""+item+"\")"
 	});
 	$('#specify').append(div);
 	$('#'+item+'_div').append(dropdown);
@@ -101,9 +101,9 @@ function populateGroupDropdown() {
 }
 
 function changeSpecify(item_changed){
-	topics_div = document.getElementById("topics")
-	active_button = topics_div.getElementsByClassName("active")[0];
-	active_button_id = active_button.id;
+	var topics_div = document.getElementById("topics")
+	var active_button = topics_div.getElementsByClassName("active")[0];
+	var active_button_id = active_button.id;
 	selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
 	specs = selected_topic.specify
 	index_changed = specs.indexOf(item_changed)
@@ -150,7 +150,7 @@ function addRank(val_dict){
 			"data-width": "85%",
 			"title" : "choose rank",
 			"method": "POST",
-			"onchange": "changeSpecify(\"rank\")"
+			"onchange": "changeSpecify(\"rank\"),changeLastCol(\"rank\")"
 		});
 		$('#specify').append(div);
 		$('#rank_div').append(choose_rank);
@@ -261,7 +261,7 @@ function addCartanOptions(output){
 		"data-width": "85%",
 		"title": "choose Cartan",
 		"method": "POST",
-		"onchange": "changeSpecify(\"Cartan\")"
+		"onchange": "changeSpecify(\"Cartan\"),changeLastCol(\"Cartan\")"
 	})
 	$('#specify').append(div);
 	$('#Cartan_div').append(choose_Cartan)
@@ -270,6 +270,38 @@ function addCartanOptions(output){
 	}
 	$('.selectpicker').selectpicker('refresh');
 
+}
+
+function changeLastCol(spec_id){
+	var topics_div = document.getElementById("topics")
+	var active_button = topics_div.getElementsByClassName("active")[0];
+	var active_button_id = active_button.id;
+	var last_col = document.getElementById('lastcol').children
+	var selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
+	for (var i=1; i<last_col.length;i++){
+		var button_text = last_col[i].textContent
+		var show_item = $.grep(selected_topic.show, function(e){return e.name === button_text})[0]
+		var required_specs = show_item.require
+		console.log("checking button "+button_text)
+		console.log("required specs "+required_specs)
+		if (required_specs.every(hasValue)){
+			last_col[i].disabled = false
+		} else {
+			console.log("not everything has value")
+		}
+	}
+}
+
+function hasValue(id){
+	var answer = false
+	var e = document.getElementById(id)
+	console.log("checking id "+id)
+	if (e){
+		if (e.value){
+			answer = true;
+		}
+	}
+	return answer
 }
 
 function activateLastCol(struc_item){
@@ -290,6 +322,9 @@ function runAtlas(item){
 }
 
 function showCartanSubgroups(output){
+	text_list = output.split("\n")
 	console.log("showCartanSubgroups called")
-	console.log(output)
+	for (var i=0; i<text_list.length; i++){
+		$('#atlas_output').append($('<p>').text(text_list[i]))
+	}
 }
