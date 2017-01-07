@@ -166,21 +166,45 @@ function addRank(val_dict){
 
 function addCartan(val_dict){
 	val_dict["request"]="Cartan"
+	ajax_post(val_dict)
+//	$.ajax({
+//		type: 'POST',
+//		url: '/newquery',
+//		contentType: 'json',
+//		data: JSON.stringify(val_dict),
+//		success: function(){
+//			console.log("information posted");
+//		},
+//		complete: function(output){
+//			query_id = JSON.parse(output.responseText).query_id;
+//			ajax_get(query_id);
+//		}
+//	})
+}
+
+function ajax_post(some_dict) {
 	$.ajax({
-		type: 'POST',
-		url: '/newquery',
-		contentType: 'json',
-		data: JSON.stringify(val_dict),
+		type:'POST',
+		url:'/newquery',
+		contentType:'json',
+		data: JSON.stringify(some_dict),
 		success: function(){
-			console.log("group and rank information posted");
+			console.log("information posted");
 		},
 		complete: function(output){
 			query_id = JSON.parse(output.responseText).query_id;
-			ajax_get(query_id);
+			postReact(query_id,some_dict)
 		}
 	})
 }
 
+function postReact(query_id,some_dict){
+	requesting = some_dict.request
+	var reaction_dict = {}
+	reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
+	reaction_dict['Cartan Subgroups'] = [showCartanSubgroups]
+	ajax_get(query_id,reaction_dict[requesting])
+}
 
 function timeOutCallBack(query_id){
 	return function() {
@@ -188,21 +212,23 @@ function timeOutCallBack(query_id){
 	}
 }
 
-function ajax_get(query_id){
+function ajax_get(query_id, func_array){
 	$.ajax({
 		type: 'POST',
 		url: '/checkquery',
 		contentType: 'json',
 		data: JSON.stringify({"query_id":query_id}),
 		success: function(){
-			console.log("query id posted")
+			console.log("checking query")
 		},
 		complete: function(output){
 			out= JSON.parse(output.responseText) 
 			out_stat = out.status
 			if (out_stat === "SUCCESS") {
-				addCartanOptions(out.output)
-				addAvailCartans(out.output)
+				console.log("query done")
+				for (var i=0; i<func_array.length; i++){
+					func_array[i](out.output)
+				}
 			} else if (out_stat === "FAILED") {
 				console.log("failed")
 				console.log(out)
@@ -254,6 +280,16 @@ function activateLastCol(struc_item){
 }
 
 function runAtlas(item){
-	console.log("selected show item ")
-	console.log(item)
+	required_info = item.require
+	var info_dict = {}
+	info_dict["request"] = item.name
+	for (i=0; i<required_info.length;i++) {
+		info_dict[required_info[i]] = document.getElementById(required_info[i]).value
+	}
+	ajax_post(info_dict)
+}
+
+function showCartanSubgroups(output){
+	console.log("showCartanSubgroups called")
+	console.log(output)
 }

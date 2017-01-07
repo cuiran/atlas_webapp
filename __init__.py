@@ -47,6 +47,7 @@ def get_Cartan():
 @app.route("/newquery", methods=['POST'])
 def get_queried():
     user_input = json.loads(request.data)
+    print(user_input)
     user_input = to_atlas_input(user_input)
     query_id = process_input(user_input, atlas_dir)
     output = {
