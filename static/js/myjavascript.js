@@ -117,7 +117,7 @@ function changeSpecify(item_changed){
 	for (i=0; i<=index_changed; i++) {
 		val_dict[specs[i]] = document.getElementById(specs[i]).value; 
 	}
-	func_dict = {"rank": addRank, "Cartan": addCartan}
+	func_dict = {"rank": addRank, "Cartan": addCartan, "K": addK, "Borel": addBorel}
 	removeOutdate(item_changed,index_changed,specs)
 	if (next_spec != "EndOfSpecs"){
 		func_dict[next_spec](val_dict)
@@ -167,19 +167,6 @@ function addRank(val_dict){
 function addCartan(val_dict){
 	val_dict["request"]="Cartan"
 	ajax_post(val_dict)
-//	$.ajax({
-//		type: 'POST',
-//		url: '/newquery',
-//		contentType: 'json',
-//		data: JSON.stringify(val_dict),
-//		success: function(){
-//			console.log("information posted");
-//		},
-//		complete: function(output){
-//			query_id = JSON.parse(output.responseText).query_id;
-//			ajax_get(query_id);
-//		}
-//	})
 }
 
 function ajax_post(some_dict) {
@@ -282,24 +269,19 @@ function changeLastCol(spec_id){
 		var button_text = last_col[i].textContent
 		var show_item = $.grep(selected_topic.show, function(e){return e.name === button_text})[0]
 		var required_specs = show_item.require
-		console.log("checking button "+button_text)
-		console.log("required specs "+required_specs)
-		if (required_specs.every(hasValue)){
-			last_col[i].disabled = false
-		} else {
-			console.log("not everything has value")
+		has_all = true
+		for (var j=0; j<required_specs.length; j++){
+			if (hasValue(required_specs[j])){ } else {has_all = false}
 		}
+		if (has_all) {last_col[i].disabled = false} else {last_col[i].disabled = true}
 	}
 }
 
 function hasValue(id){
 	var answer = false
 	var e = document.getElementById(id)
-	console.log("checking id "+id)
 	if (e){
-		if (e.value){
-			answer = true;
-		}
+		if (e.value){answer = true}
 	}
 	return answer
 }
@@ -327,4 +309,12 @@ function showCartanSubgroups(output){
 	for (var i=0; i<text_list.length; i++){
 		$('#atlas_output').append($('<p>').text(text_list[i]))
 	}
+}
+
+function addK(){
+	console.log("function addK is called")
+}
+
+function addBorel(){
+	console.log("function addBorel is called")
 }
