@@ -183,11 +183,13 @@ function ajax_post(some_dict) {
 	})
 }
 
+var reaction_dict = {}
+reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
+reaction_dict['Cartan Subgroups'] = [scrollToInputOutput,showCartanSubgroups]
+
+
 function postReact(query_id,some_dict){
 	requesting = some_dict.request
-	var reaction_dict = {}
-	reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
-	reaction_dict['Cartan Subgroups'] = [showCartanSubgroups]
 	ajax_get(query_id,reaction_dict[requesting])
 }
 
@@ -301,9 +303,13 @@ function runAtlas(item){
 	ajax_post(info_dict)
 }
 
+function scrollToInputOutput(){
+	$('html, body').animate({scrollTop:$('#atlas_input_output').position().top}, 'slow');
+}
+
 function showCartanSubgroups(output){
 	text_list = output.split("\n")
-	console.log("showCartanSubgroups called")
+	$('#atlas_output').empty()
 	for (var i=0; i<text_list.length; i++){
 		$('#atlas_output').append($('<p>').text(text_list[i]))
 	}
