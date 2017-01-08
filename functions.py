@@ -2,9 +2,6 @@ import subprocess
 import re
 from create_atlas_input import *
 
-#atlas_dir="/home/ran/atlas_project/latest/atlasofliegroups/" 
-#atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/" 
-
 
 def to_atlas_input(user_input):
 	request = str(user_input["request"])
