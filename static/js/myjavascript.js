@@ -175,11 +175,9 @@ function ajax_post(some_dict) {
 		url:'/newquery',
 		contentType:'json',
 		data: JSON.stringify(some_dict),
-		success: function(){
+		success: function(data){
+			var query_id = JSON.parse(data).query_id;
 			console.log("information posted");
-		},
-		complete: function(output){
-			query_id = JSON.parse(output.responseText).query_id;
 			postReact(query_id,some_dict)
 		}
 	})
@@ -193,9 +191,9 @@ function postReact(query_id,some_dict){
 	ajax_get(query_id,reaction_dict[requesting])
 }
 
-function timeOutCallBack(query_id){
+function timeOutCallBack(query_id,func_array){
 	return function() {
-		ajax_get(query_id);
+		ajax_get(query_id,func_array);
 	}
 }
 
@@ -220,7 +218,7 @@ function ajax_get(query_id, func_array){
 				console.log("failed")
 				console.log(out)
 			} else {
-				setTimeout(timeOutCallBack(query_id),500)
+				setTimeout(timeOutCallBack(query_id,func_array),500)
 			}
 		}
 	})
