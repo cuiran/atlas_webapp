@@ -232,11 +232,18 @@ function ajax_get(query_id, func_array){
 
 function addAvailCartans(output){
 	$('#details').empty();
-	$('#details').append("<h4>Available Cartans</h4>")
-	text_list = output.split("\n")
-	for (i=3; i<text_list.length-1; i++){
-		$('#details').append($("<p>").text(text_list[i]))
-	}
+	$('#details').append($('<button>').attr({
+		"id":"show_avail_Cartans",
+		"type":"button",
+		"style":"width:180px",
+		"class":"btn btn-default btn-md"}).text("Available Cartans").click(function(){
+			$('#details').append("<h4>Available Cartans</h4>")
+			text_list = output.split("\n")
+			for (i=3; i<text_list.length-1; i++){
+				$('#details').append($("<p>").text(text_list[i]))
+			}
+		})
+	)
 }
 
 function addCartanOptions(output){
