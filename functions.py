@@ -7,6 +7,12 @@ def to_atlas_input(user_input):
 	request = str(user_input["request"])
 	if (request == "Cartan") or (request == "Cartan Subgroups"):
 		atlas_input = get_Cartans(user_input)
+	elif (request == "Real Forms"):
+		atlas_input = get_realforms(user_input)
+	elif (request == "Distinguished Involution"):
+		atlas_input = get_distinv(user_input)
+	elif (request == "Simple Roots"):
+		atlas_input = get_simple_roots(user_input)
 	else:
 		atlas_input = "n=11"
 	return atlas_input

@@ -18,6 +18,16 @@ $.when(getGrp()).then(function(data){
 	grp = data;
 })
 
+var func_dict = {"rank": addRank, "Cartan": addCartan, "K": addK, "Borel": addBorel}
+
+var reaction_dict = {}
+reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
+reaction_dict['Cartan Subgroups'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Real Forms'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Distinguished Involution'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Simple Roots'] = [scrollToInputOutput,showRawOutput]
+
+
 
 // append one button to each topic listed in structure.json
 // it also attach a function to the click event
@@ -117,7 +127,6 @@ function changeSpecify(item_changed){
 	for (i=0; i<=index_changed; i++) {
 		val_dict[specs[i]] = document.getElementById(specs[i]).value; 
 	}
-	func_dict = {"rank": addRank, "Cartan": addCartan, "K": addK, "Borel": addBorel}
 	removeOutdate(item_changed,index_changed,specs)
 	if (next_spec != "EndOfSpecs"){
 		func_dict[next_spec](val_dict)
@@ -182,11 +191,6 @@ function ajax_post(some_dict) {
 		}
 	})
 }
-
-var reaction_dict = {}
-reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
-reaction_dict['Cartan Subgroups'] = [scrollToInputOutput,showCartanSubgroups]
-
 
 function postReact(query_id,some_dict){
 	requesting = some_dict.request
@@ -307,7 +311,7 @@ function scrollToInputOutput(){
 	$('html, body').animate({scrollTop:$('#atlas_input_output').position().top}, 'slow');
 }
 
-function showCartanSubgroups(output){
+function showRawOutput(output){
 	text_list = output.split("\n")
 	$('#atlas_output').empty()
 	for (var i=0; i<text_list.length; i++){
