@@ -114,17 +114,17 @@ function changeSpecify(item_changed){
 	var topics_div = document.getElementById("topics")
 	var active_button = topics_div.getElementsByClassName("active")[0];
 	var active_button_id = active_button.id;
-	selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
-	specs = selected_topic.specify
-	index_changed = specs.indexOf(item_changed)
+	var selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
+	var specs = selected_topic.specify
+	var index_changed = specs.indexOf(item_changed)
 	var next_spec;
 	if (specs.length == index_changed + 1){
 		next_spec = "EndOfSpecs"
 	} else{
 		next_spec = specs[index_changed+1]
 	}
-	val_dict ={};
-	for (i=0; i<=index_changed; i++) {
+	var val_dict ={};
+	for (var i=0; i<=index_changed; i++) {
 		val_dict[specs[i]] = document.getElementById(specs[i]).value; 
 	}
 	removeOutdate(item_changed,index_changed,specs)
@@ -136,18 +136,17 @@ function changeSpecify(item_changed){
 }
 
 function removeOutdate(item_changed,index_changed,specs){
-	for (i=index_changed+1; i<specs.length; i++) {
+	for (var i=index_changed+1; i<specs.length; i++) {
 		if ($('#'+specs[i]+'_div').length != 0){
-			console.log(specs[i]+" not empty, removing ");
 			$("#"+specs[i]+"_div").remove();
 		}
 	}
 }
 
 function addRank(val_dict){
-	group_selected = val_dict["group"]
-	grp_item = $.grep(grp, function(g){return g.id === group_selected})[0]
-	input_needed = grp_item.need_rank
+	var group_selected = val_dict["group"]
+	var grp_item = $.grep(grp, function(g){return g.id === group_selected})[0]
+	var input_needed = grp_item.need_rank
 	if (input_needed.length === 1) {
 		const div = $("<div>").attr({
 			"id": "rank_div",
@@ -163,7 +162,7 @@ function addRank(val_dict){
 		});
 		$('#specify').append(div);
 		$('#rank_div').append(choose_rank);
-		for (i=1; i<9; i++){
+		for (var i=1; i<9; i++){
 			$('#rank').append($("<option>").attr("value", i).text("\$n="+i+"\$"));
 		}
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"rank"]);
@@ -236,19 +235,18 @@ function addAvailCartans(output){
 		"id":"show_avail_Cartans",
 		"type":"button",
 		"style":"width:180px",
-		"class":"btn btn-default btn-md"}).text("Available Cartans").click(function(){
-			$('#details').append("<h4>Available Cartans</h4>")
-			text_list = output.split("\n")
-			for (i=3; i<text_list.length-1; i++){
-				$('#details').append($("<p>").text(text_list[i]))
-			}
-		})
-	)
+		"class":"btn btn-default btn-md"}).text("Available Cartans").click(function(){$('#availCartans').toggle()}))
+	$('#details').append("<div id='availCartans' style='display:none'></div>")
+	var text_list = output.split("\n")
+	$('#availCartans').append("<h4>Available Cartans</h4>")
+	for (var i=3; i<text_list.length-1; i++){
+		$('#availCartans').append($("<p>").text(text_list[i]))
+	}
 }
 
 function addCartanOptions(output){
-	Cartan_list = output.split("\"Cartan number")
-	nr_Cartans = Cartan_list.length-1
+	var Cartan_list = output.split("\"Cartan number")
+	var nr_Cartans = Cartan_list.length-1
 	const div = $('<div>').attr({
 		"id": "Cartan_div",
 		"class": "form-group"
@@ -263,7 +261,7 @@ function addCartanOptions(output){
 	})
 	$('#specify').append(div);
 	$('#Cartan_div').append(choose_Cartan)
-	for (i=0; i<nr_Cartans; i++){
+	for (var i=0; i<nr_Cartans; i++){
 		$('#Cartan').append($("<option>").attr({"value":"Cartan_"+i, "title":"Cartan "+i}).text("Cartan number "+i))
 	}
 	$('.selectpicker').selectpicker('refresh');
@@ -298,28 +296,28 @@ function hasValue(id){
 }
 
 function activateLastCol(struc_item){
-	last_col = document.getElementById('lastcol').children
-	for (i=1;i<last_col.length;i++){
+	var last_col = document.getElementById('lastcol').children
+	for (var i=1;i<last_col.length;i++){
 		last_col[i].disabled = false
 	}
 }
 
 function runAtlas(item){
-	required_info = item.require
+	var required_info = item.require
 	var info_dict = {}
 	info_dict["request"] = item.name
-	for (i=0; i<required_info.length;i++) {
+	for (var i=0; i<required_info.length;i++) {
 		info_dict[required_info[i]] = document.getElementById(required_info[i]).value
 	}
 	ajax_post(info_dict)
 }
 
 function scrollToInputOutput(){
-	$('html, body').animate({scrollTop:$('#atlas_input_output').position().top}, 'slow');
+	$('html, body').animate({scrollTop:$('#atlas_input_output').position().top}, 300);
 }
 
 function showRawOutput(output){
-	text_list = output.split("\n")
+	var text_list = output.split("\n")
 	$('#atlas_output').empty()
 	for (var i=0; i<text_list.length; i++){
 		$('#atlas_output').append($('<p>').text(text_list[i]))
