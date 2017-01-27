@@ -29,7 +29,7 @@ reaction_dict['Simple Roots'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['KGB Elements'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Real Weyl Group'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Branch to K'] = [scrollToInputOutput,showRawOutput]
-reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput]
+reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput,insertWarning]
 reaction_dict['Cuspidal Data'] = [scrollToInputOutput,showRawOutput]
 
 // append one button to each topic listed in structure.json
@@ -392,6 +392,10 @@ function showRawOutput(output){
 	}
 }
 
+function insertWarning(){
+	console.log("insertWarning")
+	$('#atlas_output').append($('<p style="color:red;">').text("The unitarity functionality is still under construction, the result might not be accurate."))
+}
 
 function addType(){
 	const div = $("<div>").attr({
