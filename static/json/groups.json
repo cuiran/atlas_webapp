@@ -19,6 +19,9 @@
 	"need_rank":["n"]},
 	{"id":"SO(p,q)",
 	"name":"SO(p,q)",
-	"need_rank":["p","q"]}
+	"need_rank":["p","q"]},
+	{"id":"SOstar(2*n)",
+	"name":"SO^*(2n)",
+	"need_rank":["n"]}
 ]
 

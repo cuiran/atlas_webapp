@@ -4,91 +4,41 @@
 	"specify":["group","rank","Cartan"],
 	"show":[
 		{"name":"Cartan Subgroups",
+		"id":"Cartan_Subgroups",
 		"require":["group","rank"]},
 		{"name":"Real Forms",
+		"id":"Real_Forms",
 		"require":["group","rank"]},
 		{"name":"Distinguished Involution",
+		"id":"Distinguished_Involution",
 		"require":["group","rank"]},
 		{"name":"Simple Roots",
+		"id":"Simple_Roots",
 		"require":["group","rank"]},
 		{"name":"KGB Elements",
+		"id":"KGB_Elements",
 		"require":["group","rank"]},
-		{"name":"KGB Orbits of Real Weyl Group",
+		{"name":"Real Weyl Group",
+		"id":"Real_Weyl_Group",
 		"require":["group","rank","Cartan"]}
 		]
 	},
-	{"topic":"K Types & Branching",
-	"id":"branching",
-	"specify":["group","rank","K","Borel"],
+	{"topic":"Representation Theory",
+	"id":"rep_thy",
+	"specify":["group","rank","type","param"],
 	"show":[
-		{"name":"choice1",
-		"require":["group","rank","K"]},
-		{"name":"choice2",
-		"require":["group","rank","Borel"]},
-		{"name":"example",
-		"require":["group","rank","K","Borel"]},
-		{"name":"choice3",
-		"require":["group","rank"]}
-		]
-	},
-	{"topic":"Representations",
-	"id":"reps",
-	"specify":["spec1","other","another"],
-	"show":[
-		{"name":"Parameter",
-		"require":["spec1"]},
+		{"name":"Branch to K",
+		"id":"Branch_to_K",
+		"require":["group","rank","type","param"]},
 		{"name":"Unitarity",
-		"require":["spec1","other"]},
-		{"name":"Dual",
-		"require":["other","another"]}
-		]
-	},
-	{"topic":"KLV Polynomials",
-	"id":"klv",
-	"specify":["thing1","thing2"],
-	"show":[
-		{"name":"choice4",
-		"require":["thing1"]},
-		{"name":"choice5",
-		"require":["thing1","thing2"]},
-		{"name":"choice6",
-		"require":["thing2"]}
-		]
-	},
-	{"topic":"Unitary Representations",
-	"id":"unitary_reps",
-	"specify":["group","rank","parameter"],
-	"show":[
-		{"name":"Unitarity",
-		"require":["group","rank","parameter"]},
-		{"name":"Hermitian Forms",
-		"require":["group","rank","parameter"]},
-		{"name":"choice8",
-		"require":["group","rank"]},
-		{"name":"choice7",
-		"require":["parameter"]}
-		]
-	},
-	{"topic":"Induction",
-	"id":"induction",
-	"specify":["group","rank","Borel","parameter"],
-	"show":[
-		{"name":"something",
-		"require":["group","rank","Borel"]},
-		{"name":"a good question",
-		"require":["group","rank"]},
-		{"name":"another good question",
-		"require":["group","rank","Borel"]}
-		]
-	},
-	{"topic":"Complex Groups",
-	"id":"complex_grps",
-	"specify":["group","rank"],
-	"show":[
-		{"name":"type",
-		"require":["group"]},
-		{"name":"Lie Algebra",
-		"require":["group"]}
+		"id":"Unitarity",
+		"require":["group","rank","type","param"]},
+		{"name":"Signature of Hermitian Forms",
+		"id":"Signature_of_Hermitian_Forms",
+		"require":["group","rank","type","param"]},
+		{"name":"Cuspidal Data",
+		"id":"Cuspidal_Data",
+		"require":["group","rank","type","param"]}
 		]
 	}
 ]

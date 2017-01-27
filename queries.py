@@ -132,7 +132,7 @@ def check_query_status(query_id):
 
 
 def run_atlas_query(user_input, atlas_dir):
-    p = subprocess.Popen(["../atlas all"],
+    p = subprocess.Popen(["../atlas all galois"],
                          cwd=atlas_dir+"atlas-scripts",
                          shell=True,
                          universal_newlines=True,

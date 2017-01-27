@@ -38,3 +38,42 @@ def get_simple_roots(user_input):
 		set_group(group,rank)+
 		"simple_roots(G)\n")
 	return atlas_input
+
+def print_KGB(user_input):
+	group = str(user_input["group"])
+	rank = str(user_input["rank"])
+	atlas_input = (
+		set_group(group,rank)+
+		"print_KGB(G)\n")
+	return atlas_input
+
+def real_weyl(user_input):
+	group = str(user_input["group"])
+	rank = str(user_input["rank"])
+	Cartan_num = str(user_input["Cartan"])
+	atlas_input = (
+		set_group(group,rank)+
+		"set H=Cartan_class(G,"+Cartan_num+")\n"
+		"print_real_Weyl(G,H)\n")
+	return atlas_input
+
+
+def branch_to_K(user_input):
+	group = str(user_input["group"])
+	rank = str(user_input["rank"])
+	if user_input["param"] == "trivial":
+		atlas_input=(
+			set_group(group,rank)+
+			"set t=trivial(G)\n"+
+			"branch_std(t,10)\n")
+	return atlas_input
+
+def unitarity(user_input):
+	group = str(user_input["group"])
+	rank = str(user_input["rank"])
+	if user_input["param"]=="trivial":
+		atlas_input = (
+			set_group(group,rank)+
+			"set t=trivial(G)\n"+
+			"is_unitary(t)\n")
+	return atlas_input

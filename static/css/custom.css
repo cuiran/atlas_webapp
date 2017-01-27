@@ -17,7 +17,7 @@ hr {
 
 .btn-md {
   border-radius:0px;
-  width: 93%;
+  width: 85%;
   height: 45px;
   font-size:90%;
 }
@@ -36,3 +36,14 @@ h4 {
   padding-bottom:20px;
 }
 
+.btn-circle{
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  padding: 1px 1px;
+  margin-left: 6px;
+  font-size: 15px;
+  line-height: 1.428571429;
+  border-radius: 15px;
+  border-color: #00aced;
+}

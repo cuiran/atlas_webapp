@@ -18,15 +18,18 @@ $.when(getGrp()).then(function(data){
 	grp = data;
 })
 
-var func_dict = {"rank": addRank, "Cartan": addCartan, "K": addK, "Borel": addBorel}
+var func_dict = {"rank": addRank, "Cartan": addCartan, "type": addType, "param": addParam}
 
 var reaction_dict = {}
-reaction_dict['Cartan'] = [addCartanOptions,addAvailCartans]
+reaction_dict['Cartan'] = [addCartanOptions]
 reaction_dict['Cartan Subgroups'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Real Forms'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Distinguished Involution'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Simple Roots'] = [scrollToInputOutput,showRawOutput]
-
+reaction_dict['KGB Elements'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Real Weyl Group'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Branch to K'] = [scrollToInputOutput,showRawOutput]
+reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput]
 
 
 // append one button to each topic listed in structure.json
@@ -65,15 +68,28 @@ function addToLastcol(list) {
 	$('#lastcol').empty();
 	$('#lastcol').append("<h4>Show:</h4>");
 	$.each(list, function(i, item) {
-		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md"}).text(item.name).prop('disabled',true).click(showCallback(item));
+		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md","id":item.id}).text(item.name).prop('disabled',true).click(showCallback(item));
 		$('#lastcol').append(button);
 	})
 }
 
 function showCallback(item){
 	return function(){
+		highlightShowButton(item)
 		runAtlas(item);
 	}
+}
+
+function highlightShowButton(selected_show){
+	var active_button_id = document.getElementById("topics").getElementsByClassName("active")[0].id;
+	var show_options = $.grep(struc, function(e){return e.id===active_button_id})[0].show
+	$.each(show_options, function(i,item){
+		if (item.name===selected_show.name){
+			$('#'+item.id).addClass('active');
+		} else {
+			$('#'+item.id).removeClass('active');
+		}
+	})
 }
 
 // dynamically change the list of specifications in the second column after topic selection
@@ -88,18 +104,40 @@ function addToSpecify(list) {
 	const dropdown = $("<select>").attr({
 		"id": item,
 		"class": "selectpicker",
-		"data-width": "85%",
+		"data-width": "auto",
 		"data-windowPadding": "[5px,25px,5px,5px]",
 		"title": "choose "+item,
 		"method": "POST",
 		"onchange": "changeSpecify(\""+item+"\"),changeLastCol(\""+item+"\")"
 	});
+	const question_button = $("<button>").attr({"id":item+"_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack(item));
 	$('#specify').append(div);
-	$('#'+item+'_div').append(dropdown);
+	$('#'+item+'_div').append(dropdown).append(question_button);
 	if ($('#group').length != 0){
 		populateGroupDropdown();
 	}
 	$('.selectpicker').selectpicker('refresh');
+}
+
+function clickQuestionCallBack(item){
+	if (item === "group"){
+		return function(){question_group()}
+	} else if (item === "Cartan"){
+		return function(){question_Cartan()}
+	} else {
+		return function(){console.log("not ready yet")}
+	}
+}
+
+function question_Cartan(){
+	$('#details').empty();
+	$('#details').append("<h4>Cartan Options:</h4>").append("<p>Each option provides a triple \$(a,b,c)\$, which specifies a Cartan Subgroup with compact rank \$a\$, complex rank \$b\$, and split rank \$c\$.</p> <p>For a more detailed and mathematical explanation of these concepts, please look through the tutorial page on <a href=\'https://jeffreyadams.github.io/atlasofliegroups-docs/tutorial/video_1B/cartan_classes.html#cartan-subgroups\' target=\'_blank\'>Cartan Subgroups</a>.</p>")
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,"details"]);
+}
+
+function question_group(){
+	$('#details').empty();
+	$('#details').append("<h4>Groups Options:</h4>").append("<p> Currently we have 8 choices of classical groups. The ones that needs p and q inputs are still under construction. </p>")
 }
 
 // get the list of groups in groups.json and use it to populate the "pick a group" dropdown menu
@@ -109,6 +147,7 @@ function populateGroupDropdown() {
 	MathJax.Hub.Queue(["Typeset",MathJax.Hub,"group"]);
 	$('.selectpicker').selectpicker('refresh');
 }
+
 
 function changeSpecify(item_changed){
 	var topics_div = document.getElementById("topics")
@@ -155,11 +194,12 @@ function addRank(val_dict){
 		const choose_rank = $("<select>").attr({
 			"id": "rank",
 			"class": "selectpicker",
-			"data-width": "85%",
-			"title" : "choose rank",
+			"data-width": "auto",
+			"title" : "choose n",
 			"method": "POST",
 			"onchange": "changeSpecify(\"rank\"),changeLastCol(\"rank\")"
 		});
+		//const question_button = $("<button>").attr({"id":"rank"+"_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("rank"));
 		$('#specify').append(div);
 		$('#rank_div').append(choose_rank);
 		for (var i=1; i<9; i++){
@@ -250,19 +290,22 @@ function addCartanOptions(output){
 	const div = $('<div>').attr({
 		"id": "Cartan_div",
 		"class": "form-group"
-	})
+	});
 	const choose_Cartan = $('<select>').attr({
 		"id": "Cartan",
 		"class": "selectpicker",
-		"data-width": "85%",
+		"data-width": "80%",
 		"title": "choose Cartan",
 		"method": "POST",
 		"onchange": "changeSpecify(\"Cartan\"),changeLastCol(\"Cartan\")"
-	})
+	});
+	const question_button = $("<button>").attr({"id":"Cartan_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("Cartan"));
 	$('#specify').append(div);
-	$('#Cartan_div').append(choose_Cartan)
+	$('#Cartan_div').append(choose_Cartan).append(question_button)
 	for (var i=0; i<nr_Cartans; i++){
-		$('#Cartan').append($("<option>").attr({"value":"Cartan_"+i, "title":"Cartan "+i}).text("Cartan number "+i))
+		var Cartan_ranks = Cartan_list[i+1].split("\n")[1]
+		var ranks = Cartan_ranks.split(":").slice(1,4).join().split(",")
+		$('#Cartan').append($("<option>").attr({"value":i, "title":'('+ranks[0]+','+ranks[2]+','+ranks[4]+' )'}).text(Cartan_ranks))
 	}
 	$('.selectpicker').selectpicker('refresh');
 
@@ -324,10 +367,50 @@ function showRawOutput(output){
 	}
 }
 
-function addK(){
-	console.log("function addK is called")
+
+function addType(){
+	const div = $("<div>").attr({
+		"id": "type_div",
+		"class": "form-group"
+	})
+	const choose_type = $("<select>").attr({
+		"id":"type",
+		"class":"selectpicker",
+		"data-width":"auto",
+		"title":"category",
+		"method":"POST",
+		"onchange":"changeSpecify(\"type\"),changeLastCol(\"type\")"
+	})
+	$('#specify').append(div);
+	$('#type_div').append(choose_type);
+	var rep_types = ['Finite Dimensional','Discrete Series','Principal Series']
+	$.each(rep_types,function(i,item){
+		$('#type').append($("<option>").attr("value",item).text(item));
+	})
+	$('.selectpicker').selectpicker('refresh');
 }
 
-function addBorel(){
-	console.log("function addBorel is called")
+function addParam(){
+	console.log("function addParam is called")
+	selected_cat = document.getElementById("type").value
+	if (selected_cat === "Finite Dimensional"){
+		const div = $("<div>").attr({
+			"id":"param_div",
+			"class":"form-group"
+		})
+		const choose_param = $("<select>").attr({
+			"id":"param",
+			"class":"selectpicker",
+			"data-width":"auto",
+			"title":"which rep",
+			"method":"POST",
+			"onchange":"changeSpecify(\"param\"),changeLastCol(\"param\")"
+		})
+		$('#specify').append(div);
+		$('#param_div').append(choose_param);
+		$('#param').append($("<option>").attr("value","trivial").text("Trivial Representation"));
+		$('.selectpicker').selectpicker('refresh');
+	}
 }
+
+
