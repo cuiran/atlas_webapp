@@ -30,7 +30,7 @@ reaction_dict['KGB Elements'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Real Weyl Group'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Branch to K'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput]
-
+reaction_dict['Cuspidal Data'] = [scrollToInputOutput,showRawOutput]
 
 // append one button to each topic listed in structure.json
 // it also attach a function to the click event
@@ -104,7 +104,7 @@ function addToSpecify(list) {
 	const dropdown = $("<select>").attr({
 		"id": item,
 		"class": "selectpicker",
-		"data-width": "auto",
+		"data-width": "40%",
 		"data-windowPadding": "[5px,25px,5px,5px]",
 		"title": "choose "+item,
 		"method": "POST",
@@ -122,8 +122,14 @@ function addToSpecify(list) {
 function clickQuestionCallBack(item){
 	if (item === "group"){
 		return function(){question_group()}
+	} else if (item === "rank"){
+		return function(){question_rank()}
 	} else if (item === "Cartan"){
 		return function(){question_Cartan()}
+	} else if (item === "type"){
+		return function(){question_type()}
+	} else if (item === "param"){
+		return function(){question_param()}
 	} else {
 		return function(){console.log("not ready yet")}
 	}
@@ -140,6 +146,21 @@ function question_group(){
 	$('#details').append("<h4>Groups Options:</h4>").append("<p> Currently we have 8 choices of classical groups. The ones that needs p and q inputs are still under construction. </p>")
 }
 
+function question_rank(){
+	$('#details').empty();
+	$('#details').append("<h4>Rank Options:</h4>").append("<p>For computation efficiency, we provide rank option up to 8 for now.</p>")
+}
+
+
+function question_type(){
+	$('#details').empty();
+	$('#details').append("<h4>Representation Options:</h4>");
+}
+
+function question_param(){
+	$('#details').empty();
+	$('#details').append("<h4>Parameter Options:</h4>");
+}
 // get the list of groups in groups.json and use it to populate the "pick a group" dropdown menu
 function populateGroupDropdown() {
 	$.each(grp, function(i,group){
@@ -194,14 +215,14 @@ function addRank(val_dict){
 		const choose_rank = $("<select>").attr({
 			"id": "rank",
 			"class": "selectpicker",
-			"data-width": "auto",
+			"data-width": "40%",
 			"title" : "choose n",
 			"method": "POST",
 			"onchange": "changeSpecify(\"rank\"),changeLastCol(\"rank\")"
 		});
-		//const question_button = $("<button>").attr({"id":"rank"+"_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("rank"));
+		const question_button = $("<button>").attr({"id":"rank"+"_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("rank"));
 		$('#specify').append(div);
-		$('#rank_div').append(choose_rank);
+		$('#rank_div').append(choose_rank).append(question_button);
 		for (var i=1; i<9; i++){
 			$('#rank').append($("<option>").attr("value", i).text("\$n="+i+"\$"));
 		}
@@ -259,9 +280,13 @@ function ajax_get(query_id, func_array){
 				for (var i=0; i<func_array.length; i++){
 					func_array[i](out.output)
 				}
+				document.getElementById("atlas_output").style.color="black"
 			} else if (out_stat === "FAILED") {
-				console.log("failed")
-				console.log(out)
+				console.log("error occured")
+				for (var i=0; i<func_array.length;i++){
+					func_array[i](out.error)
+				}
+				document.getElementById("atlas_output").style.color="red"
 			} else {
 				setTimeout(timeOutCallBack(query_id,func_array),500)
 			}
@@ -294,7 +319,7 @@ function addCartanOptions(output){
 	const choose_Cartan = $('<select>').attr({
 		"id": "Cartan",
 		"class": "selectpicker",
-		"data-width": "80%",
+		"data-width": "60%",
 		"title": "choose Cartan",
 		"method": "POST",
 		"onchange": "changeSpecify(\"Cartan\"),changeLastCol(\"Cartan\")"
@@ -372,18 +397,19 @@ function addType(){
 	const div = $("<div>").attr({
 		"id": "type_div",
 		"class": "form-group"
-	})
+	});
 	const choose_type = $("<select>").attr({
 		"id":"type",
 		"class":"selectpicker",
-		"data-width":"auto",
+		"data-width":"50%",
 		"title":"category",
 		"method":"POST",
 		"onchange":"changeSpecify(\"type\"),changeLastCol(\"type\")"
-	})
+	});
+	const question_button = $("<button>").attr({"id":"type_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("type"));
 	$('#specify').append(div);
-	$('#type_div').append(choose_type);
-	var rep_types = ['Finite Dimensional','Discrete Series','Principal Series']
+	$('#type_div').append(choose_type).append(question_button);
+	var rep_types = ['Finite Dimensional']
 	$.each(rep_types,function(i,item){
 		$('#type').append($("<option>").attr("value",item).text(item));
 	})
@@ -397,17 +423,18 @@ function addParam(){
 		const div = $("<div>").attr({
 			"id":"param_div",
 			"class":"form-group"
-		})
+		});
 		const choose_param = $("<select>").attr({
 			"id":"param",
 			"class":"selectpicker",
-			"data-width":"auto",
+			"data-width":"50%",
 			"title":"which rep",
 			"method":"POST",
 			"onchange":"changeSpecify(\"param\"),changeLastCol(\"param\")"
-		})
+		});
+		const question_button = $("<button>").attr({"id":"param_question","type":"button","class":"btn btn-circle btn-default btn-sm"}).text("?").click(clickQuestionCallBack("param"));
 		$('#specify').append(div);
-		$('#param_div').append(choose_param);
+		$('#param_div').append(choose_param).append(question_button);
 		$('#param').append($("<option>").attr("value","trivial").text("Trivial Representation"));
 		$('.selectpicker').selectpicker('refresh');
 	}

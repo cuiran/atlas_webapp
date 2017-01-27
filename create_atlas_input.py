@@ -65,7 +65,7 @@ def branch_to_K(user_input):
 		atlas_input=(
 			set_group(group,rank)+
 			"set t=trivial(G)\n"+
-			"branch_std(t,10)\n")
+			"print_branch_std_long(t,10)\n")
 	return atlas_input
 
 def unitarity(user_input):
@@ -77,3 +77,14 @@ def unitarity(user_input):
 			"set t=trivial(G)\n"+
 			"is_unitary(t)\n")
 	return atlas_input
+
+def cuspidal_data(user_input):
+	group = str(user_input["group"])
+	rank = str(user_input["rank"])
+	if user_input["param"]=="trivial":
+		atlas_input = (
+			set_group(group,rank)+
+			"set t=trivial(G)\n"+
+			"cuspidal_data(t)\n")
+	return atlas_input
+

@@ -21,6 +21,8 @@ def to_atlas_input(user_input):
 		atlas_input = branch_to_K(user_input)
 	elif (request == "Unitarity"):
 		atlas_input = unitarity(user_input)
+	elif (request == "Cuspidal Data"):
+		atlas_input = cuspidal_data(user_input)
 	else:
 		atlas_input = "n=11"
 	return atlas_input
