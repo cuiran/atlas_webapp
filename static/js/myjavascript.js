@@ -29,7 +29,7 @@ reaction_dict['Simple Roots'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['KGB Elements'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Real Weyl Group'] = [scrollToInputOutput,showRawOutput]
 reaction_dict['Branch to K'] = [scrollToInputOutput,showRawOutput]
-reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput,insertWarning]
+reaction_dict['Unitarity']=[scrollToInputOutput,showRawOutput]
 reaction_dict['Cuspidal Data'] = [scrollToInputOutput,showRawOutput]
 
 // append one button to each topic listed in structure.json
@@ -95,7 +95,7 @@ function highlightShowButton(selected_show){
 // dynamically change the list of specifications in the second column after topic selection
 function addToSpecify(list) {
 	$('#specify').empty();
-	$('#specify').append("<h4>Specify:</h4>");
+	$('#specify').append("<h4 id=\"header_specify\">Specify:</h4>");
 	var item = list[0];
 	const div = $("<div>").attr({
 		"id": item+"_div",
@@ -198,7 +198,7 @@ function changeSpecify(item_changed){
 function removeOutdate(item_changed,index_changed,specs){
 	for (var i=index_changed+1; i<specs.length; i++) {
 		if ($('#'+specs[i]+'_div').length != 0){
-			$("#"+specs[i]+"_div").remove();
+			$("#"+specs[i]+"_div").remove()
 		}
 	}
 }
@@ -229,8 +229,71 @@ function addRank(val_dict){
 		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"rank"]);
 		$('.selectpicker').selectpicker('refresh');
 	} else {
-		console.log("not ready yet");
+		const rank_div = $("<div>").attr({
+			"id":"rank_div"
+		})
+		const div = $("<div>").attr({
+			"id":"rank_p_div",
+			"class":"form-group"
+		})
+		const choose_p = $("<select>").attr({
+			"id":"rank_p",
+			"class":"selectpicker",
+			"data-width":"40%",
+			"title":"choose p",
+			"method":"POST",
+			"onchange":"removeRankq(),addRankq(\"rank_p\")"
+		});
+		$('#specify').append(div);
+		$('#rank_p_div').append(choose_p);
+		for (var i=1; i<9; i++){
+			$('#rank_p').append($("<option>").attr("value",i).text("\$p="+i+"\$"));
+		}
+		MathJax.Hub.Queue(["Typeset",MathJax.Hub,"rank_p"]);
+		$('.selectpicker').selectpicker('refresh');
 	}	
+}
+
+function removeRankq(){
+	var spec_showing = document.getElementById('specify').children
+	var spec_ids = [spec_showing[0].id]
+	for (var i=1; i<spec_showing.length; i++){
+		spec_ids.push(spec_showing[i].id)
+	}
+	p_index = spec_ids.indexOf("rank_p_div")
+	for (var i=p_index+1; i<spec_ids.length; i++){
+		document.getElementById(spec_ids[i]).remove()
+	}
+}
+
+function addRankq(id){
+	p = document.getElementById(id).value
+	const div = $("<div>").attr({
+	"id":"rank_q_div",
+	"class":"form-group"
+	})
+	const choose_q = $("<select>").attr({
+	"id":"rank_q",
+	"class":"selectpicker",
+	"data-width":"40%",
+	"title":"choose q",
+	"method":"POST",
+	"onchange":"assignValueToRank(),changeSpecify(\"rank\"),changeLastCol(\"rank\")"
+	});
+	$('#specify').append(div)
+	$('#rank_q_div').append(choose_q);
+	for (var i=1; i<9-p; i++){
+	$('#rank_q').append($("<option>").attr("value",i).text("\$q="+i+"\$"));
+	}
+	MathJax.Hub.Queue(["Typeset",MathJax.Hub,"rank_q"]);
+	$('.selectpicker').selectpicker('refresh');
+}
+
+function assignValueToRank(){
+	p = document.getElementById("rank_p").value
+	q = document.getElementById("rank_q").value
+	hidden_rank_button = $("<button>").attr({"id":"rank","value":"["+p+","+q+"]","style":"display:none"})
+	$('#specify').append(hidden_rank_button)
 }
 
 function addCartan(val_dict){
@@ -239,6 +302,7 @@ function addCartan(val_dict){
 }
 
 function ajax_post(some_dict) {
+	console.log(some_dict)
 	$.ajax({
 		type:'POST',
 		url:'/newquery',
@@ -390,11 +454,6 @@ function showRawOutput(output){
 	for (var i=0; i<text_list.length; i++){
 		$('#atlas_output').append($('<p>').text(text_list[i]))
 	}
-}
-
-function insertWarning(){
-	console.log("insertWarning")
-	$('#atlas_output').append($('<p style="color:red;">').text("The unitarity functionality is still under construction, the result might not be accurate."))
 }
 
 function addType(){

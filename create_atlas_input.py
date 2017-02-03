@@ -1,5 +1,12 @@
 def set_group (group,rank):
-	s = (
+	if len(rank)>1:
+		l = rank[1:-1].split(',')
+		s = (
+		"set p="+l[0]+"\n"+
+		"set q="+l[1]+"\n"+
+		"set G="+group+"\n")
+	else: 
+		s = (
 		"set n="+rank+"\n"+
 		"set G="+group+"\n")
 	return s
