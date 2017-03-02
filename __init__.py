@@ -11,8 +11,9 @@ from queries import process_input, check_query_status
 
 app = Flask(__name__)
 
-# set atlas directory
-atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
+# set atlas directory"
+atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
+#atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
 #atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
 #atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/"
 

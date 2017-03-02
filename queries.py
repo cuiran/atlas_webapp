@@ -126,6 +126,7 @@ def check_query_status(query_id):
     if status == SUCCESS:
         output = found.get(OUTPUT)
     else:
+        print("status is "+status)
         output = None
 
     return status, output, err
@@ -141,8 +142,8 @@ def run_atlas_query(user_input, atlas_dir):
                          stderr=subprocess.PIPE)
 
     output, err = p.communicate(input=user_input)
-    output = output.decode('UTF-8')
-    err = err.decode('UTF-8')
+    #output = output.decode('UTF-8')
+    #err = err.decode('UTF-8')
     if not err:
         output = trim_output(output)
 
