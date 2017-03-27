@@ -148,3 +148,17 @@ def run_atlas_query(user_input, atlas_dir):
         output = trim_output(output)
 
     return output, err
+
+def perl_process(output):
+    with open('perl_scripts/output.tmp','w') as f:
+        f.write(output)
+    f.close()
+    p = subprocess.Popen(["perl perl_scripts/testperl.pl"],
+        shell=True,
+        universal_newlines=True,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE)
+    output,err = p.communicate()
+    subprocess.call(['rm','perl_scripts/output.tmp'])
+    return output,err
