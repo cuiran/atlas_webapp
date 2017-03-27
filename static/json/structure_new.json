@@ -1,0 +1,46 @@
+[
+    {
+    "topic":"Structure Theory",
+    "id":"str_thy",
+    "specify":["group"],
+    "show":[
+        {
+        "name":"Cartan Subgroups"
+        },
+        {
+        "name":"Real Forms"
+        },
+        {
+        "name":"Distinguished Involution"
+        },
+        {
+        "name":"Simple Roots"
+        },
+        {
+        "name":"KGB Elements"
+        },
+        {
+        "name":"Real Weyl Group",
+        "further_require":["Cartan"]
+        }]
+    },
+    {
+    "topic":"Representation Theory",
+    "id":"rep_thy",
+    "specify":["group","rep_cat","rep_param"],
+    "show":[
+        {
+        "name":"Branch to K",
+        "further_require":["hight"]
+        },
+        {
+        "name":"Unitarity"
+        },
+        {
+        "name":"Signature of Hermitian Form"
+        },
+        {
+        "name":"Cuspidal Data"
+        }]
+    }
+]
