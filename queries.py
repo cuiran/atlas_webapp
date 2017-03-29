@@ -159,6 +159,6 @@ def perl_process(output):
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
-    output,err = p.communicate()
+    out,err = p.communicate()
     subprocess.call(['rm','perl_scripts/output.tmp'])
-    return output,err
+    return out,err

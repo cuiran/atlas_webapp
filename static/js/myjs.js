@@ -39,19 +39,21 @@ function topicClickReaction(item){
 function highlightTopicButton(topic_id){
     $.each(struc, function(i,item){
         if (item.id === topic_id){
-            $('#'+item.id).addClass('active');
+            $("#"+item.id).addClass('active');
         } else {
-            $('#'+item.id).removeClass('active');
+            $("#"+item.id).removeClass('active');
         }
     })
 }
 
+//keep show button highlighted throughout session
 function highlightShowButton(show_id,topic_item){
     $.each(topic_item.show,function(i,item){
-        if (item.name === show_id.name){
-            $('#'+show_id.name).addClass('active');
+        if (item.id === show_id.id){
+            $('#'+item.id).addClass('active');
         } else {
-            $('#'+show_id.name).removeClass('active');
+            console.log(item.id)
+            $('#'+item.id).removeClass('active');
         }
     })
 }
@@ -122,7 +124,7 @@ function addShow(item){
         const button = $('<button>').attr({
             "type":"button",
             "class":"btn btn-default btn-md",
-            "id":show_item.name
+            "id":show_item.id
         }).text(show_item.name).click(showClickReaction(show_item,item));
         $('#show').append(button);
     })   
@@ -145,14 +147,14 @@ function changeSpecify(changed_item, topic_item){
 function addGrpParam(param_list){
     if (param_list.length === 1){
         addDropdown("n","specify");
-        setOnchangeFuncs("n",[]);
+        //setOnchangeFuncs("n","");
         for (var i=1; i<9; i++){
             $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
         }
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
-        setOnchangeFuncs("p",["addQ()"]);
+        setOnchangeFuncs("p","addQ()");
         for (var i=1; i<9; i++){
             $('#p').append($('<option>').attr("value",i).text("\$p="+i+"\$"));
         }
@@ -163,7 +165,14 @@ function addGrpParam(param_list){
 
 // add q parameter
 function addQ(){
-    console.log("addQ is called");
+    addDropdown("q","specify");
+    p_node = document.getElementById('p');
+    p_val = p_node.value;
+    for (var i=1; i<9-p_val; i++){
+        $('#q').append($('<option>').attr("value",i).text("\$q="+i+"\$"));
+    }
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"q"]);
+    $('.selectpicker').selectpicker('refresh');
 }
 
 function addDropdown(id,column){
@@ -174,9 +183,9 @@ function addDropdown(id,column){
 }
 
 // set the onchange functions to execute 
-function setOnchangeFuncs(id,func_array){
-    Node = document.getElementById(id);
-    Node.setAttribute("onchange":func_array);
+function setOnchangeFuncs(id,funcs){
+    node = document.getElementById(id);
+    node.setAttribute("onchange",funcs);
 }
 
 // get list of element id's that are below the given id in the given column
@@ -187,8 +196,6 @@ function getIdsBelow(id,column){
         specs_ids.push(specs_onscreen[i].id);
     }
     var id_index = specs_ids.indexOf(id);
-    console.log(id_index)
-    console.log(specs_ids)
     if (id_index+1<=specs_ids.length){
         var ids_below = specs_ids.slice(id_index+1,specs_ids.length)
         return ids_below
