@@ -58,7 +58,8 @@ def try_find_existing_query(user_input):
 
     doc = queries_collection.find_one(query)
     if doc:
-        return doc[_ID]
+#        return doc[_ID]
+        return None
     else:
         return None
 
@@ -146,19 +147,20 @@ def run_atlas_query(user_input, atlas_dir):
     #err = err.decode('UTF-8')
     if not err:
         output = trim_output(output)
-
-    return output, err
+#   return output, err
+    return perl_process(user_input+"\n--divider--\n"+output)
 
 def perl_process(output):
-    with open('perl_scripts/output.tmp','w') as f:
+    with open('/var/www/web_interface/atlas_app/output.tmp','w') as f:
         f.write(output)
     f.close()
-    p = subprocess.Popen(["perl perl_scripts/testperl.pl"],
+    p = subprocess.Popen(["perl /var/www/web_interface/atlas_app/perl_scripts/process.pl"],
         shell=True,
         universal_newlines=True,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     output,err = p.communicate()
-    subprocess.call(['rm','perl_scripts/output.tmp'])
+#    subprocess.call(['rm','/var/www/web_interface/atlas_app/output.tmp'])
     return output,err
+

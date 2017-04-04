@@ -65,11 +65,12 @@ function highlightTopicsButton(id){
 
 // dynamically change the list of buttons in the last column after topic selection
 function addToLastcol(list) {
-	$('#lastcol').empty();
-	$('#lastcol').append("<h4>Show:</h4>");
+	console.log("addToLastcol called");
+	$('#show').empty();
+	$('#show').append("<h4>Show:</h4>");
 	$.each(list, function(i, item) {
 		const button = $("<button>").attr({"type":"button","class":"btn btn-default btn-md","id":item.id}).text(item.name).prop('disabled',true).click(showCallback(item));
-		$('#lastcol').append(button);
+		$('#show').append(button);
 	})
 }
 
@@ -206,7 +207,7 @@ function removeOutdate(item_changed,index_changed,specs){
 function addRank(val_dict){
 	var group_selected = val_dict["group"]
 	var grp_item = $.grep(grp, function(g){return g.id === group_selected})[0]
-	var input_needed = grp_item.need_rank
+	var input_needed = grp_item.need_param
 	if (input_needed.length === 1) {
 		const div = $("<div>").attr({
 			"id": "rank_div",
@@ -404,7 +405,7 @@ function changeLastCol(spec_id){
 	var topics_div = document.getElementById("topics")
 	var active_button = topics_div.getElementsByClassName("active")[0];
 	var active_button_id = active_button.id;
-	var last_col = document.getElementById('lastcol').children
+	var last_col = document.getElementById('show').children
 	var selected_topic = $.grep(struc, function(e){return e.id === active_button_id})[0];
 	for (var i=1; i<last_col.length;i++){
 		var button_text = last_col[i].textContent
@@ -428,7 +429,7 @@ function hasValue(id){
 }
 
 function activateLastCol(struc_item){
-	var last_col = document.getElementById('lastcol').children
+	var last_col = document.getElementById('show').children
 	for (var i=1;i<last_col.length;i++){
 		last_col[i].disabled = false
 	}
