@@ -450,12 +450,23 @@ function scrollToInputOutput(){
 }
 
 function showRawOutput(output){
-	var text_list = output.split("\n")
-	$('#atlas_output').empty()
-	for (var i=0; i<text_list.length; i++){
-		$('#atlas_output').append($('<p>').text(text_list[i]))
-	}
+    $('#atlas_output').empty();
+    $('#atlas_output').append(output);
 }
+
+function showRawOutput(output){
+    $('#atlas_output').empty();
+//    $('#atlas_output').append(JSON.parse(output));
+    $('#atlas_output').append(output);
+}
+
+//function showRawOutput(output){
+//	var text_list = output.split("\n")
+//	$('#atlas_output').empty()
+//	for (var i=0; i<text_list.length; i++){
+//		$('#atlas_output').append($('<p>').text(text_list[i]))
+//	}
+//}
 
 function addType(){
 	const div = $("<div>").attr({

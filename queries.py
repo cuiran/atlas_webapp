@@ -151,16 +151,16 @@ def run_atlas_query(user_input, atlas_dir):
     return perl_process(user_input+"\n--divider--\n"+output)
 
 def perl_process(output):
-    with open('/var/www/web_interface/atlas_app/output.tmp','w') as f:
+    with open('/var/www/web_interface2/atlas_app/output.tmp','w') as f:
         f.write(output)
     f.close()
-    p = subprocess.Popen(["perl /var/www/web_interface/atlas_app/perl_scripts/process.pl"],
+    p = subprocess.Popen(["perl /var/www/web_interface2/atlas_app/perl_scripts/process.pl"],
         shell=True,
         universal_newlines=True,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE)
     output,err = p.communicate()
-#    subprocess.call(['rm','/var/www/web_interface/atlas_app/output.tmp'])
+    subprocess.call(['rm','/var/www/web_interface2/atlas_app/output.tmp'])
     return output,err
 
