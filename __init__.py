@@ -6,8 +6,9 @@ from flask import Flask
 from flask import render_template
 from flask import request
 
-from functions import *
-from queries import process_input, check_query_status
+import background_process.convert_input as atin
+import background_process.run_atlas as runat
+import background_process.parse as parse
 
 app = Flask(__name__)
 
@@ -21,30 +22,13 @@ atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
 def main_page():
 	return render_template('main.html')
 
-@app.route("/newquery", methods=['POST'])
-def get_queried():
+@app.route("/runatlas", methods=['GET','POST'])
+def atlas_process():
     user_input = json.loads(request.data)
-    print(user_input)
-    user_input = to_atlas_input(user_input)
-    query_id = process_input(user_input, atlas_dir)
-    output = {
-        'query_id': query_id
-    }
-    return json.dumps(output)
-
-
-@app.route("/checkquery", methods=['GET','POST'])
-def check_on_query():
-    query_id = json.loads(request.data)["query_id"]
-    status, output, err = check_query_status(query_id)
-
-    response = {
-        'status': status,
-        'output': output,
-        'error': err
-    }
-
-    return json.dumps(response)
+    atlas_input = atin.get_atlasinput(user_input)
+    atlas_output = runat.get_atlas_output(atlas_input,atlas_dir)
+    parsed_out = parse.parse_output(user_input,atlas_output)
+    return json.dumps(parsed_out)
 
 
 if __name__ == "__main__":
