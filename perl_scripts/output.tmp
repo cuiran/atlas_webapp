@@ -1,0 +1,20 @@
+{"topic": "str_thy", "group": "GL(n,R)", "n": "3", "show": "Real_Weyl_Group"}
+--divider--
+Variable n: int
+Variable G: RealForm
+Variable cartans: [CartanClass]
+"Cartan number 0"
+compact: 0, complex: 1, split: 1
+canonical twisted involution: e
+twisted involution orbit size: 3; fiber size: 1; strong inv: 3
+imaginary root system: A1
+real root system: empty
+complex factor: empty
+"Cartan number 1"
+compact: 0, complex: 0, split: 3
+canonical twisted involution: 1,2,1
+twisted involution orbit size: 1; fiber size: 1; strong inv: 1
+imaginary root system: empty
+real root system: A2
+complex factor: empty
+Value: [(),()]

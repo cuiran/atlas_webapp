@@ -274,13 +274,18 @@ function react(show_id,output){
 }
 
 function showRawOutput(output){
-    text_list = JSON.parse(output);
     $('#atlas_input_output').empty();
-    $('#atlas_input_output').append('<p><h4 id=output_header>atlas output:</h></p>');
-    for (var i=0;i<text_list.length;i++){
-        $('#atlas_input_output').append($('<p>').text(text_list[i]));
-    }
+    $('#atlas_input_output').append(output);
 }
+
+//function showRawOutput(output){
+//    text_list = JSON.parse(output);
+//    $('#atlas_input_output').empty();
+//    $('#atlas_input_output').append('<p><h4 id=output_header>atlas output:</h></p>');
+//    for (var i=0;i<text_list.length;i++){
+//        $('#atlas_input_output').append($('<p>').text(text_list[i]));
+//    }
+//}
 
 function addCartanOptions(output){
     Cartan_list = JSON.parse(output);

@@ -18,6 +18,10 @@ atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
 #atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
 #atlas_dir = "/home/cuiran/atlas_software/atlasofliegroups/"
 
+# perl scripts directory
+perl_scripts_dir="/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/"
+#perl_scripts_dir="/var/www/web_interface2/atlas_app/perl_scripts/"
+
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
 	return render_template('main.html')
@@ -27,7 +31,10 @@ def atlas_process():
     user_input = json.loads(request.data)
     atlas_input = atin.get_atlasinput(user_input)
     atlas_output = runat.get_atlas_output(atlas_input,atlas_dir)
-    parsed_out = parse.parse_output(user_input,atlas_output)
+    if "further" not in user_input.keys():
+        parsed_out,_ = parse.perl_process(user_input,atlas_output,perl_scripts_dir)
+    else:
+        parsed_out = parse.parse_output(user_input,atlas_output)
     return json.dumps(parsed_out)
 
 
