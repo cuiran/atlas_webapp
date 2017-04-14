@@ -18,7 +18,7 @@ def perl_process(user_input,atlas_output,perl_scripts_dir):
 def parse_output(user_input,atlas_output):
     if user_input['show']=='Cartan_Subgroups':
         parsed_out = trim(atlas_output)
-    if (user_input['show']=='Real_Weyl_Group') and ('Cartan' not in user_input.keys()):
+    elif (user_input['show']=='Real_Weyl_Group') and (user_input['further']['Cartan']==""):
         parsed_out = get_cartan_options(atlas_output)
     return parsed_out
 
@@ -34,5 +34,4 @@ def get_cartan_options(atlas_output):
     for i in range(len(cartan_idx_inlines)):
         cartans.append(lines[cartan_idx_inlines[i]][1:-1])
         cartans.append(lines[cartan_idx_inlines[i]+1])
-    print(cartans)
     return cartans

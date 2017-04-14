@@ -29,14 +29,28 @@ def main_page():
 @app.route("/runatlas", methods=['GET','POST'])
 def atlas_process():
     user_input = json.loads(request.data)
+    print(user_input)
     atlas_input = atin.get_atlasinput(user_input)
     atlas_output = runat.get_atlas_output(atlas_input,atlas_dir)
-    if "further" not in user_input.keys():
-        parsed_out,_ = parse.perl_process(user_input,atlas_output,perl_scripts_dir)
+    if no_empty_value(user_input):
+        parsed_out,_ = parse.perl_process(atlas_input,atlas_output,perl_scripts_dir)
+        print(parsed_out)
     else:
         parsed_out = parse.parse_output(user_input,atlas_output)
+        print(parsed_out)
     return json.dumps(parsed_out)
 
+def no_empty_value(user_input):
+    if all(value!="" for value in user_input.values()):
+        if "further" in user_input.keys():
+            if all(value!="" for value in user_input['further'].values()):
+                return True
+            else:
+                return False
+        else:
+            return True
+    else:
+        return False
 
 if __name__ == "__main__":
     app.run(debug=True)

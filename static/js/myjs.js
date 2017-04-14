@@ -241,7 +241,7 @@ function ajax_post(val_dict){
         contentType:'json',
         data: JSON.stringify(val_dict),
         success: function(data){
-            react(val_dict['show'],data);
+            react(val_dict,data);
         }
     })
 }
@@ -251,6 +251,7 @@ function get_val_dict(){
     var val_dict = {};
     var topic_node = document.getElementById("topics");
     var active_topic_id = topic_node.getElementsByClassName("active")[0].id;
+    var struc_selected = $.grep(struc, function(e){return e.id===active_topic_id})[0]
     val_dict["topic"] = active_topic_id;
     var spec_divs_onscreen = document.getElementById("specify").children;
     for (var i=1; i<spec_divs_onscreen.length; i++){
@@ -261,37 +262,61 @@ function get_val_dict(){
     var show_node = document.getElementById("show");
     var active_show_id = show_node.getElementsByClassName("active")[0].id;
     val_dict["show"] = active_show_id;
+    var show_selected = $.grep(struc_selected.show, function(e){return e.id===active_show_id})[0]
+    if ("further_require" in show_selected){
+        val_dict["further"] = {}
+        $.each(show_selected.further_require, function(i,item){
+            val_dict.further[item] = document.getElementById(item).value
+        })
+    }
     return val_dict   
 }
 
-function react(show_id,output){
+function react(val_dict,output){
+    var show_id = val_dict['show']
     if (show_id === "Cartan_Subgroups"){
         showRawOutput(output);
     }
-    if (show_id === "Real_Weyl_Group"){
-        addCartanOptions(output);
+    else if (show_id === "Real_Forms"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Distinguished_Involution"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Simple_Roots"){
+        showRawOutput(output);
+    }
+    else if (show_id === "KGB_Elements"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Real_Weyl_Group"){
+        if (val_dict['further']['Cartan'] == ""){
+            addCartanOptions(output);
+        } else {
+            showRawOutput(output);
+        }
     }
 }
 
 function showRawOutput(output){
     $('#atlas_input_output').empty();
+    $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
     $('#atlas_input_output').append(output);
 }
 
-//function showRawOutput(output){
-//    text_list = JSON.parse(output);
-//    $('#atlas_input_output').empty();
-//    $('#atlas_input_output').append('<p><h4 id=output_header>atlas output:</h></p>');
-//    for (var i=0;i<text_list.length;i++){
-//        $('#atlas_input_output').append($('<p>').text(text_list[i]));
-//    }
-//}
 
 function addCartanOptions(output){
-    Cartan_list = JSON.parse(output);
-    console.log(Cartan_list);
-    for (var i=0;i<Cartan_list.length/2;i++){
-        $('#Cartan').append($("<option>").attr({"value":i,"title":"Cartan "+i}).text(Cartan_list[2*i+1]))
+    if (document.getElementById('Cartan').options.length<=1){
+        Cartan_list = JSON.parse(output);
+        for (var i=0;i<Cartan_list.length/2;i++){
+            $('#Cartan').append($("<option>").attr({"value":i,"title":"Cartan "+i}).text(Cartan_list[2*i+1]))
+        }
+        setOnchangeFuncs("Cartan","clearPrevious([\'atlas_input_output\']),furtherClickReaction(\'Cartan\')")
+        $('.selectpicker').selectpicker('refresh');
     }
-    $('.selectpicker').selectpicker('refresh');
+}
+
+function furtherClickReaction(item){
+    var val_dict = get_val_dict();
+    ajax_post(val_dict);
 }
