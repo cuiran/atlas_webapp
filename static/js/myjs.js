@@ -1,5 +1,5 @@
 function getStruc(){
-    return $.getJSON('static/json/structure_new.json');
+    return $.getJSON('static/json/structure.json');
 }
 function getGrps(){
     return $.getJSON('static/json/groups.json');
@@ -29,7 +29,7 @@ function addTopics(col_id){
 function topicClickReaction(item){
     return function(){
         highlightTopicButton(item.id);
-        clearPrevious(['specify','show','further','atlas_output']);
+        clearPrevious(['specify','show','further','atlas_input_output']);
         addSpecify(item);
         addShow(item);
     }
@@ -52,7 +52,6 @@ function highlightShowButton(show_id,topic_item){
         if (item.id === show_id.id){
             $('#'+item.id).addClass('active');
         } else {
-            console.log(item.id)
             $('#'+item.id).removeClass('active');
         }
     })
@@ -147,14 +146,13 @@ function changeSpecify(changed_item, topic_item){
 function addGrpParam(param_list){
     if (param_list.length === 1){
         addDropdown("n","specify");
-        //setOnchangeFuncs("n","");
         for (var i=1; i<9; i++){
             $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
         }
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
-        setOnchangeFuncs("p","addQ()");
+        setOnchangeFuncs("p","clearElements(getIdsBelow(\'p_div\',\'specify\')),addQ()");
         for (var i=1; i<9; i++){
             $('#p').append($('<option>').attr("value",i).text("\$p="+i+"\$"));
         }
@@ -184,7 +182,7 @@ function addDropdown(id,column){
 
 // set the onchange functions to execute 
 function setOnchangeFuncs(id,funcs){
-    node = document.getElementById(id);
+    var node = document.getElementById(id);
     node.setAttribute("onchange",funcs);
 }
 
@@ -207,9 +205,11 @@ function getIdsBelow(id,column){
 // reaction functions triggered by clicking buttons in the show column
 function showClickReaction(item_clicked,topic_item){
     return function(){
-        clearPrevious(['further','atlas_output']);
+        clearPrevious(['further','atlas_input_output']);
         highlightShowButton(item_clicked,topic_item);
         processShowClick(item_clicked,topic_item);
+        var val_dict = get_val_dict();
+        ajax_post(val_dict);
     }
 }
 
@@ -223,7 +223,7 @@ function processShowClick(item_clicked,topic_item){
 // add to further column
 function addFurtherRequired(item_clicked,topic_item){
     $('#further').append("<h4 id=\"header_further\">Further Specify:</h4>");
-    first_further = item_clicked.further_require[0];
+    var first_further = item_clicked.further_require[0];
     if (first_further === "Cartan"){
         const div = div_const(first_further);
         const dropdown = dropdown_const(first_further);
@@ -231,4 +231,92 @@ function addFurtherRequired(item_clicked,topic_item){
         $('#'+first_further+'_div').append(dropdown);
         $('.selectpicker').selectpicker('refresh');
     }
+}
+
+// post user input and get atlas output
+function ajax_post(val_dict){
+    $.ajax({
+        type:'POST',
+        url:'/runatlas',
+        contentType:'json',
+        data: JSON.stringify(val_dict),
+        success: function(data){
+            react(val_dict,data);
+        }
+    })
+}
+
+// get user input values into a dictionary
+function get_val_dict(){
+    var val_dict = {};
+    var topic_node = document.getElementById("topics");
+    var active_topic_id = topic_node.getElementsByClassName("active")[0].id;
+    var struc_selected = $.grep(struc, function(e){return e.id===active_topic_id})[0]
+    val_dict["topic"] = active_topic_id;
+    var spec_divs_onscreen = document.getElementById("specify").children;
+    for (var i=1; i<spec_divs_onscreen.length; i++){
+        var div_id = spec_divs_onscreen[i].id;
+        var child_id = div_id.slice(0,-4);
+        val_dict[child_id] = document.getElementById(child_id).value;
+    }
+    var show_node = document.getElementById("show");
+    var active_show_id = show_node.getElementsByClassName("active")[0].id;
+    val_dict["show"] = active_show_id;
+    var show_selected = $.grep(struc_selected.show, function(e){return e.id===active_show_id})[0]
+    if ("further_require" in show_selected){
+        val_dict["further"] = {}
+        $.each(show_selected.further_require, function(i,item){
+            val_dict.further[item] = document.getElementById(item).value
+        })
+    }
+    return val_dict   
+}
+
+function react(val_dict,output){
+    var show_id = val_dict['show']
+    if (show_id === "Cartan_Subgroups"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Real_Forms"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Distinguished_Involution"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Simple_Roots"){
+        showRawOutput(output);
+    }
+    else if (show_id === "KGB_Elements"){
+        showRawOutput(output);
+    }
+    else if (show_id === "Real_Weyl_Group"){
+        if (val_dict['further']['Cartan'] == ""){
+            addCartanOptions(output);
+        } else {
+            showRawOutput(output);
+        }
+    }
+}
+
+function showRawOutput(output){
+    $('#atlas_input_output').empty();
+    $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
+    $('#atlas_input_output').append(output);
+}
+
+
+function addCartanOptions(output){
+    if (document.getElementById('Cartan').options.length<=1){
+        Cartan_list = JSON.parse(output);
+        for (var i=0;i<Cartan_list.length/2;i++){
+            $('#Cartan').append($("<option>").attr({"value":i,"title":"Cartan "+i}).text(Cartan_list[2*i+1]))
+        }
+        setOnchangeFuncs("Cartan","clearPrevious([\'atlas_input_output\']),furtherClickReaction(\'Cartan\')")
+        $('.selectpicker').selectpicker('refresh');
+    }
+}
+
+function furtherClickReaction(item){
+    var val_dict = get_val_dict();
+    ajax_post(val_dict);
 }
