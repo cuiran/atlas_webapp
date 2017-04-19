@@ -15,11 +15,17 @@ while (my $row = <$fh>) {
 sub detect_type{
     my $io=shift;
     if ($io =~ /real_forms/m){
-    process_real_forms($io);
+	process_real_forms($io);
     }elsif ($io =~ /cartans/m){
-    process_cartans($io);
+	process_cartans($io);
     }elsif ($io =~ /print_KGB/m){
-    process_kgb($io);
+	process_kgb($io);
+    }elsif ($io =~ /distinguished_involution/m){
+	process_di($io);
+    }elsif ($io =~ /simple_roots/m){
+	process_simple_roots($io);
+    }elsif ($io =~ /print_real_Weyl/m){
+	process_print_real_weyl($io);
     }else{
     print $io;
     }    
@@ -37,8 +43,13 @@ sub process_cartans{
     $output =~ s/"//g;        
  #   print("<P>output2=",$output);
     my @cartans = split("Cartan number ",$output);
+
+
     print "<P><strong>Cartan subgroups</strong><BR>";
-    print "<P><Table border=1>";
+
+print "<style>
+table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
+    print "<P><Table>";
     print "<tr>
 <td>#&nbsp;</td>
 <td>cpt&nbsp;</td>
@@ -53,10 +64,6 @@ sub process_cartans{
 <td>involution&nbsp;</td>
 </tr>";
 
-    # print "Cartans are:";
-    # foreach my $cartan (@cartans){
-    #   print "got $cartan";
-    # }
     foreach my $cartan (@cartans){
 
 my ($number,$compact,$complex,$split,$involution,$orbit_size,$fiber,$strong_inv,$imaginary,$real,$complex_factor)=
@@ -81,19 +88,19 @@ if (defined($number)){
 
 print "</table>";
 print "<P><P><strong>Key:</strong><BR>
-<table>
-<tr><td align=right>#:</td><td width=10></td><td>Cartan number</td></tr>
-<tr><td align=right>cpt:</td><td width=10></td><td>number of S<sup>1</sup> factors</td></tr>
-<tr><td align=right>real:</td><td width=10></td><td>number of R<sup>x</sup> factors</td></tr>
-<tr><td align=right>cx:</td><td width=10></td><td>number of C<sup>x</sup> factors</td></tr>
-<tr><td align=right>orbit:</td><td width=10></td><td>size of W-conjugacy class of &theta; </td></tr>
-<tr><td align=right>fiber:</td><td width=10></td><td>rank of fiber of map to twisted involution</td></tr>
-<tr><td align=right>SI:</td><td width=10></td><td>number of strong involutions with same square as x</td></tr>
-<tr><td align=right>Im:</td><td width=10></td><td>type of system of imaginary roots &Delta;<sup>&theta;</sup></td></tr>
-<tr><td align=right>Re:</td><td width=10></td><td>type of system of real roots &Delta;<sup>-&theta;</sup> </td></tr>
-<tr><td align=right>Cx:</td><td width=10></td><td>type of complex root system &Delta;<sup>C</sup></td></tr>
-<tr><td align=right>involution:</td><td width=10></td><td>(twisted) involution &theta; of T</td></tr>
-</table>"
+<UL>
+<LI>#: Cartan number
+<LI>cpt: number of S<sup>1</sup> factors
+<LI>real: number of R<sup>x</sup> factors
+<LI>cx: number of C<sup>x</sup> factors
+<LI>orbit: size of W-conjugacy class of &theta; 
+<LI>fiber: rank of fiber of map to twisted involution
+<LI>SI: number of strong involutions with same square as x
+<LI>Im: type of system of imaginary roots &Delta;<sup>&theta;</sup>
+<LI>Re: type of system of real roots &Delta;<sup>-&theta;</sup> 
+<LI>Cx: type of complex root system &Delta;<sup>C</sup>
+<LI>involution: (twisted) involution &theta; of T
+</UL>";
 }
 sub process_real_forms{
     my $io=shift;
@@ -110,10 +117,13 @@ sub process_real_forms{
 # 7:  2  [C,n]    5   8     *  10  (0,0)#2 1x2^e
 
 sub process_kgb{
+    print "<script src=../static/js/wz_tooltip.js></script>";
+    print "<script src=../static/js/structurePopups.js></script>";
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
 #    print("<P>input=",$input);
 #    print("<P>output=",$output);
+
     $output =~ s/\n//g;        
     $output =~ s/.*\.//g;
 #    print("<P>output2=",$output);
@@ -122,28 +132,15 @@ sub process_kgb{
 #    foreach my $x (@kgb){ print("<BR>x=$x");}
     #do one step to get the rank
 my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $kgb[0] =~ 
-    / *([0-9]*) *(\[.*\]) *([0-9 \*]*) *(\(.*\))(.)([0-9]*) *(.*)/;
+    / *([0-9]*) *(\[.*\]) *([0-9 \*]*) *(\(.*\))(.) *([0-9]+) *(.*)/;
     my @roots=split ',', $roots;
     my $rank=scalar(@roots);
 #    print "rank=$rank";
-    print "<div>";
-    print "<table styletable { 
-      border-spacing:10; 
-      border-collapse:collapse;   
-    }";
-    print "<P><strong>K\\G/B</strong><BR>";
-    print "<P><Table border=1 style=\"border-spacing: 10px;\">";
 
-    print "<tr>
-<td>#&nbsp;</td>
-<td>l&nbsp;</td>
-<td colspan=$rank>cross&nbsp;</td>
-<td colspan=$rank>Cayley&nbsp;</td>
-<td>torus&nbsp;</td>
-<td>#&nbsp;</td>
-<td>Cartan&nbsp;</td>
-<td>w&nbsp;</td>
-</tr>";
+print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
+
+    print "<P><Table>";
+    print "<tr><td>#&nbsp;</td><td>l&nbsp;</td><td colspan=$rank>cross&nbsp;</td><td colspan=$rank>Cayley&nbsp;</td><td>torus&nbsp;</td><td>#&nbsp;</td><td>Cartan&nbsp;</td><td>w&nbsp;</td></tr>";
 
 
 
@@ -151,31 +148,127 @@ my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $kgb[0] =~
     my $x=$kgb[$i];
 
 my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $x =~ 
-    / *([0-9]*) *(\[.*\]) *([0-9 \*]*) *(\(.*\))(.)([0-9]*) *(.*)/;
+    / *([0-9]*) *(\[.*\]) *([0-9 \*]*) *(\(.*\))(.) *([0-9]*) *(.*) */;
+    $w =~ s/ //g;
 #print "l=$l\n roots=$roots\n crossandcayley=$crossandcayley\ntorus=$torus\ncanonical=$canonical\ncartan=$cartan\nw=$w";
-my @crossandcayley=split "\ +", $crossandcayley;
+    my @crossandcayley=split "\ +", $crossandcayley;
+    my @roots= split ',', $roots;
+    my @root_texts;
+    foreach my $i (0..$#roots){
+	my $root = $roots[$i];
+	$root =~ s/\[|\]//g;
+	if ($root eq 'C'){
+	    push @root_texts,"complex";
+	}elsif 
+	    ($root eq 'n'){
+	    push @root_texts,"noncompact imaginary";
+	}elsif 
+	    ($root eq 'c'){
+	    push @root_texts,"compact imaginary";
+	}elsif 
+	    ($root eq 'r'){
+	    push @root_texts,"real";
+	}else{
+	    push @root_texts,"other";
+	}
+	    
+    }
+#    <a onclick="kgbTip4(3, 0, ['complex','noncompact imaginary','complex'])">[C,n,C]</a>    
+    my $roots_text="<a onclick=\"kgTip4(3,0, ['".join "'", @root_texts."'])\">$roots</a>";
 print "<tr>
-<td>$i</td>
-<td>$roots</td>";
+<td><a onclick=kgbTip1($i)>$i</td>
+<td>$roots_text</td>";
     for my $c (@crossandcayley){
         print "<td>$c</td>";
     }
-    print "<td>$torus</td><td>$canonical</td><td>$cartan</td><td>$w</td></tr>";
+    print "<td>$torus</td><td>$canonical</td><td>$cartan</td><td><a onclick=kgbTip7('$w',0)>$w</td></tr>";
     }
 print "</table>";
 print "</div>";
-
 print "<P><P><strong>Key:</strong><BR>
-<table>
-<tr><td align=right>#:</td><td width=10></td><td>KGB number</td></tr>
-<tr><td align=right>roots:</td><td width=10></td><td>types of simple roots</td></tr>
-<tr><td align=right>cross:</td><td width=10></td><td>Cross action of simple roots</td></tr>
-<tr><td align=right>Cayley:</td><td width=10></td><td>Cayley transforms of simple roots</td></tr>
-<tr><td align=right>torus:</td><td width=10></td><td>torus element</td></tr>
-<tr><td align=right>#:</td><td width=10></td><td>distinguished involution on this Cartan</td></tr>
-<tr><td align=right>Cartan:</td><td width=10></td><td>Cartan number</td></tr>
-<tr><td align=right>w:</td><td width=10></td><td>(twisted) involution</td></tr>
-</table>";
+<UL>
+<LI>#: Cartan number
+<LI>cpt: number of S<sup>1</sup> factors
+<LI>real: number of R<sup>x</sup> factors
+<LI>cx: number of C<sup>x</sup> factors
+<LI>orbit: size of W-conjugacy class of &theta; 
+<LI>fiber: rank of fiber of map to twisted involution
+<LI>SI: number of strong involutions with same square as x
+<LI>Im: type of system of imaginary roots &Delta;<sup>&theta;</sup>
+<LI>Re: type of system of real roots &Delta;<sup>-&theta;</sup> 
+<LI>Cx: type of complex root system &Delta;<sup>C</sup>
+<LI>involution: (twisted) involution &theta; of T
+</UL>";
+}
+
+#set n=4\\nset G=SL(n,R)\\ndistinguished_involution(G)\\n\"\n--divider--\nVariable n: int\nVariable G: RealForm\nValue: \n| 1, 0, 0 |\n| 1, 0, -1 |\n| 1, -1, 0 |\n"
+
+sub process_di{
+    my $io=shift;
+    my ($input,$output)=split("--divider--",$io);
+#    print("<P>output=",$output);
+    print "<P><strong>Distinguished Involution:</strong><BR>";
+    $output =~ s/\n//g;        
+    $output =~ s/.*Value://g;
+    my @rows=split('\| *\|',$output);
+print "<style>table{border:1px solid black;}td{padding:5px;}</style>";
+    print "<table>";
+    foreach my $row (@rows){
+	print "<tr>";
+	$row =~ s/\|//;
+	my @entries=split(',',$row);
+	foreach my $x (@entries){
+	    print "<td>$x</td>";
+	}
+	print "</tr>";
+    }
+    print "</table>";
+
+}
+
+sub process_simple_roots{
+    my $io=shift;
+    my ($input,$output)=split("--divider--",$io);
+#    print("<P>output=",$output);
+    print "<P><strong>Simple Roots:</strong><BR>";
+    print "(are the <em>columns</em> of the matrix:)<BR>";
+    $output =~ s/\n//g;        
+    $output =~ s/.*Value://g;
+    my @rows=split('\| *\|',$output);
+print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
+    print "<table>";
+    foreach my $row (@rows){
+	print "<tr>";
+	$row =~ s/\|//;
+	my @entries=split(',',$row);
+	foreach my $x (@entries){
+	    print "<td>$x</td>";
+	}
+	print "</tr>";
+    }
+    print "</table>";
+
+}
+
+#real weyl group is W^C.((A.W_ic) x W^R), where:\n
+#W^C is trivial\nA is trivial\nW_ic is trivial\nW^R is trivial
+
+sub process_print_real_weyl{
+    my $io=shift;
+    my ($input,$output)=split("--divider--",$io);
+#    print("<P>output=",$output);
+    print "<P><strong>Real Weyl Group W<sub>R</sub>:</strong><BR>";
+    print "W<sub>R</sub>=N<sub>G(R)</sub>(H(R))/H(R)<BR>";
+    print "W<sub>R</sub>&cong;W<sup>C</sup>&ltimes;((A&times;W<sub>ic</sub>) x W<sup>R</sup>)<P>";
+    $output =~ s/\n//g;        
+    $output =~ s/.*where://g;
+#    print "output:$output\n";
+    my ($WC,$A,$Wic,$WR) = $output =~ /W\^C(.*)A(.*)W_ic(.*)W\^R(.*)generators.*/;
+    print "W<sup>C</sup>: $WC<BR>";
+    print "A: $A<BR>";
+    print "W<sub>ic</sub>: $Wic<BR>";
+    print "W<sup>R</sup>: $WR<BR>";
+
 }
 
 

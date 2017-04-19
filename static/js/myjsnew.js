@@ -235,6 +235,8 @@ function addFurtherRequired(item_clicked,topic_item){
 
 // post user input and get atlas output
 function ajax_post(val_dict){
+    var string=JSON.stringify(val_dict);
+    var fixed_string = myJSONString.replace(/\n/g, "");
     $.ajax({
         type:'POST',
         url:'/runatlas',
@@ -299,9 +301,8 @@ function react(val_dict,output){
 }
 
 function showRawOutput(output){
-    output = JSON.parse(output);
     $('#atlas_input_output').empty();
-    $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
+//    $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
     $('#atlas_input_output').append(output);
 }
 
