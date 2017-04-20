@@ -71,20 +71,23 @@ $cartan =~ /([0-9]*).*compact: *([0-9]*), complex: ([0-9]*), split: ([0-9]*)cano
 
 if (defined($number)){
     print "
-<tr><td>$number</td>
-<td>$compact</td>
-<td>$split</td>
-<td>$complex</td>
-<td>$orbit_size</td>
-<td>$fiber</td>
-<td>$strong_inv</td>
-<td>$imaginary</td>
-<td>$real</td>
-<td>$complex_factor</td>
-<td>$involution</td>
+<td><a onclick=cartanTip1($number)>$number</td>
+<td><a onclick=cartanTipCompact($number,$compact)>$compact</td>
+<td><a onclick=cartanTipSplit($number,$split)>$split</td>
+<td><a onclick=cartanTipComplex($number,$complex)>$complex</td>
+<td><a onclick=cartanTipOrbit($orbit_size)>$orbit_size</td>
+<td><a onclick=cartanTipFiber($fiber)>$fiber</td>
+<td><a onclick=cartanTipStrongInvolution($strong_inv)>$strong_inv</td>
+<td><a onclick=cartanTipRootsIm($number,'$imaginary')>$imaginary</td>
+<td><a onclick=cartanTipRootsReal($number,'$real')>$real</td>
+<td><a onclick=cartanTipRootsComplex($number,'$complex_factor')>$complex_factor</td>
+<td><a onclick=cartanTip3($number,'$involution')>$involution</td></tr>
 </tr>";
 }
     }
+
+#cartanTip7(number, imagSystem, realSystem, systemType) {
+
 
 print "</table>";
 print "<P><P><strong>Key:</strong><BR>
@@ -96,9 +99,11 @@ print "<P><P><strong>Key:</strong><BR>
 <LI>orbit: size of W-conjugacy class of &theta; 
 <LI>fiber: rank of fiber of map to twisted involution
 <LI>SI: number of strong involutions with same square as x
-<LI>Im: type of system of imaginary roots &Delta;<sup>&theta;</sup>
+<LI>Im: type of system of imaginary roots  &Delta;<sup>&theta;</sup> 
 <LI>Re: type of system of real roots &Delta;<sup>-&theta;</sup> 
-<LI>Cx: type of complex root system &Delta;<sup>C</sup>
+<LI>Cx: type of root system &Delta;<sup>C</sup>  -- this root system, of complex type, 
+is a subset of the complex roots (those roots which are neither real nor imaginary), 
+see Vogan, Proposition 3.12, p. 959 in Duke Math J. 49:4 (1982).
 <LI>involution: (twisted) involution &theta; of T
 </UL>";
 }
@@ -140,7 +145,7 @@ my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $kgb[0] =~
 print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
 
     print "<P><Table>";
-    print "<tr><td>#&nbsp;</td><td>l&nbsp;</td><td colspan=$rank>cross&nbsp;</td><td colspan=$rank>Cayley&nbsp;</td><td>torus&nbsp;</td><td>#&nbsp;</td><td>Cartan&nbsp;</td><td>w&nbsp;</td></tr>";
+    print "<tr><td>#&nbsp;</td><td>l&nbsp;</td><td>roots&nbsp;</td><td colspan=$rank>cross&nbsp;</td><td colspan=$rank>Cayley&nbsp;</td><td>torus&nbsp;</td><td>#&nbsp;</td><td>Cartan&nbsp;</td><td>w&nbsp;</td></tr>";
 
 
 
@@ -173,31 +178,49 @@ my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $x =~
 	}
 	    
     }
+    my $root_texts=join '\',\'', @root_texts;
 #    <a onclick="kgbTip4(3, 0, ['complex','noncompact imaginary','complex'])">[C,n,C]</a>    
-    my $roots_text="<a onclick=\"kgTip4(3,0, ['".join "'", @root_texts."'])\">$roots</a>";
+    my $roots_text="<a onclick=\"kgbTip4($rank,$i, ['".$root_texts."'])\">$roots</a>";
 print "<tr>
 <td><a onclick=kgbTip1($i)>$i</td>
+<td><a onclick=kgbTip2($l,$i)>$l</td>
 <td>$roots_text</td>";
-    for my $c (@crossandcayley){
-        print "<td>$c</td>";
+    for my $j (0..$rank-1){
+	my $c=$crossandcayley[$j];
+        print "<td><a onclick=\"kgbTip5($j, $i, $c)\">$c</a></td>";
     }
-    print "<td>$torus</td><td>$canonical</td><td>$cartan</td><td><a onclick=kgbTip7('$w',0)>$w</td></tr>";
+    for my $j ($rank..2*$rank-1){
+	my $c=$crossandcayley[$j];
+	my $corminus1= $c;
+	$corminus1 =~ s/\*/\-1/g;
+        print "<td><a onclick=\"kgbTip6($j, $i, $corminus1)\">$c</a></td>";
+
+    }
+
+    my $canonical_string;
+    if ($canonical eq "#"){
+	$canonical_string = "<a onclick=\"kgbTipsharp($i,1,$cartan,'$w')\">#</a>";
+    }else{
+	$canonical_string="";
+    }
+    print "<td>$torus</td><td>$canonical_string</td>
+<td><a onclick=\"kgbTip3($cartan,$i)\">$cartan</a></td>
+<td><a onclick=kgbTip7('$w',0)>$w</td></tr>";
     }
 print "</table>";
 print "</div>";
+
 print "<P><P><strong>Key:</strong><BR>
 <UL>
-<LI>#: Cartan number
-<LI>cpt: number of S<sup>1</sup> factors
-<LI>real: number of R<sup>x</sup> factors
-<LI>cx: number of C<sup>x</sup> factors
-<LI>orbit: size of W-conjugacy class of &theta; 
-<LI>fiber: rank of fiber of map to twisted involution
-<LI>SI: number of strong involutions with same square as x
-<LI>Im: type of system of imaginary roots &Delta;<sup>&theta;</sup>
-<LI>Re: type of system of real roots &Delta;<sup>-&theta;</sup> 
-<LI>Cx: type of complex root system &Delta;<sup>C</sup>
-<LI>involution: (twisted) involution &theta; of T
+<LI>\#: KGB number</LI>
+<LI>l: length of orbit </LI>
+<LI>roots: types of simple roots</LI>
+<LI>cross: types of simple roots</LI>
+<LI>Cayley: Cayley transforms of simple roots
+<LI>torus: torus element
+<LI>\#: canonical involution on this Cartan
+<LI>Cartan: Cartan number
+<LI>w:(twisted) involution
 </UL>";
 }
 
@@ -223,6 +246,18 @@ print "<style>table{border:1px solid black;}td{padding:5px;}</style>";
 	print "</tr>";
     }
     print "</table>";
+print "
+<script type=\"text/x-mathjax-config\">
+MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type=\"text/javascript\" async
+src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
+</script>";
+
+	print "\$e^{2\pi i}\$";
+    print "DONE";
+
+
 
 }
 
@@ -230,8 +265,7 @@ sub process_simple_roots{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
 #    print("<P>output=",$output);
-    print "<P><strong>Simple Roots:</strong><BR>";
-    print "(are the <em>columns</em> of the matrix:)<BR>";
+    print "<P><strong>Simple Roots:</strong> (the <em>columns</em> of the matrix):<P>";
     $output =~ s/\n//g;        
     $output =~ s/.*Value://g;
     my @rows=split('\| *\|',$output);
@@ -270,7 +304,6 @@ sub process_print_real_weyl{
     print "W<sup>R</sup>: $WR<BR>";
 
 }
-
 
 
 
