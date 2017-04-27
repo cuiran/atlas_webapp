@@ -35,8 +35,7 @@ sub detect_type{
 sub process_cartans{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
+#    print("<P>input=",$input);
 #    print("<P>output=",$output);
     $output =~ s/.*CartanClass\]//s;  #cut off everything up to [CartanClass]
     $output =~ s/Value.*//s;  #cut off everything up to [CartanClass]
@@ -111,10 +110,8 @@ see Vogan, Proposition 3.12, p. 959 in Duke Math J. 49:4 (1982).
 sub process_real_forms{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
     my @lines=split("\n",$output);
-    print "<strong>Real forms in the given inner class of G:</strong><P><P>";
+    print "<strong>gReal forms in the given inner class of G:</strong><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
         print($line,"<br>");
@@ -131,8 +128,7 @@ sub process_kgb{
     my ($input,$output)=split("--divider--",$io);
 #    print("<P>input=",$input);
 #    print("<P>output=",$output);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
+
     $output =~ s/\n//g;        
     $output =~ s/.*\.//g;
 #    print("<P>output2=",$output);
@@ -233,26 +229,25 @@ print "<P><P><strong>Key:</strong><BR>
 sub process_di{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
-
+#    print("<P>output=",$output);
     print "<P><strong>Distinguished Involution:</strong><BR>";
     $output =~ s/\n//g;        
     $output =~ s/.*Value://g;
     my @rows=split('\| *\|',$output);
-
-    my @matrix;
+	print "\$e^{2\\pi i}\$";
+print "<style>table{border:1px solid black;}td{padding:5px;}</style>";
+    print "<table>";
     foreach my $row (@rows){
-	$row =~ s/\|//g;
-	my @row= split ',', $row;
-	push @matrix, join "&", @row;
+	print "<tr>";
+	$row =~ s/\|//;
+	my @entries=split(',',$row);
+	foreach my $x (@entries){
+	    print "<td>$x</td>";
+	}
+	print "</tr>";
     }
-
-    print "<P>\$\\begin{pmatrix}";
-    print join "\\\\", @matrix;
-    print "\\end{pmatrix}\$";
-
-    print "
+    print "</table>";
+print "
 <script type=\"text/x-mathjax-config\">
 MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>
@@ -260,6 +255,8 @@ MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
 </script>";
 
+	print "\$e^{2\\pi i}\$";
+    print "DONE";
 
 
 
@@ -268,8 +265,6 @@ src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
 sub process_simple_roots{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     print "<P><strong>Simple Roots:</strong> (the <em>columns</em> of the matrix):<P>";
     $output =~ s/\n//g;        
@@ -296,8 +291,6 @@ print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
 sub process_print_real_weyl{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-    show_input($input);
-    print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     print "<P><strong>Real Weyl Group W<sub>R</sub>:</strong><BR>";
     print "W<sub>R</sub>=N<sub>G(R)</sub>(H(R))/H(R)<BR>";
@@ -311,15 +304,6 @@ sub process_print_real_weyl{
     print "W<sub>ic</sub>: $Wic<BR>";
     print "W<sup>R</sup>: $WR<BR>";
 
-}
-
-sub show_input{
-    my $input=shift;
-    $input =~ s/\\n/<br>/g;
-    $input =~ s/\"//g;
-    print "<h4>Atlas Code</h4>";
-    print "<em>This is the atlas code which was run</em>:<br>";
-    print $input, "<P>";
 }
 
 
