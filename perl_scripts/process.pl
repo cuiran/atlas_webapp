@@ -111,7 +111,7 @@ sub process_real_forms{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
     my @lines=split("\n",$output);
-    print "Real forms in the given inner class of G:<P><P>";
+    print "<strong>gReal forms in the given inner class of G:</strong><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
         print($line,"<br>");

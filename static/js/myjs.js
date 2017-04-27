@@ -303,6 +303,8 @@ function showRawOutput(output){
     $('#atlas_input_output').empty();
     $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
     $('#atlas_input_output').append(output);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"atlas_input_output"]);
+
 }
 
 
