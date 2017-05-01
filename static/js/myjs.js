@@ -299,12 +299,34 @@ function react(val_dict,output){
 }
 
 function showRawOutput(output){
+    const input = "sample input";
     output = JSON.parse(output);
     $('#atlas_input_output').empty();
-//    $('#atlas_input_output').append('<h4 id=header_output> atlas output </h4>');
+    const checkbox_div = $('<div>').attr({"id":"checkbox_div"});
+    const checkbox = "<input type=\'checkbox\' id = \'show_input_checkbox\'> <label for=\'show_input_checkbox\'>Show atlas input </label>";
+    $('#atlas_input_output').append(checkbox_div);
+    $('#checkbox_div').append(checkbox);
+    $('#show_input_checkbox').on("click",function(){showAtlasInput(input)});
+    //setOnchangeFuncs("show_input_checkbox","showAtlasInput()");
     $('#atlas_input_output').append(output);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"atlas_input_output"]);
 
+}
+
+
+function showAtlasInput(input){
+    var checkboxElm = document.getElementById("show_input_checkbox");
+    if (checkboxElm.checked){
+        clearElements(['atlas_input_div']);
+        const input_div = $('<div>').attr({
+            "id": "atlas_input_div"
+        });
+        $("#checkbox_div").after(input_div);
+        $('#atlas_input_div').append("<h4 id=\"input_header\">Atlas Code:</h4>");
+        $('#atlas_input_div').append(input);
+    } else {
+        clearElements(['atlas_input_div']);
+    }
 }
 
 
