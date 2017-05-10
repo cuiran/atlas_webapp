@@ -1,7 +1,7 @@
 import subprocess
 
 def get_atlas_output(atlas_input,atlas_dir):
-    p = subprocess.Popen(["../atlas all galois"],
+    p = subprocess.Popen(["../atlas all"],
         cwd=atlas_dir+"atlas-scripts",
         shell=True,
         universal_newlines=True,

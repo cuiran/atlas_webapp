@@ -44,7 +44,8 @@ def get_atlasinput(user_input):
     elif user_input['show'] == 'KGB_Elements':
         define_grp = set_group(user_input)
         print_KGB = "print_KGB(G)\n"
-        atlas_input = define_grp+print_KGB
+        print_KGB_graph = "prints(\"KGB_graph\")\nprint_KGB_graph(G)\n"
+        atlas_input = define_grp+print_KGB+print_KGB_graph
     else:
         atlas_input = "x=10"
     return atlas_input

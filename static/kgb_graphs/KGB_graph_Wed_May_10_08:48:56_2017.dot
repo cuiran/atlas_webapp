@@ -1,0 +1,193 @@
+
+
+digraph G {
+ratio="1.5"
+size="7.5,10.0"
+v0
+v1
+v2
+v3
+v4
+v5
+v6
+v7
+v8
+v9
+v10
+v11
+v12
+v13
+v14
+v15
+v16
+v17
+v18
+v19
+v20
+v21
+v22
+v23
+v24
+v25
+v26
+v27
+v28
+v29
+v30
+v31
+v32
+v33
+v34
+v35
+v36
+v37
+v38
+v39
+v40
+v41
+v42
+v43
+v44
+v45
+v46
+v47
+v48
+v49
+v50
+v51
+v52
+v53
+v54
+v19 -> v0[color=blue] [arrowhead=none] [style=bold]
+v16 -> v0[color=blue] [arrowhead=none] [style=bold]
+v13 -> v0[color=blue] [arrowhead=none] [style=bold]
+v10 -> v0[color=blue] [arrowhead=none] [style=bold]
+v19 -> v1[color=blue] [arrowhead=none] [style=bold]
+v14 -> v1[color=blue] [arrowhead=none] [style=bold]
+v11 -> v1[color=blue] [arrowhead=none] [style=bold]
+v16 -> v2[color=blue] [arrowhead=none] [style=bold]
+v12 -> v2[color=blue] [arrowhead=none] [style=bold]
+v20 -> v3[color=blue] [arrowhead=none] [style=bold]
+v13 -> v3[color=blue] [arrowhead=none] [style=bold]
+v21 -> v4[color=blue] [arrowhead=none] [style=bold]
+v17 -> v4[color=blue] [arrowhead=none] [style=bold]
+v10 -> v4[color=blue] [arrowhead=none] [style=bold]
+v20 -> v5[color=blue] [arrowhead=none] [style=bold]
+v18 -> v5[color=blue] [arrowhead=none] [style=bold]
+v14 -> v5[color=blue] [arrowhead=none] [style=bold]
+v21 -> v6[color=blue] [arrowhead=none] [style=bold]
+v11 -> v6[color=blue] [arrowhead=none] [style=bold]
+v17 -> v7[color=blue] [arrowhead=none] [style=bold]
+v15 -> v7[color=blue] [arrowhead=none] [style=bold]
+v12 -> v7[color=blue] [arrowhead=none] [style=bold]
+v18 -> v8[color=blue] [arrowhead=none] [style=bold]
+v15 -> v9[color=blue] [arrowhead=none] [style=bold]
+v23 -> v10[color=blue] [arrowhead=none] [style=bold]
+v22 -> v10[color=blue] [arrowhead=none] [style=bold]
+v25 -> v10[color=black] [arrowhead=none] [style=bold]
+v23 -> v11[color=blue] [arrowhead=none] [style=bold]
+v26 -> v11[color=black] [arrowhead=none] [style=bold]
+v22 -> v12[color=blue] [arrowhead=none] [style=bold]
+v27 -> v12[color=black] [arrowhead=none] [style=bold]
+v24 -> v13[color=blue] [arrowhead=none] [style=bold]
+v28 -> v13[color=black] [arrowhead=none] [style=bold]
+v25 -> v13[color=black] [arrowhead=none] [style=bold]
+v24 -> v14[color=blue] [arrowhead=none] [style=bold]
+v29 -> v14[color=black] [arrowhead=none] [style=bold]
+v26 -> v14[color=black] [arrowhead=none] [style=bold]
+v30 -> v15[color=black] [arrowhead=none] [style=bold]
+v27 -> v15[color=black] [arrowhead=none] [style=bold]
+v31 -> v16[color=black] [arrowhead=none] [style=bold]
+v28 -> v16[color=black] [arrowhead=none] [style=bold]
+v22 -> v16[color=blue] [arrowhead=none] [style=bold]
+v32 -> v17[color=black] [arrowhead=none] [style=bold]
+v30 -> v17[color=black] [arrowhead=none] [style=bold]
+v22 -> v17[color=blue] [arrowhead=none] [style=bold]
+v33 -> v18[color=black] [arrowhead=none] [style=bold]
+v29 -> v18[color=black] [arrowhead=none] [style=bold]
+v31 -> v19[color=black] [arrowhead=none] [style=bold]
+v24 -> v19[color=blue] [arrowhead=none] [style=bold]
+v23 -> v19[color=blue] [arrowhead=none] [style=bold]
+v33 -> v20[color=black] [arrowhead=none] [style=bold]
+v24 -> v20[color=blue] [arrowhead=none] [style=bold]
+v32 -> v21[color=black] [arrowhead=none] [style=bold]
+v23 -> v21[color=blue] [arrowhead=none] [style=bold]
+v37 -> v22[color=black] [arrowhead=none] [style=bold]
+v34 -> v22[color=black] [arrowhead=none] [style=bold]
+v37 -> v23[color=black] [arrowhead=none] [style=bold]
+v36 -> v23[color=black] [arrowhead=none] [style=bold]
+v35 -> v24[color=black] [arrowhead=none] [style=bold]
+v36 -> v24[color=black] [arrowhead=none] [style=bold]
+v36 -> v25[color=blue] [arrowhead=none] [style=bold]
+v38 -> v25[color=black] [arrowhead=none] [style=bold]
+v36 -> v26[color=blue] [arrowhead=none] [style=bold]
+v39 -> v26[color=black] [arrowhead=none] [style=bold]
+v40 -> v27[color=black] [arrowhead=none] [style=bold]
+v41 -> v28[color=black] [arrowhead=none] [style=bold]
+v38 -> v28[color=black] [arrowhead=none] [style=bold]
+v42 -> v29[color=black] [arrowhead=none] [style=bold]
+v39 -> v29[color=black] [arrowhead=none] [style=bold]
+v43 -> v30[color=black] [arrowhead=none] [style=bold]
+v40 -> v30[color=black] [arrowhead=none] [style=bold]
+v41 -> v31[color=black] [arrowhead=none] [style=bold]
+v37 -> v31[color=blue] [arrowhead=none] [style=bold]
+v43 -> v32[color=black] [arrowhead=none] [style=bold]
+v37 -> v32[color=blue] [arrowhead=none] [style=bold]
+v42 -> v33[color=black] [arrowhead=none] [style=bold]
+v46 -> v34[color=black] [arrowhead=none] [style=bold]
+v44 -> v34[color=black] [arrowhead=none] [style=bold]
+v44 -> v34[color=black] [arrowhead=none] [style=bold]
+v47 -> v35[color=black] [arrowhead=none] [style=bold]
+v47 -> v35[color=black] [arrowhead=none] [style=bold]
+v45 -> v35[color=black] [arrowhead=none] [style=bold]
+v45 -> v36[color=black] [arrowhead=none] [style=bold]
+v46 -> v37[color=black] [arrowhead=none] [style=bold]
+v48 -> v38[color=black] [arrowhead=none] [style=bold]
+v44 -> v38[color=blue] [arrowhead=none] [style=bold]
+v49 -> v39[color=black] [arrowhead=none] [style=bold]
+v50 -> v40[color=black] [arrowhead=none] [style=bold]
+v44 -> v40[color=blue] [arrowhead=none] [style=bold]
+v47 -> v41[color=blue] [arrowhead=none] [style=bold]
+v48 -> v41[color=black] [arrowhead=none] [style=bold]
+v47 -> v42[color=blue] [arrowhead=none] [style=bold]
+v49 -> v42[color=black] [arrowhead=none] [style=bold]
+v50 -> v43[color=black] [arrowhead=none] [style=bold]
+v52 -> v44[color=black] [arrowhead=none] [style=bold]
+v53 -> v45[color=black] [arrowhead=none] [style=bold]
+v51 -> v45[color=black] [arrowhead=none] [style=bold]
+v51 -> v46[color=black] [arrowhead=none] [style=bold]
+v52 -> v46[color=black] [arrowhead=none] [style=bold]
+v53 -> v47[color=black] [arrowhead=none] [style=bold]
+v53 -> v48[color=blue] [arrowhead=none] [style=bold]
+v52 -> v48[color=blue] [arrowhead=none] [style=bold]
+v53 -> v49[color=blue] [arrowhead=none] [style=bold]
+v52 -> v50[color=blue] [arrowhead=none] [style=bold]
+v54 -> v51[color=black] [arrowhead=none] [style=bold]
+v54 -> v51[color=black] [arrowhead=none] [style=bold]
+v54 -> v52[color=black] [arrowhead=none] [style=bold]
+v54 -> v53[color=black] [arrowhead=none] [style=bold]
+v34 -> v25[color=gray] [arrowhead=none]
+v34 -> v27[color=gray] [arrowhead=none]
+v34 -> v28[color=gray] [arrowhead=none]
+v34 -> v30[color=gray] [arrowhead=none]
+v35 -> v28[color=gray] [arrowhead=none]
+v35 -> v29[color=gray] [arrowhead=none]
+v35 -> v31[color=gray] [arrowhead=none]
+v35 -> v33[color=gray] [arrowhead=none]
+v38 -> v22[color=gray] [arrowhead=none]
+v40 -> v22[color=gray] [arrowhead=none]
+v41 -> v24[color=gray] [arrowhead=none]
+v42 -> v24[color=gray] [arrowhead=none]
+v45 -> v37[color=gray] [arrowhead=none]
+v45 -> v38[color=gray] [arrowhead=none]
+v45 -> v39[color=gray] [arrowhead=none]
+v46 -> v36[color=gray] [arrowhead=none]
+v46 -> v41[color=gray] [arrowhead=none]
+v46 -> v43[color=gray] [arrowhead=none]
+v48 -> v36[color=gray] [arrowhead=none]
+v48 -> v37[color=gray] [arrowhead=none]
+v49 -> v36[color=gray] [arrowhead=none]
+v50 -> v37[color=gray] [arrowhead=none]
+v51 -> v44[color=gray] [arrowhead=none]
+v51 -> v47[color=gray] [arrowhead=none]
+}

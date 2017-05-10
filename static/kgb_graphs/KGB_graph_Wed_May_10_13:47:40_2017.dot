@@ -1,0 +1,11 @@
+
+
+digraph G {
+ratio="1.5"
+size="7.5,10.0"
+v0
+v1
+v2
+v2 -> v0[color=blue] [arrowhead=none] [style=bold]
+v2 -> v1[color=blue] [arrowhead=none] [style=bold]
+}

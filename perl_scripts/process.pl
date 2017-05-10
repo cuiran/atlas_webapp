@@ -129,10 +129,31 @@ sub process_kgb{
     print "<script src=../static/js/structurePopups.js></script>";
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-#    print("<P>input=",$input);
+    print("<P>input=",$input);
+    my $group=$input;
+    $group =~ s/.*G=//;
+    $group =~ s/\\n.*//g;
 #    print("<P>output=",$output);
+    my ($output_kgb,$output_graph)=split("KGB_graph",$output);
+    $output_graph =~ s/kgbsize:.*//;
+#    print("<P>output_kgb:",$output_kgb);
+#    print("<P>output_graph:",$output_graph);
     show_input($input);
     print "<h4>Atlas Output</h4>";
+    print "<h3>G=", $group,"</h3>";
+#now write and process the KGB graph
+    my $kgb_graph_dir="/var/www/web_interface/atlas_app/static/kgb_graphs";
+    my $timestamp=localtime(time);
+    my $dot_file="KGB_graph_$timestamp".".dot";
+    $dot_file =~ s/ /_/g;
+    my $ps_file="KGB_graph_$timestamp".".jpg";
+    $ps_file=~ s/ /_/g;
+    open(OUTPUT,">$kgb_graph_dir/$dot_file")|| die("can't open dot file");
+    print OUTPUT $output_graph;
+    close(OUTPUT);
+    `dot -Tjpg $kgb_graph_dir/$dot_file -o$kgb_graph_dir/$ps_file`;
+    print "<a href=static/kgb_graphs/$ps_file>Graph of the order relation on K\G/B</a>";
+
     $output =~ s/\n//g;        
     $output =~ s/.*\.//g;
 #    print("<P>output2=",$output);
@@ -226,6 +247,8 @@ print "<P><P><strong>Key:</strong><BR>
 <LI>Cartan: Cartan number
 <LI>w:(twisted) involution
 </UL>";
+
+
 }
 
 #set n=4\\nset G=SL(n,R)\\ndistinguished_involution(G)\\n\"\n--divider--\nVariable n: int\nVariable G: RealForm\nValue: \n| 1, 0, 0 |\n| 1, 0, -1 |\n| 1, -1, 0 |\n"

@@ -1,0 +1,46 @@
+
+
+digraph G {
+ratio="1.5"
+size="7.5,10.0"
+v0
+v1
+v2
+v3
+v4
+v5
+v6
+v7
+v8
+v9
+v10
+v11
+v12
+v3 -> v0[color=black] [arrowhead=none] [style=bold]
+v2 -> v0[color=blue] [arrowhead=none] [style=bold]
+v3 -> v0[color=black] [arrowhead=none] [style=bold]
+v4 -> v1[color=black] [arrowhead=none] [style=bold]
+v2 -> v1[color=blue] [arrowhead=none] [style=bold]
+v4 -> v1[color=black] [arrowhead=none] [style=bold]
+v6 -> v2[color=black] [arrowhead=none] [style=bold]
+v5 -> v2[color=black] [arrowhead=none] [style=bold]
+v7 -> v3[color=black] [arrowhead=none] [style=bold]
+v8 -> v4[color=black] [arrowhead=none] [style=bold]
+v10 -> v5[color=black] [arrowhead=none] [style=bold]
+v9 -> v5[color=black] [arrowhead=none] [style=bold]
+v11 -> v6[color=black] [arrowhead=none] [style=bold]
+v10 -> v6[color=black] [arrowhead=none] [style=bold]
+v11 -> v7[color=blue] [arrowhead=none] [style=bold]
+v9 -> v7[color=blue] [arrowhead=none] [style=bold]
+v11 -> v8[color=blue] [arrowhead=none] [style=bold]
+v9 -> v8[color=blue] [arrowhead=none] [style=bold]
+v12 -> v9[color=green] [arrowhead=none] [style=bold]
+v12 -> v10[color=green] [arrowhead=none] [style=bold]
+v12 -> v11[color=green] [arrowhead=none] [style=bold]
+v5 -> v3[color=gray] [arrowhead=none]
+v5 -> v4[color=gray] [arrowhead=none]
+v6 -> v3[color=gray] [arrowhead=none]
+v6 -> v4[color=gray] [arrowhead=none]
+v7 -> v2[color=gray] [arrowhead=none]
+v8 -> v2[color=gray] [arrowhead=none]
+}
