@@ -136,7 +136,6 @@ function addShow(item){
 // the change in column specify triggered by dropdown selections
 function changeSpecify(changed_item, topic_item){
     if (changed_item === "group"){
-        console.log(topic_item);
         grp_selected = document.getElementById("group").value;
         clearElements(getIdsBelow("group_div","specify"));
         $.each(grps, function(i,item){
@@ -145,6 +144,10 @@ function changeSpecify(changed_item, topic_item){
             }
         })
     } else if (changed_item === "n"){
+        if (topic_item === "rep_thy"){
+            addRepCat(changed_item,topic_item);
+        }
+    } else if (changed_item === "q"){
         if (topic_item === "rep_thy"){
             addRepCat(changed_item,topic_item);
         }
@@ -164,7 +167,7 @@ function addGrpParam(param_list,topic_item){
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
-        setOnchangeFuncs("p","clearElements(getIdsBelow(\'p_div\',\'specify\')),addQ()");
+        document.getElementById('p').setAttribute("onchange",["clearElements(getIdsBelow(\'p_div\',\'specify\'))","addQ(\'"+topic_item+"\')"]);
         for (var i=1; i<9; i++){
             $('#p').append($('<option>').attr("value",i).text("\$p="+i+"\$"));
         }
@@ -174,13 +177,14 @@ function addGrpParam(param_list,topic_item){
 }
 
 // add q parameter
-function addQ(){
+function addQ(topic_item){
     addDropdown("q","specify");
     p_node = document.getElementById('p');
     p_val = p_node.value;
     for (var i=1; i<9-p_val; i++){
         $('#q').append($('<option>').attr("value",i).text("\$q="+i+"\$"));
     }
+    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","changeSpecify(\'q\',\'"+topic_item+"\')"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"q"]);
     $('.selectpicker').selectpicker('refresh');
 }
@@ -191,7 +195,7 @@ function addRepCat(changed_item,topic_item){
     $.each(reps,function(i,item){
         $('#rep').append($('<option>').attr("value",item.id).text(item.name));
     })
-    document.getElementById('rep').setAttribute("onchange","changeSpecify(\'rep\',\'"+topic_item+"\')");
+    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","changeSpecify(\'rep\',\'"+topic_item+"\')"]);
     $('.selectpicker').selectpicker('refresh');
 }
 
@@ -238,7 +242,6 @@ function DSExists(output){
 
 // add DS parameter input options
 function addDSParams(output){
-    console.log(output)
     var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
     if (rho.slice(-1) === "1"){
         var is_int = true;
@@ -403,7 +406,6 @@ function react(val_dict,output){
 function showRawOutput(output){
     const input = "sample input";
     output = JSON.parse(output);
-    console.log(output);
     $('#atlas_input_output').empty();
     const checkbox_div = $('<div>').attr({"id":"checkbox_div"});
     const checkbox = "<input type=\'checkbox\' id = \'show_input_checkbox\'> <label for=\'show_input_checkbox\'>Show atlas input </label>";
