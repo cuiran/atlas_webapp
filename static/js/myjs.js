@@ -377,6 +377,7 @@ function react(val_dict,output){
 function showRawOutput(output){
     const input = "sample input";
     output = JSON.parse(output);
+    console.log(output);
     $('#atlas_input_output').empty();
     const checkbox_div = $('<div>').attr({"id":"checkbox_div"});
     const checkbox = "<input type=\'checkbox\' id = \'show_input_checkbox\'> <label for=\'show_input_checkbox\'>Show atlas input </label>";

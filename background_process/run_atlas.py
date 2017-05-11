@@ -11,4 +11,6 @@ def get_atlas_output(atlas_input,atlas_dir):
     output,err = p.communicate(input=atlas_input)
     if not err:
         atlas_output=output
-    return atlas_output
+        return atlas_output
+    else:
+        return err

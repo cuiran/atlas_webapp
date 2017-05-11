@@ -4,7 +4,7 @@ import json
 def perl_process(user_input,atlas_output,perl_scripts_dir):
     trimmed_out = trim(atlas_output)
     with open(perl_scripts_dir+'output.tmp','w') as f:
-        f.write(json.dumps(user_input)+"\n--divider--\n"+trimmed_out)
+        f.write("{input:"+json.dumps(user_input)+",\noutput:"+json.dumps(trimmed_out)+"}")
     f.close()
     p = subprocess.Popen(["perl "+perl_scripts_dir+"process.pl"],
         shell=True,
@@ -20,9 +20,10 @@ def parse_output(user_input,atlas_output):
         parsed_out = trim(atlas_output)
     elif (user_input['show']=='Real_Weyl_Group') and (user_input['further']['Cartan']==""):
         parsed_out = get_cartan_options(atlas_output)
-    elif (user_input['show']=='') and (user_input['rep']=='ds'):
-        print(atlas_output)
-        parsed_out = trim(atlas_output)
+    elif user_input['show']=="":
+        if user_input['rep'] == 'ds':
+            print(atlas_output)
+            parsed_out = trim(atlas_output)
     return parsed_out
 
 def trim(atlas_output):

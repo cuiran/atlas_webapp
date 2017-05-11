@@ -1,9 +1,9 @@
 use strict;
 use warnings;
  
-#my $filename = '/var/www/web_interface/atlas_app/perl_scripts/output.tmp';
+my $filename = '/var/www/web_interface/atlas_app/perl_scripts/output.tmp';
 #my $filename = '/var/www/web_interface2/atlas_app/output.tmp';
-my $filename = '/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/output.tmp';
+#my $filename = '/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/output.tmp';
 my $fh;
 open($fh, '<:encoding(UTF-8)', $filename)
   or die "Could not open file '$filename' $!";
@@ -34,15 +34,17 @@ sub detect_type{
 
 sub process_cartans{
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     $output =~ s/.*CartanClass\]//s;  #cut off everything up to [CartanClass]
     $output =~ s/Value.*//s;  #cut off everything up to [CartanClass]
-    $output =~ s/\n//g;        
+    $output =~ s/\\n//g;        
     $output =~ s/"//g;        
- #   print("<P>output2=",$output);
+#    print("<P>output2=",$output);
     my @cartans = split("Cartan number ",$output);
 
 
@@ -110,10 +112,13 @@ see Vogan, Proposition 3.12, p. 959 in Duke Math J. 49:4 (1982).
 }
 sub process_real_forms{
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    $output =~ s/\\n/X/g;
     show_input($input);
     print "<h4>Atlas Output</h4>";
-    my @lines=split("\n",$output);
+    my @lines=split("X",$output);
     print "<strong>Real forms in the given inner class of G:</strong><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
@@ -128,36 +133,50 @@ sub process_kgb{
     print "<script src=../static/js/wz_tooltip.js></script>";
     print "<script src=../static/js/structurePopups.js></script>";
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
-    print("<P>input=",$input);
+#    print "io=", $io,"<P>";
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+#    print("<P>input=",$input);
+#    print("<P>output=",$output);
     my $group=$input;
     $group =~ s/.*G=//;
     $group =~ s/\\n.*//g;
+#    $output =~ s/\\n//g;
 #    print("<P>output=",$output);
     my ($output_kgb,$output_graph)=split("KGB_graph",$output);
-    $output_graph =~ s/kgbsize:.*//;
+    $output_graph =~ s/kgbsize:[ 0-9]*//;
+    $output_graph =~ s/\\n/\n/g;
+    $output_graph =~ s/\\"/\"/g;
 #    print("<P>output_kgb:",$output_kgb);
 #    print("<P>output_graph:",$output_graph);
     show_input($input);
     print "<h4>Atlas Output</h4>";
-    print "<h3>G=", $group,"</h3>";
+
 #now write and process the KGB graph
     my $kgb_graph_dir="/var/www/web_interface/atlas_app/static/kgb_graphs";
-    my $timestamp=localtime(time);
-    my $dot_file="KGB_graph_$timestamp".".dot";
+    my $rand=int(rand(1000000));
+    my $dot_file="KGB_graph_$rand".".dot";
     $dot_file =~ s/ /_/g;
-    my $ps_file="KGB_graph_$timestamp".".jpg";
-    $ps_file=~ s/ /_/g;
+    my $jpg_file="KGB_graph_$rand".".jpg";
+    $jpg_file=~ s/ /_/g;
+    print "<fonts size=+1><strong>Graph of closure relations for K\\G/B, G=", $group,"<P>",
+"<a href=\"static/kgb_graphs/$jpg_file\"  download=\"$jpg_file\">Download Graph</a><P>";
+print "</strong></fontsize><P>";
+
+
     open(OUTPUT,">$kgb_graph_dir/$dot_file")|| die("can't open dot file");
     print OUTPUT $output_graph;
     close(OUTPUT);
-    `dot -Tjpg $kgb_graph_dir/$dot_file -o$kgb_graph_dir/$ps_file`;
-    print "<a href=static/kgb_graphs/$ps_file>Graph of the order relation on K\G/B</a>";
+    `dot -Tjpg $kgb_graph_dir/$dot_file -o$kgb_graph_dir/$jpg_file`;
+    print "<IMG SRC=static/kgb_graphs/$jpg_file -height=\"200\", width=\"200\"><P><P>";
 
-    $output =~ s/\n//g;        
-    $output =~ s/.*\.//g;
-#    print("<P>output2=",$output);
-    my @kgb = split("[0-9]*:",$output);
+
+
+    $output_kgb =~ s/\n//g;        
+    $output_kgb =~ s/.*\.//g;
+#    print("<P>output2=",$output_kgb);
+    my @kgb = split("[0-9]*:",$output_kgb);
     shift(@kgb);
 #    foreach my $x (@kgb){ print("<BR>x=$x");}
     #do one step to get the rank
@@ -255,12 +274,15 @@ print "<P><P><strong>Key:</strong><BR>
 
 sub process_di{
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
 
     print "<P><strong>Distinguished Involution:</strong><BR>";
-    $output =~ s/\n//g;        
+    $output =~ s/\\n//g;        
+    $output =~ s/\"//g;
     $output =~ s/.*Value://g;
     my @rows=split('\| *\|',$output);
 
@@ -290,12 +312,15 @@ src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
 
 sub process_simple_roots{
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     print "<P><strong>Simple Roots:</strong> (the <em>columns</em> of the matrix):<P>";
-    $output =~ s/\n//g;        
+    $output =~ s/\\n//g;        
+    $output =~ s/\"//g;        
     $output =~ s/.*Value://g;
     my @rows=split('\| *\|',$output);
 print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
@@ -318,7 +343,9 @@ print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
 
 sub process_print_real_weyl{
     my $io=shift;
-    my ($input,$output)=split("--divider--",$io);
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
