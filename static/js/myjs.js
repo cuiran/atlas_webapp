@@ -218,6 +218,7 @@ function getRho(){
 
 // add DS parameter input options
 function addDSParams(output){
+    console.log(output)
     var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
     if (rho.slice(-1) === "1"){
         var is_int = true;

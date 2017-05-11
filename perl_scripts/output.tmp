@@ -1,10 +1,7 @@
-"set n=3\nset G=GL(n,R)\nprint_KGB(G)\n"
+"set n=3\nset G=GL(n,R)\nset rf = real_forms(G)\nfor a in rf do prints(a) od"
 --divider--
 Variable n: int
 Variable G: RealForm
-kgbsize: 4
-Base grading: [11].
-0:  0  [C,C]   2  1    *  *  (0,0,0)#0 e
-1:  1  [n,C]   1  0    3  *  (0,0,0) 0 2xe
-2:  1  [C,n]   0  2    *  3  (0,0,0) 0 1xe
-3:  2  [r,r]   3  3    *  *  (0,0,0)#1 1^2xe
+Variable rf: [RealForm]
+disconnected split real group with Lie algebra 'sl(3,R).gl(1,R)'
+Value: [()]

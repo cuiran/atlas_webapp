@@ -46,6 +46,11 @@ def get_atlasinput(user_input):
         print_KGB = "print_KGB(G)\n"
         print_KGB_graph = "prints(\"KGB_graph\")\nprint_KGB_graph(G)\n"
         atlas_input = define_grp+print_KGB+print_KGB_graph
+    elif user_input['show'] == '':
+        if user_input['rep'] == 'ds':
+            define_grp = set_group(user_input)
+            get_rho = "rho(G)\n"
+            atlas_input = define_grp+get_rho
     else:
         atlas_input = "x=10"
     return atlas_input

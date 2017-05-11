@@ -20,6 +20,9 @@ def parse_output(user_input,atlas_output):
         parsed_out = trim(atlas_output)
     elif (user_input['show']=='Real_Weyl_Group') and (user_input['further']['Cartan']==""):
         parsed_out = get_cartan_options(atlas_output)
+    elif (user_input['show']=='') and (user_input['rep']=='ds'):
+        print(atlas_output)
+        parsed_out = trim(atlas_output)
     return parsed_out
 
 def trim(atlas_output):

@@ -13,15 +13,15 @@ import background_process.parse as parse
 app = Flask(__name__)
 
 # set atlas directory"
-#atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
+atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
 #atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
 #atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
-atlas_dir = "/usr/local/atlas/atlas/"
+#atlas_dir = "/usr/local/atlas/atlas/"
 
 # perl scripts directory
-#perl_scripts_dir="/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/"
+perl_scripts_dir="/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/"
 #perl_scripts_dir="/var/www/web_interface2/atlas_app/perl_scripts/"
-perl_scripts_dir = "/var/www/web_interface/atlas_app/perl_scripts/"
+#perl_scripts_dir = "/var/www/web_interface/atlas_app/perl_scripts/"
 
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
