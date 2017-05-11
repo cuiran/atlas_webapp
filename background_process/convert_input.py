@@ -48,9 +48,14 @@ def get_atlasinput(user_input):
         atlas_input = define_grp+print_KGB+print_KGB_graph
     elif user_input['show'] == '':
         if user_input['rep'] == 'ds':
-            define_grp = set_group(user_input)
-            get_rho = "rho(G)\n"
-            atlas_input = define_grp+get_rho
+            if user_input['request'] == 'is_equal_rank':
+                define_grp = set_group(user_input)
+                equalrk = "is_equal_rank(G)\n"
+                atlas_input = define_grp+equalrk
+            elif user_input['request'] == 'rho':
+                define_grp = set_group(user_input)
+                get_rho = "rho(G)\n"
+                atlas_input = define_grp+get_rho
     else:
         atlas_input = "x=10"
     return atlas_input

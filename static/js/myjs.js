@@ -160,7 +160,7 @@ function addGrpParam(param_list,topic_item){
         for (var i=1; i<9; i++){
             $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
         }
-        document.getElementById('n').setAttribute("onchange","changeSpecify(\'n\',\'"+topic_item+"\')");
+        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","changeSpecify(\'n\',\'"+topic_item+"\')"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
@@ -201,8 +201,15 @@ function addRepParam(changed_item,topic_item){
     if (rep_cat === "finite"){
         addFiniteParams();
     } else if (rep_cat === "ds"){
-        getRho();
+        isEqualRk(changed_item,topic_item);
     }
+}
+
+// check if a group is equal rank
+function isEqualRk(changed_item,topic_item){
+    var val_dict = get_val_dict();
+    val_dict['request'] = "is_equal_rank";
+    ajax_post(val_dict);
 }
 
 // add parameters if user chose finite dimensional 
@@ -213,7 +220,20 @@ function addFiniteParams(){
 // get rho(G) if user chose discrete series
 function getRho(){
     var val_dict = get_val_dict();
+    val_dict['request'] = 'rho';
     ajax_post(val_dict);
+}
+
+// check if discrete series exists
+function DSExists(output){
+    true_false = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+    if (true_false === "true"){
+        getRho();
+    } else {
+        const div = $('<div>').attr({"id":"unequal_rk_warning","class":"form-group"})
+        $('#specify').append(div);
+        $('#unequal_rk_warning').append("<p>This group doesn't have discrete series.</p>");
+    }
 }
 
 // add DS parameter input options
@@ -226,18 +246,20 @@ function addDSParams(output){
         var is_int = false;
     }
     var num_inputs = output.split(",").length;
-    const div = $('<div>').attr({"id":"dsparam_div","class":"form-group"})
+    const div = $('<div>').attr({"id":"dsinstru_div","class":"form-group"})
     $('#specify').append(div);
     if (is_int){
-        $('#dsparam_div').append("<p>Input integer parameters below:</p>");
+        $('#dsinstru_div').append("<p>Input Harish-Chandra parameters (all integers):</p>");
     } else {
-        $('#dsparam_div').append("<p>Input half integer parameters below:</p>");
+        $('#dsinstru_div').append("<p>Input Harish-Chandra parameters (all half integers):</p>");
     }
+    const param_div = $('<div>').attr({"id":"dsparam_div","class":"form-group"})
+    $('#specify').append(param_div);
     for (var i=1;i<num_inputs;i++){
-        $('#dsparam_div').append("<input type=\"float\" id="+i+" maxlength\"2\" size=\"2\">");
+        $('#dsparam_div').append("<input type=\"float\" id="+i+" maxlength=\"5\" size=\"4\">");
         $('#dsparam_div').append(", ");
     }
-    $('#dsparam_div').append("<input type=\"float\" id="+num_inputs+" maxlength\"2\" size=\"2\">");
+    $('#dsparam_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
 }
 
 function addDropdown(id,column){
@@ -369,7 +391,11 @@ function react(val_dict,output){
     } 
     else if (show_id === ""){
         if (val_dict['rep'] === "ds"){
-            addDSParams(output);
+            if (val_dict['request'] === 'is_equal_rank'){
+                DSExists(output)
+            } else {
+                addDSParams(output);
+            }
         }
     }
 }

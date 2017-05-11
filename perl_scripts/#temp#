@@ -15,17 +15,17 @@ while (my $row = <$fh>) {
 sub detect_type{
     my $io=shift;
     if ($io =~ /real_forms/m){
-	process_real_forms($io);
+    process_real_forms($io);
     }elsif ($io =~ /cartans/m){
-	process_cartans($io);
+    process_cartans($io);
     }elsif ($io =~ /print_KGB/m){
-	process_kgb($io);
+    process_kgb($io);
     }elsif ($io =~ /distinguished_involution/m){
-	process_di($io);
+    process_di($io);
     }elsif ($io =~ /simple_roots/m){
-	process_simple_roots($io);
+    process_simple_roots($io);
     }elsif ($io =~ /print_real_Weyl/m){
-	process_print_real_weyl($io);
+    process_print_real_weyl($io);
     }else{
     print $io;
     }    
@@ -35,7 +35,8 @@ sub detect_type{
 sub process_cartans{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-#    print("<P>input=",$input);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     $output =~ s/.*CartanClass\]//s;  #cut off everything up to [CartanClass]
     $output =~ s/Value.*//s;  #cut off everything up to [CartanClass]
@@ -110,8 +111,10 @@ see Vogan, Proposition 3.12, p. 959 in Duke Math J. 49:4 (1982).
 sub process_real_forms{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
     my @lines=split("\n",$output);
-    print "<strong>gReal forms in the given inner class of G:</strong><P><P>";
+    print "<strong>Real forms in the given inner class of G:</strong><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
         print($line,"<br>");
@@ -126,8 +129,30 @@ sub process_kgb{
     print "<script src=../static/js/structurePopups.js></script>";
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-#    print("<P>input=",$input);
+    print("<P>input=",$input);
+    my $group=$input;
+    $group =~ s/.*G=//;
+    $group =~ s/\\n.*//g;
 #    print("<P>output=",$output);
+    my ($output_kgb,$output_graph)=split("KGB_graph",$output);
+    $output_graph =~ s/kgbsize:.*//;
+#    print("<P>output_kgb:",$output_kgb);
+#    print("<P>output_graph:",$output_graph);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+    print "<h3>G=", $group,"</h3>";
+#now write and process the KGB graph
+    my $kgb_graph_dir="/var/www/web_interface/atlas_app/static/kgb_graphs";
+    my $timestamp=localtime(time);
+    my $dot_file="KGB_graph_$timestamp".".dot";
+    $dot_file =~ s/ /_/g;
+    my $ps_file="KGB_graph_$timestamp".".jpg";
+    $ps_file=~ s/ /_/g;
+    open(OUTPUT,">$kgb_graph_dir/$dot_file")|| die("can't open dot file");
+    print OUTPUT $output_graph;
+    close(OUTPUT);
+    `dot -Tjpg $kgb_graph_dir/$dot_file -o$kgb_graph_dir/$ps_file`;
+    print "<a href=static/kgb_graphs/$ps_file>Graph of the order relation on K\G/B</a>";
 
     $output =~ s/\n//g;        
     $output =~ s/.*\.//g;
@@ -160,23 +185,23 @@ my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $x =~
     my @roots= split ',', $roots;
     my @root_texts;
     foreach my $i (0..$#roots){
-	my $root = $roots[$i];
-	$root =~ s/\[|\]//g;
-	if ($root eq 'C'){
-	    push @root_texts,"complex";
+    my $root = $roots[$i];
+    $root =~ s/\[|\]//g;
+    if ($root eq 'C'){
+        push @root_texts,"complex";
 	}elsif 
 	    ($root eq 'n'){
-	    push @root_texts,"noncompact imaginary";
-	}elsif 
-	    ($root eq 'c'){
-	    push @root_texts,"compact imaginary";
-	}elsif 
-	    ($root eq 'r'){
-	    push @root_texts,"real";
-	}else{
-	    push @root_texts,"other";
-	}
-	    
+	        push @root_texts,"noncompact imaginary";
+		}elsif 
+		    ($root eq 'c'){
+		        push @root_texts,"compact imaginary";
+			}elsif 
+			    ($root eq 'r'){
+			        push @root_texts,"real";
+				}else{
+				    push @root_texts,"other";
+				    }
+				        
     }
     my $root_texts=join '\',\'', @root_texts;
 #    <a onclick="kgbTip4(3, 0, ['complex','noncompact imaginary','complex'])">[C,n,C]</a>    
@@ -186,22 +211,22 @@ print "<tr>
 <td><a onclick=kgbTip2($l,$i)>$l</td>
 <td>$roots_text</td>";
     for my $j (0..$rank-1){
-	my $c=$crossandcayley[$j];
+    my $c=$crossandcayley[$j];
         print "<td><a onclick=\"kgbTip5($j, $i, $c)\">$c</a></td>";
     }
     for my $j ($rank..2*$rank-1){
-	my $c=$crossandcayley[$j];
-	my $corminus1= $c;
-	$corminus1 =~ s/\*/\-1/g;
+    my $c=$crossandcayley[$j];
+    my $corminus1= $c;
+    $corminus1 =~ s/\*/\-1/g;
         print "<td><a onclick=\"kgbTip6($j, $i, $corminus1)\">$c</a></td>";
 
     }
 
     my $canonical_string;
     if ($canonical eq "#"){
-	$canonical_string = "<a onclick=\"kgbTipsharp($i,1,$cartan,'$w')\">#</a>";
+    $canonical_string = "<a onclick=\"kgbTipsharp($i,1,$cartan,'$w')\">#</a>";
     }else{
-	$canonical_string="";
+    $canonical_string="";
     }
     print "<td>$torus</td><td>$canonical_string</td>
 <td><a onclick=\"kgbTip3($cartan,$i)\">$cartan</a></td>
@@ -222,6 +247,8 @@ print "<P><P><strong>Key:</strong><BR>
 <LI>Cartan: Cartan number
 <LI>w:(twisted) involution
 </UL>";
+
+
 }
 
 #set n=4\\nset G=SL(n,R)\\ndistinguished_involution(G)\\n\"\n--divider--\nVariable n: int\nVariable G: RealForm\nValue: \n| 1, 0, 0 |\n| 1, 0, -1 |\n| 1, -1, 0 |\n"
@@ -229,25 +256,26 @@ print "<P><P><strong>Key:</strong><BR>
 sub process_di{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
-#    print("<P>output=",$output);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+
     print "<P><strong>Distinguished Involution:</strong><BR>";
     $output =~ s/\n//g;        
     $output =~ s/.*Value://g;
     my @rows=split('\| *\|',$output);
-	print "\$e^{2\\pi i}\$";
-print "<style>table{border:1px solid black;}td{padding:5px;}</style>";
-    print "<table>";
+
+    my @matrix;
     foreach my $row (@rows){
-	print "<tr>";
-	$row =~ s/\|//;
-	my @entries=split(',',$row);
-	foreach my $x (@entries){
-	    print "<td>$x</td>";
-	}
-	print "</tr>";
+    $row =~ s/\|//g;
+    my @row= split ',', $row;
+    push @matrix, join "&", @row;
     }
-    print "</table>";
-print "
+
+    print "<P>\$\\begin{pmatrix}";
+    print join "\\\\", @matrix;
+    print "\\end{pmatrix}\$";
+
+    print "
 <script type=\"text/x-mathjax-config\">
 MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 </script>
@@ -255,8 +283,6 @@ MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
 src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
 </script>";
 
-	print "\$e^{2\\pi i}\$";
-    print "DONE";
 
 
 
@@ -265,6 +291,8 @@ src=\"https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML\">
 sub process_simple_roots{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     print "<P><strong>Simple Roots:</strong> (the <em>columns</em> of the matrix):<P>";
     $output =~ s/\n//g;        
@@ -273,11 +301,11 @@ sub process_simple_roots{
 print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
     print "<table>";
     foreach my $row (@rows){
-	print "<tr>";
-	$row =~ s/\|//;
-	my @entries=split(',',$row);
-	foreach my $x (@entries){
-	    print "<td>$x</td>";
+    print "<tr>";
+    $row =~ s/\|//;
+    my @entries=split(',',$row);
+    foreach my $x (@entries){
+        print "<td>$x</td>";
 	}
 	print "</tr>";
     }
@@ -291,6 +319,8 @@ print "<style>table{border:0px solid black;}td{padding:5px;}</style>";
 sub process_print_real_weyl{
     my $io=shift;
     my ($input,$output)=split("--divider--",$io);
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
     print "<P><strong>Real Weyl Group W<sub>R</sub>:</strong><BR>";
     print "W<sub>R</sub>=N<sub>G(R)</sub>(H(R))/H(R)<BR>";
@@ -306,8 +336,16 @@ sub process_print_real_weyl{
 
 }
 
+sub show_input{
+    my $input=shift;
+    $input =~ s/\\n/<br>/g;
+    $input =~ s/\"//g;
+    print "<h4>Atlas Code</h4>";
+    print "<em>This is the atlas code which was run</em>:<br>";
+    print $input, "<P>";
+}
+
 
 
 
 detect_type($input_output);
-
