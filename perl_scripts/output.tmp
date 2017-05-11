@@ -1,7 +1,27 @@
-"set n=3\nset G=GL(n,R)\nset rf = real_forms(G)\nfor a in rf do prints(a) od"
+"set n=4\nset G=GL(n,R)\nset cartans = Cartan_classes(G)\nfor i: nr_of_Cartan_classes(G) from 0 do print(\"Cartan number \"+i); print_Cartan_info(cartans[i]) od"
 --divider--
 Variable n: int
 Variable G: RealForm
-Variable rf: [RealForm]
-disconnected split real group with Lie algebra 'sl(3,R).gl(1,R)'
-Value: [()]
+Variable cartans: [CartanClass]
+"Cartan number 0"
+compact: 0, complex: 2, split: 0
+canonical twisted involution: e
+twisted involution orbit size: 3; fiber size: 1; strong inv: 3
+imaginary root system: A1.A1
+real root system: empty
+complex factor: A1
+"Cartan number 1"
+compact: 0, complex: 1, split: 2
+canonical twisted involution: 1,2,3,2,1
+twisted involution orbit size: 6; fiber size: 1; strong inv: 6
+imaginary root system: A1
+real root system: A1
+complex factor: empty
+"Cartan number 2"
+compact: 0, complex: 0, split: 4
+canonical twisted involution: 1,2,1,3,2,1
+twisted involution orbit size: 1; fiber size: 1; strong inv: 1
+imaginary root system: empty
+real root system: A3
+complex factor: empty
+Value: [(),(),()]

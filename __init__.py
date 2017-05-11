@@ -13,15 +13,15 @@ import background_process.parse as parse
 app = Flask(__name__)
 
 # set atlas directory"
-#atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
+atlas_dir = "/Users/rancui/Math/atlas_project/software/atlasofliegroups/"
 #atlas_dir = "/home/ran/atlas_project/latest/atlasofliegroups/"
 #atlas_dir = "/Users/richard.rast/atlas/atlasofliegroups/"
-atlas_dir = "/usr/local/atlas/atlas/"
+#atlas_dir = "/usr/local/atlas/atlas/"
 
 # perl scripts directory
-#perl_scripts_dir="/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/"
+perl_scripts_dir="/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/"
 #perl_scripts_dir="/var/www/web_interface2/atlas_app/perl_scripts/"
-perl_scripts_dir = "/var/www/web_interface/atlas_app/perl_scripts/"
+#perl_scripts_dir = "/var/www/web_interface/atlas_app/perl_scripts/"
 
 @app.route("/", methods=['GET', 'POST'])
 def main_page():
@@ -35,10 +35,8 @@ def atlas_process():
     atlas_output = runat.get_atlas_output(atlas_input,atlas_dir)
     if no_empty_value(user_input):
         parsed_out,_ = parse.perl_process(atlas_input,atlas_output,perl_scripts_dir)
-        print(parsed_out)
     else:
         parsed_out = parse.parse_output(user_input,atlas_output)
-        print(parsed_out)
     return json.dumps(parsed_out)
 
 def no_empty_value(user_input):
