@@ -349,7 +349,19 @@ function get_val_dict(){
     for (var i=1; i<spec_divs_onscreen.length; i++){
         var div_id = spec_divs_onscreen[i].id;
         var child_id = div_id.slice(0,-4);
-        val_dict[child_id] = document.getElementById(child_id).value;
+        if (child_id !== "dsinstru" && child_id !== "dsparam"){
+            val_dict[child_id] = document.getElementById(child_id).value;
+        } else if (child_id === "dsinstru"){
+            val_dict[child_id] = document.getElementById(child_id+'_div').innerHTML;
+        } else {
+            param_boxes = document.getElementById(child_id+'_div').children;
+            param_array = []
+            for (var j=0;j<param_boxes.length;j++){
+                box_id = param_boxes[j].id;
+                param_array.push(document.getElementById(box_id).value)
+            }
+            val_dict[child_id] = param_array;
+        }
     }
     var show_node = document.getElementById("show");
     if (show_node.getElementsByClassName("active").length != 0){
@@ -401,11 +413,14 @@ function react(val_dict,output){
             }
         }
     }
+    else if (show_id === "Unitarity"){
+        showRawOutput(output)
+    }
 }
 
-function showRawOutput(output){
-    const input = "sample input";
-    output = JSON.parse(output);
+function showRawOutput(in_output){
+    var input = "sample input";
+    var output = JSON.parse(in_output);
     $('#atlas_input_output').empty();
     const checkbox_div = $('<div>').attr({"id":"checkbox_div"});
     const checkbox = "<input type=\'checkbox\' id = \'show_input_checkbox\'> <label for=\'show_input_checkbox\'>Show atlas input </label>";

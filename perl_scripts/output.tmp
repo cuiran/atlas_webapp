@@ -1,2 +1,2 @@
-{input:"set n=6\nset G=GL(n,R)\nsimple_roots(G)\n",
-output:"Variable n: int\nVariable G: RealForm\nValue: \n|  1,  0,  0,  0,  0 |\n| -1,  1,  0,  0,  0 |\n|  0, -1,  1,  0,  0 |\n|  0,  0, -1,  1,  0 |\n|  0,  0,  0, -1,  1 |\n|  0,  0,  0,  0, -1 |\n"}
+{input:"set n=2\nset G=SL(n,R)\nset dsparam=discrete_series(G,[5])\nis_unitary(dsparam)\n",
+output:"Variable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: true"}
