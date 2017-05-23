@@ -10,7 +10,8 @@ var struc;
 var grps;
 var reps = [
     {"id":"finite","name":"Finite Dimensional"},
-    {"id":"ds","name":"Discrete Series"}
+    {"id":"ds","name":"Discrete Series"},
+    {"id":"spherical_ps","name":"Spherical Principal Series"}
     ];
 
 //load json objects into variables and populate the topics column
@@ -206,6 +207,8 @@ function addRepParam(changed_item,topic_item){
         addFiniteParams();
     } else if (rep_cat === "ds"){
         isEqualRk(changed_item,topic_item);
+    } else if (rep_cat === "spherical_ps"){
+        isSplit(changed_item,topic_item);
     }
 }
 
@@ -213,6 +216,12 @@ function addRepParam(changed_item,topic_item){
 function isEqualRk(changed_item,topic_item){
     var val_dict = get_val_dict();
     val_dict['request'] = "is_equal_rank";
+    ajax_post(val_dict);
+}
+
+function isSplit(changed_item,topic_item){
+    var val_dict = get_val_dict();
+    val_dict['request'] = "is_split";
     ajax_post(val_dict);
 }
 
@@ -230,7 +239,10 @@ function getRho(){
 
 // check if discrete series exists
 function DSExists(output){
-    true_false = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+//  incorrect in some cases:
+//    true_false = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+//  instead, look for Value: true/false
+    true_false = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
     if (true_false === "true"){
         getRho();
     } else {
@@ -240,17 +252,35 @@ function DSExists(output){
     }
 }
 
+// check if spherical principal series exists
+function PSExists(output){
+    true_false = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
+    if (true_false === "true"){
+        getRho();
+    } else {
+        const div = $('<div>').attr({"id":"not_split_warning","class":"form-group"})
+        $('#specify').append(div);
+        $('#not_split_warning').append("<p>This group is not split.</p>");
+    }
+}
+
+
 // add DS parameter input options
 function addDSParams(output){
-    var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+//  incorrect in some cases:
+//    var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+    var rho = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
     if (rho.slice(-1) === "1"){
         var is_int = true;
     } else if (rho.slice(-1) === "2"){
         var is_int = false;
     }
     var num_inputs = output.split(",").length;
+    console.log("addDSParam output:",output);
+    console.log("num_inputs=", num_inputs);
     const div = $('<div>').attr({"id":"dsinstru_div","class":"form-group"})
     $('#specify').append(div);
+    $('#dsinstru_div').append("<p>rho="+rho);
     if (is_int){
         $('#dsinstru_div').append("<p>Input Harish-Chandra parameters (all integers):</p>");
     } else {
@@ -264,6 +294,42 @@ function addDSParams(output){
     }
     $('#dsparam_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
 }
+
+// add Principal Series parameter input options
+function addPSParams(output){
+    var rho = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
+    var num_inputs = output.split(",").length;
+    console.log("addPSParam output:",output);
+    console.log("num_inputs=", num_inputs);
+    const div = $('<div>').attr({"id":"psinstru_div","class":"form-group"})
+    $('#specify').append(div);
+    $('#psinstru_div').append("<p>rho="+rho);
+    $('#psinstru_div').append("<p>Input nu parameter (rationals):</p>");
+
+    const nu_div = $('<div>').attr({"id":"nu_div","class":"form-group"})
+    const epsilon_div = $('<div>').attr({"id":"epsilon_div","class":"form-group"})
+
+    $('#specify').append(nu_div);
+    for (var i=1;i<num_inputs;i++){
+        $('#nu_div').append("<input type=\"float\" id="+i+" maxlength=\"5\" size=\"4\">");
+        $('#nu_div').append(", ");
+    }
+    $('#nu_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
+
+    $('#psinstru_div').append("<p>Input character of M parameter (signs):</p>");
+
+    $('#specify').append(epsilon_div);
+    for (var i=1;i<num_inputs;i++){
+        $('#epsilon_div').append("<input type=\"float\" id=epsilon"+i+" maxlength=\"5\" size=\"4\">");
+        $('#epsilon_div').append(", ");
+    }
+    $('#epsilon_div').append("<input type=\"float\" id=epsilon"+num_inputs+" maxlength=\"5\" size=\"4\">");
+
+
+
+}
+
+
 
 function addDropdown(id,column){
     const div = div_const(id);
@@ -412,8 +478,20 @@ function react(val_dict,output){
                 addDSParams(output);
             }
         }
+        else if (val_dict['rep'] === "spherical_ps"){
+            if (val_dict['request'] === 'is_split'){
+                PSExists(output)
+            } else {
+                addPSParams(output);
+            }
+        }
     }
     else if (show_id === "Unitarity"){
+	console.log("Unitarity selected");
+        showRawOutput(output)
+    }
+    else if (show_id === "information_on_parameter"){
+	console.log("information selected");
         showRawOutput(output)
     }
 }

@@ -56,8 +56,37 @@ def get_atlasinput(user_input):
                 define_grp = set_group(user_input)
                 get_rho = "rho(G)\n"
                 atlas_input = define_grp+get_rho
+        elif user_input['rep'] == 'spherical_ps':
+            if user_input['request'] == 'is_split':
+                define_grp = set_group(user_input)
+                split = "is_split(G)\n"
+                atlas_input = define_grp+split
+            elif user_input['request'] == 'rho':
+                define_grp = set_group(user_input)
+                get_rho = "rho(G)\n"
+                atlas_input = define_grp+get_rho
+    elif user_input['show'] == 'information_on_parameter':
+        if user_input['rep'] == 'ds':
+            define_grp = set_group(user_input)
+            ds_param_text = user_input['dsparam']
+            ds_param = list()
+            for i in range(len(ds_param_text)):
+                ds_param.append(int(ds_param_text[i]))
+            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
+            parameter = "prints(\"parameter=\", dsparam)\n"
+            atlas_input = define_grp+set_dsparam+parameter+inf_char
     elif user_input['show'] == 'Unitarity':
         if user_input['rep'] == 'ds':
+            define_grp = set_group(user_input)
+            ds_param_text = user_input['dsparam']
+            ds_param = list()
+            for i in range(len(ds_param_text)):
+                ds_param.append(int(ds_param_text[i]))
+            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            is_unitary = "is_unitary(dsparam)\n"
+            atlas_input = define_grp+set_dsparam+is_unitary
+        elif user_input['rep'] == 'spherical_ps':
             define_grp = set_group(user_input)
             ds_param_text = user_input['dsparam']
             ds_param = list()

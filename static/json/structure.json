@@ -36,6 +36,10 @@
     "specify":["group","rep_cat","rep_param"],
     "show":[
         {
+        "name":"Information",
+        "id":"information_on_parameter"
+        },
+        {
         "name":"Branch to K",
         "id":"Branch_to_K",
         "further_require":["hight"]
