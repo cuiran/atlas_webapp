@@ -304,21 +304,20 @@ function addPSParams(output){
     const div = $('<div>').attr({"id":"psinstru_div","class":"form-group"})
     $('#specify').append(div);
     $('#psinstru_div').append("<p>rho="+rho);
-    $('#psinstru_div').append("<p>Input nu parameter (rationals):</p>");
 
     const nu_div = $('<div>').attr({"id":"nu_div","class":"form-group"})
     const epsilon_div = $('<div>').attr({"id":"epsilon_div","class":"form-group"})
 
     $('#specify').append(nu_div);
+    $('#nu_div').append("<p>Input nu parameter (rationals):</p>");
     for (var i=1;i<num_inputs;i++){
         $('#nu_div').append("<input type=\"float\" id="+i+" maxlength=\"5\" size=\"4\">");
         $('#nu_div').append(", ");
     }
     $('#nu_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
 
-    $('#psinstru_div').append("<p>Input character of M parameter (signs):</p>");
-
     $('#specify').append(epsilon_div);
+    $('#epsilon_div').append("<p>Input character of M parameter (signs):</p>");
     for (var i=1;i<num_inputs;i++){
         $('#epsilon_div').append("<input type=\"float\" id=epsilon"+i+" maxlength=\"5\" size=\"4\">");
         $('#epsilon_div').append(", ");
@@ -497,6 +496,7 @@ function react(val_dict,output){
 }
 
 function showRawOutput(in_output){
+    console.log(in_output)
     var input = "sample input";
     var output = JSON.parse(in_output);
     $('#atlas_input_output').empty();

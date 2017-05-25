@@ -1,2 +1,2 @@
-{input:"set n=2\nset G=SL(n,R)\nset dsparam=discrete_series(G,[5])\nis_unitary(dsparam)\n",
+{input:"set n=4\nset G=Sp(2*n,R)\nset dsparam=discrete_series(G,[1, 2, 3, 4])\nis_unitary(dsparam)\n",
 output:"Variable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: true"}
