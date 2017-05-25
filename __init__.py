@@ -37,7 +37,6 @@ def atlas_process():
         parsed_out,_ = parse.perl_process(atlas_input,atlas_output,perl_scripts_dir)
     else:
         parsed_out = parse.parse_output(user_input,atlas_output)
-    print(parsed_out)
     return json.dumps(parsed_out)
 
 def no_empty_value(user_input):
