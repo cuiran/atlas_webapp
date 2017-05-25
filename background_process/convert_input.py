@@ -67,7 +67,9 @@ def get_atlasinput(user_input):
                 atlas_input = define_grp+get_rho
     elif user_input['show'] == 'information_on_parameter':
         if user_input['rep'] == 'ds':
+            command = "prints(\"menu_item:information_on_parameter\")\n"
             define_grp = set_group(user_input)
+            print_grp = "prints(\"group:\",G)\n"
             ds_param_text = user_input['dsparam']
             ds_param = list()
             for i in range(len(ds_param_text)):
@@ -75,7 +77,7 @@ def get_atlasinput(user_input):
             set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
             inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
-            atlas_input = define_grp+set_dsparam+parameter+inf_char
+            atlas_input = command+define_grp+print_grp+set_dsparam+parameter+inf_char
     elif user_input['show'] == 'Unitarity':
         if user_input['rep'] == 'ds':
             define_grp = set_group(user_input)
