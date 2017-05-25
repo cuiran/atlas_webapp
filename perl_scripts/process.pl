@@ -26,8 +26,10 @@ sub detect_type{
 	process_simple_roots($io);
     }elsif ($io =~ /print_real_Weyl/m){
 	process_print_real_weyl($io);
+    }elsif ($io =~ /menu_item:information_on_parameter/m){
+	information_on_parameter($io);
     }else{
-    print $io;
+	print "Default return value",$io;
     }    
 }
 
@@ -48,7 +50,9 @@ sub process_cartans{
     my @cartans = split("Cartan number ",$output);
 
 
-    print "<P><strong>Cartan subgroups</strong><BR>";
+    print "<P><strong>Cartan subgroups</strong>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/cartan_classes.html>Help</a>
+";
 
 print "<style>
 table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
@@ -119,7 +123,8 @@ sub process_real_forms{
     show_input($input);
     print "<h4>Atlas Output</h4>";
     my @lines=split("X",$output);
-    print "<strong>Real forms in the given inner class of G:</strong><P><P>";
+    print "<strong>Real forms in the given inner class of G</strong>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_groups.html>(help)</a><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
         print($line,"<br>");
@@ -160,6 +165,7 @@ sub process_kgb{
     $dot_file =~ s/ /_/g;
     my $jpg_file="KGB_graph_$rand".".jpg";
     $jpg_file=~ s/ /_/g;
+    print "<strong>K orbits on G/B</strong> <a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/K_orbits_on_G_B.html>help</a><P>";
     print "<fonts size=+1><strong>Graph of closure relations for K\\G/B, G=", $group,"<P>",
 "<a href=\"static/kgb_graphs/$jpg_file\"  download=\"$jpg_file\">Download Graph</a><P>";
 print "</strong></fontsize><P>";
@@ -280,7 +286,8 @@ sub process_di{
     show_input($input);
     print "<h4>Atlas Output</h4>";
 
-    print "<P><strong>Distinguished Involution:</strong><BR>";
+    print "<P><strong>Distinguished Involution</strong>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_forms.html?highlight=distinguished>help<BR>";
     $output =~ s/\\n//g;        
     $output =~ s/\"//g;
     $output =~ s/.*Value://g;
@@ -349,7 +356,9 @@ sub process_print_real_weyl{
     show_input($input);
     print "<h4>Atlas Output</h4>";
 #    print("<P>output=",$output);
-    print "<P><strong>Real Weyl Group W<sub>R</sub>:</strong><BR>";
+    print "<P><strong>Real Weyl Group W<sub>R</sub>:</strong>
+<a href=
+<BR>";
     print "W<sub>R</sub>=N<sub>G(R)</sub>(H(R))/H(R)<BR>";
     print "W<sub>R</sub>&cong;W<sup>C</sup>&ltimes;((A&times;W<sub>ic</sub>) x W<sup>R</sup>)<P>";
     $output =~ s/\n//g;        
@@ -362,6 +371,52 @@ sub process_print_real_weyl{
     print "W<sup>R</sup>: $WR<BR>";
 
 }
+
+sub information_on_parameter{
+    my $io=shift;
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+    print "<strong>Information about the parameter</strong>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_2A/parameters.html>help</a><P>
+";
+    if ($input =~ /dsparam/){
+	print("This representation is in the discrete series<P>")
+    };
+#    print("<P>output=",$output);
+ 
+
+    my ($menu_item,$n,$p,$q,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my @data = split "X", $output;
+#    print "size:", scalar(@data);
+#    print join "<P>", @data;
+    if (scalar(@data)==9){
+	($menu_item,$n,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+    }	elsif(scalar(@data)==10){
+	($menu_item,$p,$q,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+	}else{
+	    print("Error");
+	}
+    $parameter=~ s/.*\(//;
+    $parameter=~ s/\).*//;
+    my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+    print("<P><strong>x</strong>=",$x,"<BR>");
+    print("<strong>lambda</strong>=",$lambda,"<BR>");
+    print("<strong>nu</strong>=",$nu,"<BR>");
+    $infinitesimal_character =~ s/.*=//g;
+    print("<strong>infinitesimal character</strong>: ", $infinitesimal_character,"<BR>");
+    $lkt =~ s/.*://g;
+    print("<strong>Lowest K-type</strong>: ", $lkt,"<BR>");
+    $lkt_dimension =~ s/.*://g;
+    print("<strong>Dimension of lowest K-type</strong>: ", $lkt_dimension,"<BR>");
+
+
+}
+
 
 sub show_input{
     my $input=shift;

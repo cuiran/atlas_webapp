@@ -75,9 +75,11 @@ def get_atlasinput(user_input):
             for i in range(len(ds_param_text)):
                 ds_param.append(int(ds_param_text[i]))
             set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
-            inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
-            atlas_input = command+define_grp+print_grp+set_dsparam+parameter+inf_char
+            inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
+            lkt="prints(\"LKT:\", highest_weights(LKT(dsparam))[0])\n"
+            lkt_dim="prints(\"LKT_dimension:\", dimension(highest_weights(LKT(dsparam))[0]))\n"
+            atlas_input = command+define_grp+print_grp+set_dsparam+parameter+inf_char+lkt+lkt_dim
     elif user_input['show'] == 'Unitarity':
         if user_input['rep'] == 'ds':
             define_grp = set_group(user_input)
