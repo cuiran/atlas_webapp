@@ -28,6 +28,8 @@ sub detect_type{
 	process_print_real_weyl($io);
     }elsif ($io =~ /menu_item:information_on_parameter/m){
 	information_on_parameter($io);
+    }elsif ($io =~ /menu_item:Branch_to_K/m){
+	branch_to_K($io);
     }else{
 	print "Default return value",$io;
     }    
@@ -36,6 +38,7 @@ sub detect_type{
 
 sub process_cartans{
     my $io=shift;
+    print "io: $io";
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
@@ -51,7 +54,7 @@ sub process_cartans{
 
 
     print "<P><strong>Cartan subgroups</strong>
-<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/cartan_classes.html>Help</a>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/cartan_classes.html>(More Information)</a>
 ";
 
 print "<style>
@@ -119,12 +122,12 @@ sub process_real_forms{
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
-    $output =~ s/\\n/X/g;
+    $output =~ s/\\n/X/g;w
     show_input($input);
     print "<h4>Atlas Output</h4>";
     my @lines=split("X",$output);
     print "<strong>Real forms in the given inner class of G</strong>
-<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_groups.html>(help)</a><P><P>";
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_groups.html>(More Information)</a><P><P>";
     foreach my $line (@lines){
     if ($line =~ /group/){
         print($line,"<br>");
@@ -165,7 +168,7 @@ sub process_kgb{
     $dot_file =~ s/ /_/g;
     my $jpg_file="KGB_graph_$rand".".jpg";
     $jpg_file=~ s/ /_/g;
-    print "<strong>K orbits on G/B</strong> <a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/K_orbits_on_G_B.html>help</a><P>";
+    print "<strong>K orbits on G/B</strong> <a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/K_orbits_on_G_B.html>(More Information)</a><P>";
     print "<fonts size=+1><strong>Graph of closure relations for K\\G/B, G=", $group,"<P>",
 "<a href=\"static/kgb_graphs/$jpg_file\"  download=\"$jpg_file\">Download Graph</a><P>";
 print "</strong></fontsize><P>";
@@ -287,7 +290,7 @@ sub process_di{
     print "<h4>Atlas Output</h4>";
 
     print "<P><strong>Distinguished Involution</strong>
-<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_forms.html?highlight=distinguished>help<BR>";
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_1B/real_forms.html?highlight=distinguished>(More Information)<BR>";
     $output =~ s/\\n//g;        
     $output =~ s/\"//g;
     $output =~ s/.*Value://g;
@@ -324,7 +327,7 @@ sub process_simple_roots{
     $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
-#    print("<P>output=",$output);
+    print("<P>output=",$output);
     print "<P><strong>Simple Roots:</strong> (the <em>columns</em> of the matrix):<P>";
     $output =~ s/\\n//g;        
     $output =~ s/\"//g;        
@@ -380,11 +383,9 @@ sub information_on_parameter{
     show_input($input);
     print "<h4>Atlas Output</h4>";
     print "<strong>Information about the parameter</strong>
-<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_2A/parameters.html>help</a><P>
+<a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_2A/parameters.html>(More Information)</a><P>
 ";
-    if ($input =~ /dsparam/){
-	print("This representation is in the discrete series<P>")
-    };
+
 #    print("<P>output=",$output);
  
 
@@ -399,8 +400,13 @@ sub information_on_parameter{
     }	elsif(scalar(@data)==10){
 	($menu_item,$p,$q,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}else{
-	    print("Error");
+	    print("Not a valid parameter");exit();
 	}
+
+    if ($input =~ /dsparam/){
+	print("This representation is in the discrete series<P>")
+    };
+
     $parameter=~ s/.*\(//;
     $parameter=~ s/\).*//;
     my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
@@ -417,6 +423,44 @@ sub information_on_parameter{
 
 }
 
+sub branch_to_K{
+    my $io=shift;
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+    print "<strong>Branch of irreducible representation to K</strong><P>";
+    if ($input =~ /dsparam/){
+	print("This representation is in the discrete series<P>")
+    };
+#    print("<P>output=",$output);
+
+    $output =~ s/.*Value://g;
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my @data = split "X", $output;
+#    print("data:", join "<P>", @data);
+    my ($s,$x,$lambda,$dim,$height);
+print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
+    print("<TABLE BORDER=1><TR><TD>mult.</TD><TD>lambda</TD><TD>dim</TD><TD>height</TD></TR>");
+    foreach my $line (@data){
+	next unless ($line =~ /KGB/);
+	my ($s,$x,$lambda,$dim,$height) =
+	    $line =~ / *\((.*)\)\*.*\#([0-9]*),(.*)\) *([0-9]*) *([0-9]*).*/;
+	$s =~ s/\+.*//g;
+	print "<TR><TD>$s</TD><TD>$lambda</TD><TD>$dim</TD><TD>$height</TD></TR>";
+    }
+    print("</TABLE>");
+    print "<P><P><strong>Key:</strong><BR>
+<UL>
+<LI>mult: multiplicity of the K-type</LI>
+<LI>lambda: highest weight</LI>
+<LI>dimension</LI>
+<LI>height</LI>
+</UL>";
+
+}
 
 sub show_input{
     my $input=shift;
@@ -424,7 +468,7 @@ sub show_input{
     $input =~ s/\"//g;
     print "<h4>Atlas Code</h4>";
     print "<em>This is the atlas code which was run</em>:<br>";
-    print $input, "<P>";
+    print "START INPUT".$input."END INPUT";
 }
 
 

@@ -11,7 +11,7 @@ var grps;
 var reps = [
     {"id":"finite","name":"Finite Dimensional"},
     {"id":"ds","name":"Discrete Series"},
-    {"id":"spherical_ps","name":"Spherical Principal Series"}
+    {"id":"minimal_split_ps","name":"Minimal Principal Series (split groups)"}
     ];
 
 //load json objects into variables and populate the topics column
@@ -207,7 +207,7 @@ function addRepParam(changed_item,topic_item){
         addFiniteParams();
     } else if (rep_cat === "ds"){
         isEqualRk(changed_item,topic_item);
-    } else if (rep_cat === "spherical_ps"){
+    } else if (rep_cat === "minimal_split_ps"){
         isSplit(changed_item,topic_item);
     }
 }
@@ -226,9 +226,9 @@ function isSplit(changed_item,topic_item){
 }
 
 // add parameters if user chose finite dimensional 
-function addFiniteParams(){
-    console.log("addFiniteParams called");
-}
+//function addFiniteParams(){
+//    console.log("addFiniteParams called");
+//}
 
 // get rho(G) if user chose discrete series
 function getRho(){
@@ -252,7 +252,7 @@ function DSExists(output){
     }
 }
 
-// check if spherical principal series exists
+// check if group is split
 function PSExists(output){
     true_false = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
     if (true_false === "true"){
@@ -328,6 +328,26 @@ function addPSParams(output){
 
 }
 
+// add Finite Dimensional parameter input options
+function addFiniteParams(output){
+//  incorrect in some cases:
+//    var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
+    var rho = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
+    var num_inputs = output.split(",").length;
+    console.log("addFDParam output:",output);
+    console.log("num_inputs=", num_inputs);
+    const div = $('<div>').attr({"id":"fdinstru_div","class":"form-group"})
+    $('#specify').append(div);
+    $('#fdinstru_div').append("<p>rho="+rho);
+    $('#fdinstru_div').append("<p>Input Highest Weight (all integers):</p>");
+    const param_div = $('<div>').attr({"id":"fdparam_div","class":"form-group"})
+    $('#specify').append(param_div);
+    for (var i=1;i<num_inputs;i++){
+        $('#fdparam_div').append("<input type=\"float\" id="+i+" maxlength=\"5\" size=\"4\">");
+        $('#fdparam_div').append(", ");
+    }
+    $('#fdparam_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
+}
 
 
 function addDropdown(id,column){
@@ -477,13 +497,16 @@ function react(val_dict,output){
                 addDSParams(output);
             }
         }
-        else if (val_dict['rep'] === "spherical_ps"){
+        else if (val_dict['rep'] === "minimal_split_ps"){
             if (val_dict['request'] === 'is_split'){
                 PSExists(output)
             } else {
                 addPSParams(output);
             }
-        }
+	}
+        else if (val_dict['rep'] === "finite"){
+                addFDParams(output);
+        }	
     }
     else if (show_id === "Unitarity"){
 	console.log("Unitarity selected");
@@ -491,6 +514,10 @@ function react(val_dict,output){
     }
     else if (show_id === "information_on_parameter"){
 	console.log("information selected");
+        showRawOutput(output)
+    }
+    else if (show_id === "Branch_to_K"){
+	console.log("Branch to K selected");
         showRawOutput(output)
     }
 }

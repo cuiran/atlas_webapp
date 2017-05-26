@@ -41,8 +41,7 @@
         },
         {
         "name":"Branch to K",
-        "id":"Branch_to_K",
-        "further_require":["hight"]
+        "id":"Branch_to_K"
         },
         {
         "name":"Unitarity",

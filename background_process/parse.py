@@ -26,7 +26,7 @@ def parse_output(user_input,atlas_output):
                 parsed_out = trim(atlas_output)
             elif user_input['request'] == 'rho':
                 parsed_out = trim(atlas_output)
-        elif user_input['rep'] == 'spherical_ps':
+        elif user_input['rep'] == 'minimal_split_ps':
             if user_input['request'] == 'is_split':
                 parsed_out = trim(atlas_output)
             elif user_input['request'] == 'rho':
