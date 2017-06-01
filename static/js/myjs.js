@@ -190,7 +190,9 @@ function addQ(topic_item){
     $('.selectpicker').selectpicker('refresh');
 }
 
-// add dropdown for reps
+
+
+// add dropdown for reps kkk
 function addRepCat(changed_item,topic_item){
     addDropdown("rep","specify");
     $.each(reps,function(i,item){

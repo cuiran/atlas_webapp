@@ -35,6 +35,15 @@ sub detect_type{
     }    
 }
 
+#string passed: "input: ...output:...", split into  ($input,$output)
+# $input includes ...set G=U(3,2).. .(for example) - extract U(3,2) from here
+sub get_group_from_input{
+    my $input =shift;
+    $input =~ s/\\n/X/g;
+    my ($group) = $input =~ /.*set G=([^X]*)X/;
+    $group;
+}
+
 
 sub process_cartans{
     my $io=shift;
@@ -122,7 +131,7 @@ sub process_real_forms{
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
-    $output =~ s/\\n/X/g;w
+    $output =~ s/\\n/X/g;
     show_input($input);
     print "<h4>Atlas Output</h4>";
     my @lines=split("X",$output);
@@ -379,26 +388,28 @@ sub information_on_parameter{
     my $io=shift;
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
+    my $group =get_group_from_input($input);
     $output =~ s/\}$//;
+#    print "<P>OUTPUT=", $output,"<P>";
     show_input($input);
     print "<h4>Atlas Output</h4>";
-    print "<strong>Information about the parameter</strong>
+    print "<strong>Information about the parameter for G=$group</strong>
 <a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_2A/parameters.html>(More Information)</a><P>
 ";
 
 #    print("<P>output=",$output);
  
 
-    my ($menu_item,$n,$p,$q,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
+    my ($menu_item,$n,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
     $output =~ s/\\n/X/g;
     $output =~ s/\"//g;
     my @data = split "X", $output;
 #    print "size:", scalar(@data);
 #    print join "<P>", @data;
-    if (scalar(@data)==9){
-	($menu_item,$n,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
-    }	elsif(scalar(@data)==10){
-	($menu_item,$p,$q,$G,$group,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+    if (scalar(@data)==12){
+	($menu_item,$n,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+    }	elsif(scalar(@data)==13){
+	($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}else{
 	    print("Not a valid parameter");exit();
 	}
@@ -410,13 +421,19 @@ sub information_on_parameter{
     $parameter=~ s/.*\(//;
     $parameter=~ s/\).*//;
     my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
-    print("<P><strong>x</strong>=",$x,"<BR>");
+    print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+    print("<strong>x</strong>=",$x,"<BR>");
     print("<strong>lambda</strong>=",$lambda,"<BR>");
     print("<strong>nu</strong>=",$nu,"<BR>");
     $infinitesimal_character =~ s/.*=//g;
     print("<strong>infinitesimal character</strong>: ", $infinitesimal_character,"<BR>");
-    $lkt =~ s/.*://g;
-    print("<strong>Lowest K-type</strong>: ", $lkt,"<BR>");
+    $x_K =~ s/.*=//;
+    $rho_K =~ s/.*=//;
+    print("<strong>x_K=</strong>", $x_K,"<BR>");
+    print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+    $lkt =~ s/.*\[//;
+    $lkt =~ s/\].*//;
+    print("<strong>Lowest K-type</strong>: [", $lkt,"]<BR>");
     $lkt_dimension =~ s/.*://g;
     print("<strong>Dimension of lowest K-type</strong>: ", $lkt_dimension,"<BR>");
 
