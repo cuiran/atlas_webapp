@@ -11,6 +11,8 @@ def set_group(user_input):
     return define_grp
 
 
+
+
 def get_atlasinput(user_input):
     if user_input['show'] == 'Cartan_Subgroups':
         define_grp = set_group(user_input)
@@ -73,30 +75,46 @@ def get_atlasinput(user_input):
         if user_input['rep'] == 'ds':
             command = "prints(\"menu_item:information_on_parameter\")\n"
             define_grp = set_group(user_input)
+            if "n" in list(user_input.keys()):
+                group_and_numbers =( user_input["group"] + ","  + user_input["n"] + ")") 
+            else: 
+                group_and_numbers =( user_input["group"] + "," + user_input["p"] +  "," + user_input["q"] + ")")
             print_grp = "prints(\"group:\",G)\n"
+            get_nice_x= "set x_K=get_nice_x_from_group_and_integers(" + group_and_numbers + "\n"
+            print_x_K="prints(\"x_K=\",x_K)\n"
+            print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
             ds_param = list()
             for i in range(len(ds_param_text)):
                 ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+str(ds_param)+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
-            lkt="prints(\"LKT:\", highest_weights(LKT(dsparam))[0])\n"
+            lkt="prints(\"LKT:\", highest_weights(LKT(dsparam),KGB(G,x_K))[0])\n"
             lkt_dim="prints(\"LKT_dimension:\", dimension(highest_weights(LKT(dsparam))[0]))\n"
+            atlas_input = command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_dsparam + parameter+ inf_char + lkt + lkt_dim
     elif user_input['show'] == 'Branch_to_K':
         if user_input['rep'] == 'ds':
             command = "prints(\"menu_item:Branch_to_K\")\n"
             define_grp = set_group(user_input)
+            define_grp = set_group(user_input)
+            if "n" in list(user_input.keys()):
+                group_and_numbers =( user_input["group"] + ","  + user_input["n"] + ")") 
+            else: 
+                group_and_numbers =( user_input["group"] + "," + user_input["p"] +  "," + user_input["q"] + ")")
             print_grp = "prints(\"group:\",G)\n"
+            get_nice_x= "set x_K=get_nice_x_from_group_and_integers(" + group_and_numbers + "\n"
+            print_x_K="prints(\"x_K=\",x_K)\n"
+            print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
             ds_param = list()
             for i in range(len(ds_param_text)):
                 ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+str(ds_param)+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             tag = "prints(\"Value:\")\n"
-            branch = "print_branch_irr_long(dsparam,3*height(dsparam))\n";
-            atlas_input = command+define_grp+print_grp+set_dsparam+parameter+tag+branch
+            branch = "print_branch_irr_long(dsparam,KGB(G,x_K),3*height(dsparam))\n";
+            atlas_input = command+define_grp+print_grp + get_nice_x + print_x_K + print_rho_K + set_dsparam+parameter+tag+branch
     elif user_input['show'] == 'Unitarity':
         if user_input['rep'] == 'ds':
             define_grp = set_group(user_input)

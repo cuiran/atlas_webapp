@@ -217,6 +217,7 @@ print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid bla
 my ($l, $roots,$crossandcayley,$torus,$canonical,$cartan,$w)= $x =~ 
     / *([0-9]*) *(\[.*\]) *([0-9 \*]*) *(\(.*\))(.) *([0-9]*) *(.*) */;
     $w =~ s/ //g;
+    $w =~ s/\\n//;
 #print "l=$l\n roots=$roots\n crossandcayley=$crossandcayley\ntorus=$torus\ncanonical=$canonical\ncartan=$cartan\nw=$w";
     my @crossandcayley=split "\ +", $crossandcayley;
     my @roots= split ',', $roots;
@@ -397,7 +398,7 @@ sub information_on_parameter{
 <a href=http://www.liegroups.org/software/documentation/atlasofliegroups-docs/tutorial/video_2A/parameters.html>(More Information)</a><P>
 ";
 
-#    print("<P>output=",$output);
+#    print("<P>output=",$output,"<P>");
  
 
     my ($menu_item,$n,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
@@ -411,7 +412,7 @@ sub information_on_parameter{
     }	elsif(scalar(@data)==13){
 	($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}else{
-	    print("Not a valid parameter");exit();
+	    print("Not a valid discrete series parameter");exit();
 	}
 
     if ($input =~ /dsparam/){
@@ -445,20 +446,44 @@ sub branch_to_K{
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
-    show_input($input);
+#    show_input($input);
     print "<h4>Atlas Output</h4>";
     print "<strong>Branch of irreducible representation to K</strong><P>";
+#    print("<P>output=",$output,"<P>");
+    if ($output =~ /Undefined/){
+	print("Not a valid discrete series parameter");exit();
+    }
+
+
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my ($preamble,$ktypes)=split 'Value:', $output;
+    
+    my @preamble_data = split 'X', $preamble;
+ #   print join "<P>", @preamble_data;
+    my ($menu_item, $n, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
+
+    my @data = split "X", $ktypes;
+#    print("data:", join "<P>", @data);
+
+
+
+    my ($s,$x,$lambda,$dim,$height);
+
+        $x_K =~ s/.*=//;
+    $rho_K =~ s/.*=//;
+    
+    $dsparam =~ s/.*final //;
+
     if ($input =~ /dsparam/){
 	print("This representation is in the discrete series<P>")
     };
-#    print("<P>output=",$output);
 
-    $output =~ s/.*Value://g;
-    $output =~ s/\\n/X/g;
-    $output =~ s/\"//g;
-    my @data = split "X", $output;
-#    print("data:", join "<P>", @data);
-    my ($s,$x,$lambda,$dim,$height);
+    print("<P><strong>p=</strong>$dsparam","<BR>");
+
+    print("<strong>x_K=</strong>", $x_K,"<BR>");
+    print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+
 print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
     print("<TABLE BORDER=1><TR><TD>mult.</TD><TD>lambda</TD><TD>dim</TD><TD>height</TD></TR>");
     foreach my $line (@data){
@@ -471,6 +496,8 @@ print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid bla
     print("</TABLE>");
     print "<P><P><strong>Key:</strong><BR>
 <UL>
+<LI>x_K: KGB element determining the positive roots of K
+<LI>rho_K: one-half the sum of the positive roots of K
 <LI>mult: multiplicity of the K-type</LI>
 <LI>lambda: highest weight</LI>
 <LI>dimension</LI>
