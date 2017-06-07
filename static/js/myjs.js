@@ -159,7 +159,15 @@ function changeSpecify(changed_item, topic_item){
 
 // add dropdowns for group parameters
 function addGrpParam(param_list,topic_item){
-    if (param_list.length === 1){
+    if (param_list.length === 0){   //case SL(n), only n=2 is allowed
+        addDropdown("n","specify");
+        for (var i=2; i<3; i++){
+            $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
+        }
+        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","changeSpecify(\'n\',\'"+topic_item+"\')"]);
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
+    } 
+    else if (param_list.length === 1){
         addDropdown("n","specify");
         for (var i=1; i<9; i++){
             $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
@@ -192,7 +200,7 @@ function addQ(topic_item){
 
 
 
-// add dropdown for reps kkk
+// add dropdown for reps 
 function addRepCat(changed_item,topic_item){
     addDropdown("rep","specify");
     $.each(reps,function(i,item){

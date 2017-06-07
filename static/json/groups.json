@@ -1,7 +1,7 @@
 [
 	{"id":"SL(n,R)",
 	"name":"SL(n,\\mathbb{R})",
-	"need_param": ["n"]},
+	"need_param": []},
 	{"id":"GL(n,R)",
 	"name":"GL(n,\\mathbb{R})",
 	"need_param":["n"]},

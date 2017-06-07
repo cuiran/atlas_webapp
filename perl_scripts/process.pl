@@ -449,7 +449,7 @@ sub branch_to_K{
     show_input($input);
     print "<h4>Atlas Output</h4>";
     print "<strong>Branch of irreducible representation to K</strong><P>";
-    print("<P>output=",$output,"<P>");
+#    print("<P>output=",$output,"<P>");
     if ($output =~ /Undefined/){
 	print("Not a valid discrete series parameter");exit();
     }
@@ -460,8 +460,8 @@ sub branch_to_K{
     my ($preamble,$ktypes)=split 'Value:', $output;
     
     my @preamble_data = split 'X', $preamble;
-    print "size:", scalar(@preamble_data);
-    print "<P>Preamble data:", join "<P>", @preamble_data,"<P>";
+#    print "size:", scalar(@preamble_data);
+#    print "<P>Preamble data:", join "<P>", @preamble_data,"<P>";
     my ($menu_item, $n,$p,$q, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam);
     if (scalar(@preamble_data)==9) {
 	($menu_item, $n, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
