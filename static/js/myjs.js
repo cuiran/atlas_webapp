@@ -317,7 +317,6 @@ function addPSParams(output){
         $('#nu_div').append(", ");
     }
     $('#nu_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
-
     $('#specify').append(epsilon_div);
     $('#epsilon_div').append("<p>Input character of M parameter (signs):</p>");
     for (var i=1;i<num_inputs;i++){
@@ -525,9 +524,10 @@ function react(val_dict,output){
 }
 
 function showRawOutput(in_output){
-    console.log(in_output)
-    var input = "sample input";
+//    var input = "sample input";
+    var input =  JSON.parse(in_output);
     var output = JSON.parse(in_output);
+    var output_text = output.replace(/[\s\S]*END INPUT/i,"");
     $('#atlas_input_output').empty();
     const checkbox_div = $('<div>').attr({"id":"checkbox_div"});
     const checkbox = "<input type=\'checkbox\' id = \'show_input_checkbox\'> <label for=\'show_input_checkbox\'>Show atlas input </label>";
@@ -535,22 +535,25 @@ function showRawOutput(in_output){
     $('#checkbox_div').append(checkbox);
     $('#show_input_checkbox').on("click",function(){showAtlasInput(input)});
     //setOnchangeFuncs("show_input_checkbox","showAtlasInput()");
-    $('#atlas_input_output').append(output);
+    $('#atlas_input_output').append(output_text);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"atlas_input_output"]);
-
 }
 
 
 function showAtlasInput(input){
     var checkboxElm = document.getElementById("show_input_checkbox");
     if (checkboxElm.checked){
+	var text1=input.replace(/.*START INPUT/i,"");
+	var text2=text1.replace(/END INPUT[\s\S]*/i,"");
         clearElements(['atlas_input_div']);
         const input_div = $('<div>').attr({
             "id": "atlas_input_div"
         });
         $("#checkbox_div").after(input_div);
         $('#atlas_input_div').append("<h4 id=\"input_header\">Atlas Code:</h4>");
-        $('#atlas_input_div').append(input);
+//        $('#atlas_input_div').append("start of input");
+        $('#atlas_input_div').append(text2);
+//        $('#atlas_input_div').append("end of input");
     } else {
         clearElements(['atlas_input_div']);
     }

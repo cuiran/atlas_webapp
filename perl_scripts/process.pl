@@ -446,10 +446,10 @@ sub branch_to_K{
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
-#    show_input($input);
+    show_input($input);
     print "<h4>Atlas Output</h4>";
     print "<strong>Branch of irreducible representation to K</strong><P>";
-#    print("<P>output=",$output,"<P>");
+    print("<P>output=",$output,"<P>");
     if ($output =~ /Undefined/){
 	print("Not a valid discrete series parameter");exit();
     }
@@ -460,8 +460,17 @@ sub branch_to_K{
     my ($preamble,$ktypes)=split 'Value:', $output;
     
     my @preamble_data = split 'X', $preamble;
- #   print join "<P>", @preamble_data;
-    my ($menu_item, $n, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
+    print "size:", scalar(@preamble_data);
+    print "<P>Preamble data:", join "<P>", @preamble_data,"<P>";
+    my ($menu_item, $n,$p,$q, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam);
+    if (scalar(@preamble_data)==9) {
+	($menu_item, $n, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
+    }elsif (scalar(@preamble_data)==10){
+    ($menu_item, $p,$q, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
+    }else{
+	print "Error parsing output";
+    }
+	
 
     my @data = split "X", $ktypes;
 #    print("data:", join "<P>", @data);
@@ -510,9 +519,10 @@ sub show_input{
     my $input=shift;
     $input =~ s/\\n/<br>/g;
     $input =~ s/\"//g;
-    print "<h4>Atlas Code</h4>";
-    print "<em>This is the atlas code which was run</em>:<br>";
+#    print "<h4>Atlas Code</h4>";
+#    print "<em>This is the atlas code which was run</em>:<br>";
     print "START INPUT".$input."END INPUT";
+
 }
 
 
