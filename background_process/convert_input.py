@@ -134,6 +134,16 @@ def get_atlasinput(user_input):
             set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
             is_unitary = "is_unitary(dsparam)\n"
             atlas_input = define_grp+set_dsparam+is_unitary
+    elif user_input['show'] == 'composition_series':
+        if user_input['rep'] == 'ds':
+            command = "prints(\"menu_item:composition_series\")\n"
+            define_grp = set_group(user_input)
+            atlas_input = command+define_grp
+        elif user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:composition_series\")\n"
+            define_grp = set_group(user_input)
+            define_rep = "set p=trivial(G)\n"
+            atlas_input = command+define_grp+define_rep
     else:
         atlas_input = "x=10"
     return atlas_input

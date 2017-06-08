@@ -54,6 +54,14 @@
         {
         "name":"Cuspidal Data",
         "id":"Cuspidal_Data"
+        },
+        {
+        "name":"Character Formula",
+        "id":"character_formula"
+        },
+        {
+        "name":"Composition Series",
+        "id":"composition_series"
         }]
     }
 ]

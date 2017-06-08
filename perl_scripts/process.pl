@@ -30,6 +30,8 @@ sub detect_type{
 	information_on_parameter($io);
     }elsif ($io =~ /menu_item:Branch_to_K/m){
 	branch_to_K($io);
+    }elsif ($io =~ /menu_item:composition_series/m){
+	composition_series($io);
     }else{
 	print "Default return value",$io;
     }    
@@ -439,6 +441,18 @@ sub information_on_parameter{
     print("<strong>Dimension of lowest K-type</strong>: ", $lkt_dimension,"<BR>");
 
 
+}
+
+sub composition_series{
+    my $io=shift;
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    show_input($input);
+
+    print "<h4>Atlas Output</h4>";
+    print "io=, $io<P>";
+    print "Composition Series";
 }
 
 sub branch_to_K{

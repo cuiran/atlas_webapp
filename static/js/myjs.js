@@ -529,6 +529,14 @@ function react(val_dict,output){
 	console.log("Branch to K selected");
         showRawOutput(output)
     }
+    else if (show_id === "composition_series"){
+	console.log("Composition Series selected");
+        showRawOutput(output)
+    }
+    else if (show_id === "character_formula"){
+	console.log("Character Formula selected");
+        showRawOutput(output)
+    }
 }
 
 function showRawOutput(in_output){
