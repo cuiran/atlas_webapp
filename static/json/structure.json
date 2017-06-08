@@ -52,10 +52,6 @@
         "id":"Signature_of_Hermitian_Form"
         },
         {
-        "name":"Cuspidal Data",
-        "id":"Cuspidal_Data"
-        },
-        {
         "name":"Character Formula",
         "id":"character_formula"
         },
