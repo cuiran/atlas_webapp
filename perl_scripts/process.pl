@@ -2,7 +2,6 @@ use strict;
 use warnings;
  
 my $filename = '/var/www/web_interface/atlas_app/perl_scripts/output.tmp';
-#my $filename = '/var/www/web_interface2/atlas_app/output.tmp';
 #my $filename = '/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/output.tmp';
 my $fh;
 open($fh, '<:encoding(UTF-8)', $filename)

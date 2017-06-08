@@ -1,2 +1,2 @@
-{input:"set n=4\nset G=Sp(2*n,R)\nset dsparam=discrete_series(G,[1, 2, 3, 4])\nis_unitary(dsparam)\n",
-output:"Variable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: true"}
+{input:"set p=2\nset q=3\nset G=U(p,q)\nset dsparam=discrete_series(G,[3, 2, 1, 0, 2])\nis_unitary(dsparam)\n",
+output:"Variable p: int\nVariable q: int"}
