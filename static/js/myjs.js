@@ -75,6 +75,16 @@ function clearElements(list){
     })
 }
 
+// deactivate active show button
+function deactivateActiveShow(){
+	show_node = document.getElementById("show");
+	active_show = show_node.getElementsByClassName("active");
+	if (active_show.length != 0){
+		active_show_id = active_show[0].id;
+		$('#'+active_show_id).removeClass('active');
+	}
+}
+
 
 // add content to specify column
 function addSpecify(item){
@@ -139,6 +149,7 @@ function changeSpecify(changed_item, topic_item){
     if (changed_item === "group"){
         grp_selected = document.getElementById("group").value;
         clearElements(getIdsBelow("group_div","specify"));
+		deactivateActiveShow();
         $.each(grps, function(i,item){
             if (item.id === grp_selected){
                 addGrpParam(item.need_param,topic_item);
@@ -171,11 +182,11 @@ function addGrpParam(param_list,topic_item){
                 $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
             }
         }
-        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","changeSpecify(\'n\',\'"+topic_item+"\')"]);
+        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","changeSpecify(\'n\',\'"+topic_item+"\')","deactivateActiveShow()"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
-        document.getElementById('p').setAttribute("onchange",["clearElements(getIdsBelow(\'p_div\',\'specify\'))","addQ(\'"+topic_item+"\')"]);
+        document.getElementById('p').setAttribute("onchange",["clearElements(getIdsBelow(\'p_div\',\'specify\'))","addQ(\'"+topic_item+"\')","deactivateActiveShow()"]);
         for (var i=1; i<9; i++){
             $('#p').append($('<option>').attr("value",i).text("\$p="+i+"\$"));
         }
@@ -192,7 +203,7 @@ function addQ(topic_item){
     for (var i=1; i<9-p_val; i++){
         $('#q').append($('<option>').attr("value",i).text("\$q="+i+"\$"));
     }
-    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","changeSpecify(\'q\',\'"+topic_item+"\')"]);
+    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","changeSpecify(\'q\',\'"+topic_item+"\')","deactivateActiveShow()"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"q"]);
     $('.selectpicker').selectpicker('refresh');
 }
@@ -205,7 +216,7 @@ function addRepCat(changed_item,topic_item){
     $.each(reps,function(i,item){
         $('#rep').append($('<option>').attr("value",item.id).text(item.name));
     })
-    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","changeSpecify(\'rep\',\'"+topic_item+"\')"]);
+    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","changeSpecify(\'rep\',\'"+topic_item+"\')","deactivateActiveShow()"]);
     $('.selectpicker').selectpicker('refresh');
 }
 
