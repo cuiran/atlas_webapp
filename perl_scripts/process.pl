@@ -31,6 +31,10 @@ sub detect_type{
 	branch_to_K($io);
     }elsif ($io =~ /menu_item:composition_series/m){
 	composition_series($io);
+    }elsif ($io =~ /menu_item:character_formula/m){
+	character_formula($io);
+    }elsif ($io =~ /menu_item:unitarity/m){
+	unitarity($io);
     }else{
 	print "Default return value",$io;
     }    
@@ -448,11 +452,76 @@ sub composition_series{
     $input =~ s/.*input://;
     $output =~ s/\}$//;
     show_input($input);
-
     print "<h4>Atlas Output</h4>";
-    print "io=, $io<P>";
-    print "Composition Series";
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my ($preamble,$cs)=split 'Value:', $output;
+#    print "preamble=", $preamble,"<P>";
+#    print "cs=", $cs;
+    my ($menu_item,$n,$G,$junk,$parameter)= split 'X', $preamble;
+
+    $parameter=~ s/.*\(//;
+    $parameter=~ s/\).*//;
+    my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+    print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+    print("<strong>x</strong>=",$x,"<BR>");
+    print("<strong>lambda</strong>=",$lambda,"<BR>");
+    print("<strong>nu</strong>=",$nu,"<BR>");
+    
+    my @terms= split 'X', $cs;
+    print "<strong>Composition Series</strong><P>";
+    print "<table border=1><tr><td>mult</td><td>x</td><td>lambda</td><td>nu</td></tr>";
+    foreach my $term (@terms){
+	my ($mult,$x,$lambda,$nu)= $term =~ /([0-9]*).*x=([0-9]*).*lambda=(.*)nu=(.*)/;
+	next unless ($mult);
+	print "<tr><td>$mult</td><td>$x</td><td>$lambda</td><td>$nu</td</tr>";
+    }
+    print "</table>";
+    print "<P><P><strong>Key:</strong><BR>
+<UL>
+<LI>(x,lambda,nu): parameter for irreducible module 
+<LI>mult: multiplicity irreducible module (x,lambda,nu) in composition series of p
+</UL>";
 }
+
+sub character_formula{
+    my $io=shift;
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my ($preamble,$cs)=split 'Value:', $output;
+#    print "preamble=", $preamble,"<P>";
+#    print "cs=", $cs;
+    my ($menu_item,$n,$G,$junk,$parameter)= split 'X', $preamble;
+
+    $parameter=~ s/.*\(//;
+    $parameter=~ s/\).*//;
+    my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+    print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+    print("<strong>x</strong>=",$x,"<BR>");
+    print("<strong>lambda</strong>=",$lambda,"<BR>");
+    print("<strong>nu</strong>=",$nu,"<BR>");
+    
+    my @terms= split 'X', $cs;
+    print "<strong>Character Formula</strong><P>";
+    print "<table border=1><tr><td>mult</td><td>x</td><td>lambda</td><td>nu</td></tr>";
+    foreach my $term (@terms){
+	my ($mult,$x,$lambda,$nu)= $term =~ /([0-9-]*).*x=([0-9]*).*lambda=(.*)nu=(.*)/;
+	next unless ($mult);
+	print "<tr><td>$mult</td><td>$x</td><td>$lambda</td><td>$nu</td</tr>";
+    }
+    print "</table>";
+    print "<P><P><strong>Key:</strong><BR>
+<UL>
+<LI>(x,lambda,nu): parameter for standard  module
+<LI>mult: multiplicity of standard module (x,lambda,nu) in composition series of p
+</UL>";
+}
+
 
 sub branch_to_K{
     my $io=shift;
@@ -484,11 +553,8 @@ sub branch_to_K{
 	print "Error parsing output";
     }
 	
-
     my @data = split "X", $ktypes;
 #    print("data:", join "<P>", @data);
-
-
 
     my ($s,$x,$lambda,$dim,$height);
 
@@ -528,12 +594,52 @@ print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid bla
 
 }
 
+sub unitarity{
+    my $io=shift;
+    my ($input,$output)=split("output:",$io);
+    $input =~ s/.*input://;
+    $output =~ s/\}$//;
+    show_input($input);
+    print "<h4>Atlas Output</h4>";
+#    print("<P>output=",$output,"<P>");
+
+#output="menu_item:unitarity\nVariable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: final parameter(x=0,lambda=[2]/1,nu=[0]/1)\nValue: true"
+    $output =~ s/\\n/X/g;
+    $output =~ s/\"//g;
+    my ($preamble,$parameter,$unitary)=split 'Value:', $output;
+#    print "preamble:", $preamble,"<P>";
+    my @preamble_data = split 'X', $preamble;
+
+    my ($menu_item,$n,$p,$q,$G,$junk);
+    if (scalar(@preamble_data)==4) {
+    my ($menu_item,$n,$G,$junk,$parameter)= split 'X', $preamble;
+    }elsif (scalar(@preamble_data)==6){
+    my ($menu_item,$p,$q,$G,$junk,$parameter)= split 'X', $preamble;
+    }else{
+	print "Error parsing output";
+    }
+
+    $parameter=~ s/.*\(//;
+    $parameter=~ s/\).*//;
+    my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+    print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+    print("<strong>x</strong>=",$x,"<BR>");
+    print("<strong>lambda</strong>=",$lambda,"<BR>");
+    print("<strong>nu</strong>=",$nu,"<BR>");
+    if ($unitary="true"){
+	print "This representation is unitary."}else{
+	print "This representation is <strong>not</strong> unitary."}
+}
+
 sub show_input{
     my $input=shift;
+    $input =~ s/.*menu_item:[a-zA-Z_\\]*\"\)//;
     $input =~ s/\\n/<br>/g;
-    $input =~ s/\"//g;
+    $input =~ s/\\\"/\"/g;
+    $input =~ s/\",$//;
 #    print "<h4>Atlas Code</h4>";
 #    print "<em>This is the atlas code which was run</em>:<br>";
+    $input =~ 
     print "START INPUT".$input."END INPUT";
 
 }
