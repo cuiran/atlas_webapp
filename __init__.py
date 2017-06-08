@@ -31,7 +31,9 @@ def atlas_process():
     user_input = json.loads(request.data)
     print(user_input)
     atlas_input = atin.get_atlasinput(user_input)
+    print(atlas_input)
     atlas_output = runat.get_atlas_output(atlas_input,atlas_dir)
+    print(atlas_output)
     if no_empty_value(user_input):
         parsed_out,_ = parse.perl_process(atlas_input,atlas_output,perl_scripts_dir)
     else:

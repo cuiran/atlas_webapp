@@ -84,10 +84,8 @@ def get_atlasinput(user_input):
             print_x_K="prints(\"x_K=\",x_K)\n"
             print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
-            ds_param = list()
-            for i in range(len(ds_param_text)):
-                ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+str(ds_param)+")\n"
+            ds_param_asstring = make_dsparam_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+ds_param_asstring+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
             lkt="prints(\"LKT:\", highest_weights(LKT(dsparam),KGB(G,x_K))[0])\n"
@@ -107,10 +105,8 @@ def get_atlasinput(user_input):
             print_x_K="prints(\"x_K=\",x_K)\n"
             print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
-            ds_param = list()
-            for i in range(len(ds_param_text)):
-                ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+str(ds_param)+")\n"
+            ds_param_asstring = make_dsparam_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+ds_param_asstring+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             tag = "prints(\"Value:\")\n"
             branch = "print_branch_irr_long(dsparam,KGB(G,x_K),3*height(dsparam))\n";
@@ -120,10 +116,8 @@ def get_atlasinput(user_input):
             command = "prints(\"menu_item:unitarity\")\n"
             define_grp = set_group(user_input)
             ds_param_text = user_input['dsparam']
-            ds_param = list()
-            for i in range(len(ds_param_text)):
-                ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            ds_param_asstring = make_dsparam_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
             print_rep = "dsparam\n";
             is_unitary = "is_unitary(dsparam)\n"
             atlas_input = command+ define_grp+set_dsparam+print_rep+is_unitary
@@ -131,10 +125,8 @@ def get_atlasinput(user_input):
             command = "prints(\"menu_item:unitarity\")\n"
             define_grp = set_group(user_input)
             ds_param_text = user_input['dsparam']
-            ds_param = list()
-            for i in range(len(ds_param_text)):
-                ds_param.append(int(ds_param_text[i]))
-            set_dsparam = "set dsparam=discrete_series(G,"+str(ds_param)+")\n"
+            ds_param_asstring = make_dsparam_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
             print_rep = "print(\"p=\",dsparam)\n";
             is_unitary = "is_unitary(dsparam)\n"
             atlas_input =command+ define_grp+set_dsparam+is_unitary
@@ -167,3 +159,25 @@ def get_atlasinput(user_input):
     else:
         atlas_input = "x=10"
     return atlas_input
+
+def str_to_intorfrac(s):
+    # make sure the user entered an integer or a fraction
+    try:
+        return str(int(s))
+    except ValueError:
+        l = s.split('/')
+        n = int(l[0])
+        d = int(l[1])
+        return str(n)+'/'+str(d)
+
+def make_dsparam_string(dsparam_text):
+    # the input is an array of strings, for example ['3/2','1/2']
+    # the output should be a string that is an array '[3/2,1/2]'
+    s = '['
+    for i in range(len(dsparam_text)):
+        s = s+str_to_intorfrac(dsparam_text[i])
+        s = s+','
+    # remove the last comma in string, we don't need that
+    s = s[:-1]+']'
+    return s
+    
