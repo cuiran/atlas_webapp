@@ -1,2 +1,2 @@
-{input:"prints(\"menu_item:Branch_to_K\")\nset n=2\nset G=SL(n,R)\nprints(\"group:\",G)\nset x_K=get_nice_x_from_group_and_integers(SL(n,R),2)\nprints(\"x_K=\",x_K)\nprints(\"rho_K=\",rho_K(KGB(G,x_K)))\nset dsparam=discrete_series(KGB(G,x_K),[2])\nprints(\"parameter=\", dsparam)\nprints(\"Value:\")\nprint_branch_irr_long(dsparam,KGB(G,x_K),3*height(dsparam))\n",
-output:"menu_item:Branch_to_K\nVariable n: int\nVariable G: RealForm\ngroup:connected split real group with Lie algebra 'sl(2,R)'\ngroupconnected split real group with Lie algebra 'sl(2,R)'\nVariable x_K: int\nx_K=0\nrho_K=[ 0 ]/1\nVariable dsparam: Param\nparameter=final parameter(x=0,lambda=[2]/1,nu=[0]/1)\nValue:\n(1+0s)*(KGB element #0,[ 3 ]) 1    2\n(1+0s)*(KGB element #0,[ 5 ]) 1    4\n(1+0s)*(KGB element #0,[ 7 ]) 1    6"}
+{input:"set x=10",
+output:"Variable x: int"}
