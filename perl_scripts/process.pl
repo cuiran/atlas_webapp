@@ -1,9 +1,9 @@
 use strict;
 use warnings;
  
-my $filename = '/var/www/web_interface/atlas_app/perl_scripts/output.tmp';
+#my $filename = '/var/www/web_interface/atlas_app/perl_scripts/output.tmp';
 #my $filename = '/home/ran/atlas_project/atlas_webapp/perl_scripts/output.tmp';
-#my $filename = '/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/output.tmp';
+my $filename = '/Users/rancui/Math/atlas_project/atlas_webapp/perl_scripts/output.tmp';
 my $fh;
 open($fh, '<:encoding(UTF-8)', $filename)
   or die "Could not open file '$filename' $!";

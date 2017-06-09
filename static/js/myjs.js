@@ -122,6 +122,18 @@ function dropdown_const(item){
     return dropdown 
 }
 
+function small_dropdown_const(item){
+    const dropdown = $('<select>').attr({
+        "id":item,
+        "class":"selectpicker",
+        "data-width":"20%",
+        "data-windowPadding":"[5px,5px,5px,5px]",
+        "method":"POST",
+        "title":"\$\\pm\$"
+    })
+    return dropdown
+}
+
 // dropdown menu for groups
 function populateGroupDropdown(){
     $.each(grps, function(i,group){
@@ -327,7 +339,7 @@ function addPSParams(output){
 
     const nu_div = $('<div>').attr({"id":"nu_div","class":"form-group"})
     const epsilon_div = $('<div>').attr({"id":"epsilon_div","class":"form-group"})
-
+    // add division for parameter nu
     $('#specify').append(nu_div);
     $('#nu_div').append("<p>Input nu parameter (rationals):</p>");
     for (var i=1;i<num_inputs;i++){
@@ -335,16 +347,20 @@ function addPSParams(output){
         $('#nu_div').append(", ");
     }
     $('#nu_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
+    // add division for parameter epsilon
     $('#specify').append(epsilon_div);
     $('#epsilon_div').append("<p>Input character of M parameter (signs):</p>");
     for (var i=1;i<num_inputs;i++){
-        $('#epsilon_div').append("<input type=\"float\" id=epsilon"+i+" maxlength=\"5\" size=\"4\">");
+        $('#epsilon_div').append(small_dropdown_const("epsilon"+i));
+        $('#epsilon'+i).append($('<option>').attr("value","pos").text("\$+\$"));
+        $('#epsilon'+i).append($('<option>').attr("value","neg").text("\$-\$"));
         $('#epsilon_div').append(", ");
     }
-    $('#epsilon_div').append("<input type=\"float\" id=epsilon"+num_inputs+" maxlength=\"5\" size=\"4\">");
-
-
-
+    $('#epsilon_div').append(small_dropdown_const("epsilon"+num_inputs));
+    $('#epsilon'+num_inputs).append($('<option>').attr("value","pos").text("\$+\$"));
+    $('#epsilon'+num_inputs).append($('<option>').attr("value","neg").text("\$-\$"));
+    $('.selectpicker').selectpicker('refresh');
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,'epsilon_div'])
 }
 
 // add Finite Dimensional parameter input options
