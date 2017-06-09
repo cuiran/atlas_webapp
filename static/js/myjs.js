@@ -317,18 +317,16 @@ function addDSParams(output){
         var is_int = false;
     }
     var num_inputs = output.split(",").length;
-    console.log("addDSParam output:",output);
-    console.log("num_inputs=", num_inputs);
     const div = $('<div>').attr({"id":"dsinstru_div","class":"form-group"})
     $('#specify').append(div);
     $('#dsinstru_div').append("<p>rho="+rho);
-    if (is_int){
-        $('#dsinstru_div').append("<p>Input Harish-Chandra parameters (all integers):</p>");
-    } else {
-        $('#dsinstru_div').append("<p>Input Harish-Chandra parameters (all half integers):</p>");
-    }
     const param_div = $('<div>').attr({"id":"dsparam_div","class":"form-group"})
     $('#specify').append(param_div);
+    if (is_int){
+        $('#dsparam_div').append("<p>Input Harish-Chandra parameters (all integers):</p>");
+    } else {
+        $('#dsparam_div').append("<p>Input Harish-Chandra parameters (all half integers):</p>");
+    }
     for (var i=1;i<num_inputs;i++){
         $('#dsparam_div').append("<input type=\"float\" id="+i+" maxlength=\"5\" size=\"4\">");
         $('#dsparam_div').append(", ");
@@ -340,8 +338,6 @@ function addDSParams(output){
 function addPSParams(output){
     var rho = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
     var num_inputs = output.split(",").length;
-    console.log("addPSParam output:",output);
-    console.log("num_inputs=", num_inputs);
     const div = $('<div>').attr({"id":"psinstru_div","class":"form-group"})
     $('#specify').append(div);
     $('#psinstru_div').append("<p>rho="+rho);
@@ -360,14 +356,14 @@ function addPSParams(output){
     $('#specify').append(epsilon_div);
     $('#epsilon_div').append("<p>Input character of M parameter (signs):</p>");
     for (var i=1;i<num_inputs;i++){
-        $('#epsilon_div').append(small_dropdown_const("epsilon"+i));
-        $('#epsilon'+i).append($('<option>').attr("value","pos").text("\$+\$"));
-        $('#epsilon'+i).append($('<option>').attr("value","neg").text("\$-\$"));
+        $('#epsilon_div').append(small_dropdown_const("epsilon_"+i));
+        $('#epsilon_'+i).append($('<option>').attr("value","pos").text("\$+\$"));
+        $('#epsilon_'+i).append($('<option>').attr("value","neg").text("\$-\$"));
         $('#epsilon_div').append(", ");
     }
-    $('#epsilon_div').append(small_dropdown_const("epsilon"+num_inputs));
-    $('#epsilon'+num_inputs).append($('<option>').attr("value","pos").text("\$+\$"));
-    $('#epsilon'+num_inputs).append($('<option>').attr("value","neg").text("\$-\$"));
+    $('#epsilon_div').append(small_dropdown_const("epsilon_"+num_inputs));
+    $('#epsilon_'+num_inputs).append($('<option>').attr("value","pos").text("\$+\$"));
+    $('#epsilon_'+num_inputs).append($('<option>').attr("value","neg").text("\$-\$"));
     $('.selectpicker').selectpicker('refresh');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'epsilon_div'])
 }
@@ -378,8 +374,6 @@ function addFiniteParams(output){
 //    var rho = output.slice(1,-1).split("\\n")[2].split(":")[1].replace(/ /g,'');
     var rho = output.slice(1,-1).split("Value:")[1].replace(/ /g,''); 
     var num_inputs = output.split(",").length;
-    console.log("addFDParam output:",output);
-    console.log("num_inputs=", num_inputs);
     const div = $('<div>').attr({"id":"fdinstru_div","class":"form-group"})
     $('#specify').append(div);
     $('#fdinstru_div').append("<p>rho="+rho);
@@ -478,19 +472,26 @@ function get_val_dict(){
     for (var i=1; i<spec_divs_onscreen.length; i++){
         var div_id = spec_divs_onscreen[i].id;
         var child_id = div_id.slice(0,-4);
-        var exceptions = ["dsinstru","psinstru","dsparam"];
+        var exceptions = ["dsinstru","psinstru","dsparam","nu","epsilon"];
         if (!(inList(child_id,exceptions))){
             val_dict[child_id] = document.getElementById(child_id).value;
-        } else if (child_id === "dsinstru"){
+        } else if (inList(child_id,["dsinstru","psinstru"])){
             val_dict[child_id] = document.getElementById(child_id+'_div').innerHTML;
-        } else {
+        } else if (inList(child_id,["dsparam","nu"])){
             param_boxes = document.getElementById(child_id+'_div').children;
-            param_array = []
-            for (var j=0;j<param_boxes.length;j++){
+            var param_array = []
+            for (var j=1;j<param_boxes.length;j++){
                 box_id = param_boxes[j].id;
                 param_array.push(document.getElementById(box_id).value)
             }
             val_dict[child_id] = param_array;
+        } else if (child_id === "epsilon"){
+            sign_dropdowns = document.getElementById(child_id+'_div').children;
+            var sign_array = []
+            for (var k=1;k<sign_dropdowns.length;k++){
+                sign_array.push(document.getElementById(child_id+'_'+k).value)
+            }
+            val_dict[child_id] = sign_array
         }
     }
     var show_node = document.getElementById("show");
@@ -507,6 +508,7 @@ function get_val_dict(){
     } else {
         val_dict["show"] = "";
     }
+    console.log(val_dict)
     return val_dict   
 }
 
