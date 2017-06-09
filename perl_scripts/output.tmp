@@ -1,2 +1,2 @@
-{input:"set x=10",
-output:"Variable x: int"}
+{input:"prints(\"menu_item:unitarity\")\nset n=2\nset G=SL(n,R)\nset dsparam=discrete_series(G,[2])\ndsparam\nis_unitary(dsparam)\n",
+output:"menu_item:unitarity\nVariable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: final parameter(x=0,lambda=[2]/1,nu=[0]/1)\nValue: true"}

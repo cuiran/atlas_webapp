@@ -257,6 +257,15 @@ function isSplit(changed_item,topic_item){
     ajax_post(val_dict);
 }
 
+// check if element is in list
+function inList(elem, l){
+    if (l.indexOf(elem)>=0){
+        return true
+    } else {
+        return false
+    }
+}
+
 // add parameters if user chose finite dimensional 
 //function addFiniteParams(){
 //    console.log("addFiniteParams called");
@@ -469,7 +478,8 @@ function get_val_dict(){
     for (var i=1; i<spec_divs_onscreen.length; i++){
         var div_id = spec_divs_onscreen[i].id;
         var child_id = div_id.slice(0,-4);
-        if (child_id !== "dsinstru" && child_id !== "dsparam"){
+        var exceptions = ["dsinstru","psinstru","dsparam"];
+        if (!(inList(child_id,exceptions))){
             val_dict[child_id] = document.getElementById(child_id).value;
         } else if (child_id === "dsinstru"){
             val_dict[child_id] = document.getElementById(child_id+'_div').innerHTML;
