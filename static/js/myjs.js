@@ -194,7 +194,7 @@ function addGrpParam(param_list,topic_item){
                 $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
             }
         }
-        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","changeSpecify(\'n\',\'"+topic_item+"\')","deactivateActiveShow()"]);
+        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","deactivateActiveShow","changeSpecify(\'n\',\'"+topic_item+"\')"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
@@ -215,7 +215,7 @@ function addQ(topic_item){
     for (var i=1; i<9-p_val; i++){
         $('#q').append($('<option>').attr("value",i).text("\$q="+i+"\$"));
     }
-    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","changeSpecify(\'q\',\'"+topic_item+"\')","deactivateActiveShow()"]);
+    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'q\',\'"+topic_item+"\')"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"q"]);
     $('.selectpicker').selectpicker('refresh');
 }
@@ -228,12 +228,13 @@ function addRepCat(changed_item,topic_item){
     $.each(reps,function(i,item){
         $('#rep').append($('<option>').attr("value",item.id).text(item.name));
     })
-    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","changeSpecify(\'rep\',\'"+topic_item+"\')","deactivateActiveShow()"]);
+    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'rep\',\'"+topic_item+"\')"]);
     $('.selectpicker').selectpicker('refresh');
 }
 
 //add dropdown for representation parameters
 function addRepParam(changed_item,topic_item){
+    console.log("addRepParam is called")
     var rep_cat = document.getElementById(changed_item).value;
     if (rep_cat === "finite"){
         addFiniteParams();
@@ -508,7 +509,6 @@ function get_val_dict(){
     } else {
         val_dict["show"] = "";
     }
-    console.log(val_dict)
     return val_dict   
 }
 
