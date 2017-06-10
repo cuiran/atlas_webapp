@@ -481,10 +481,10 @@ function get_val_dict(){
     var struc_selected = $.grep(struc, function(e){return e.id===active_topic_id})[0]
     val_dict["topic"] = active_topic_id;
     var spec_divs_onscreen = document.getElementById("specify").children;
-    for (var i=1; i<spec_divs_onscreen.length-1; i++){
+    for (var i=1; i<spec_divs_onscreen.length; i++){
         var div_id = spec_divs_onscreen[i].id;
         var child_id = div_id.slice(0,-4);
-        var exceptions = ["dsinstru","psinstru","dsparam","nu","epsilon"];
+        var exceptions = ["dsinstru","psinstru","dsparam","nu","epsilon","notice_choose_"];
         if (!(inList(child_id,exceptions))){
             val_dict[child_id] = document.getElementById(child_id).value;
         } else if (inList(child_id,["dsinstru","psinstru"])){

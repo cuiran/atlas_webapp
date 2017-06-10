@@ -1,2 +1,2 @@
-{input:"set n=2\nset G=SL(n,R)\nset H=Cartan_class(G,0)\nprint_real_Weyl(G,H)\n",
-output:"Variable n: int\nVariable G: RealForm\nVariable H: CartanClass (overriding previous instance, which had type string (constant))\nreal weyl group is W^C.((A.W_ic) x W^R), where:\nW^C is trivial\nA is trivial\nW_ic is trivial\nW^R is trivial\n"}
+{input:"prints(\"menu_item:unitarity\")\nset n=2\nset G=SL(n,R)\nset dsparam=discrete_series(G,[2])\ndsparam\nis_unitary(dsparam)\n",
+output:"menu_item:unitarity\nVariable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: final parameter(x=0,lambda=[2]/1,nu=[0]/1)\nValue: true"}
