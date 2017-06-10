@@ -156,6 +156,11 @@ function addShow(item){
     })   
 }
 
+// display a notice that reminds people to choose show item
+function displayNotice(){
+    $('#specify').append("<h3 id=\'notice_choose_show\'>Choose an item to show \&rarr;</h3>");
+}
+
 // the change in column specify triggered by dropdown selections
 function changeSpecify(changed_item, topic_item){
     if (changed_item === "group"){
@@ -170,10 +175,14 @@ function changeSpecify(changed_item, topic_item){
     } else if (changed_item === "n"){
         if (topic_item === "rep_thy"){
             addRepCat(changed_item,topic_item);
+        } else if (topic_item === "str_thy"){
+            displayNotice()
         }
     } else if (changed_item === "q"){
         if (topic_item === "rep_thy"){
             addRepCat(changed_item,topic_item);
+        } else if (topic_item === "str_thy"){
+            displayNotice()
         }
     } else if (changed_item === "rep"){
         addRepParam(changed_item,topic_item);
@@ -333,6 +342,7 @@ function addDSParams(output){
         $('#dsparam_div').append(", ");
     }
     $('#dsparam_div').append("<input type=\"float\" id="+num_inputs+" maxlength=\"5\" size=\"4\">");
+    setOnchangeFuncs(num_inputs,"clearElements([\"notice_choose_show\"]),displayNotice()");
 }
 
 // add Principal Series parameter input options
@@ -365,6 +375,7 @@ function addPSParams(output){
     $('#epsilon_div').append(small_dropdown_const("epsilon_"+num_inputs));
     $('#epsilon_'+num_inputs).append($('<option>').attr("value","pos").text("\$+\$"));
     $('#epsilon_'+num_inputs).append($('<option>').attr("value","neg").text("\$-\$"));
+    setOnchangeFuncs("epsilon_"+num_inputs,"clearElements([\"notice_choose_show\"]),displayNotice()");
     $('.selectpicker').selectpicker('refresh');
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'epsilon_div'])
 }
@@ -470,7 +481,7 @@ function get_val_dict(){
     var struc_selected = $.grep(struc, function(e){return e.id===active_topic_id})[0]
     val_dict["topic"] = active_topic_id;
     var spec_divs_onscreen = document.getElementById("specify").children;
-    for (var i=1; i<spec_divs_onscreen.length; i++){
+    for (var i=1; i<spec_divs_onscreen.length-1; i++){
         var div_id = spec_divs_onscreen[i].id;
         var child_id = div_id.slice(0,-4);
         var exceptions = ["dsinstru","psinstru","dsparam","nu","epsilon"];
