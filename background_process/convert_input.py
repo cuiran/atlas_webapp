@@ -10,7 +10,12 @@ def set_group(user_input):
             "set G="+user_input["group"]+"\n")
     return define_grp
 
-
+def get_grp_and_num(user_input):
+    if "n" in list(user_input.keys()):
+        group_and_numbers =( user_input["group"] + ","  + user_input["n"] + ")") 
+    else:
+        group_and_numbers =( user_input["group"] + "," + user_input["p"] +  "," + user_input["q"] + ")")
+    return group_and_numbers
 
 
 def get_atlasinput(user_input):
@@ -96,22 +101,33 @@ def get_atlasinput(user_input):
             # if user want to see information and has selected rep as discrete series
             command = "prints(\"menu_item:information_on_parameter\")\n"
             define_grp = set_group(user_input)
-            if "n" in list(user_input.keys()):
-                group_and_numbers =( user_input["group"] + ","  + user_input["n"] + ")") 
-            else: 
-                group_and_numbers =( user_input["group"] + "," + user_input["p"] +  "," + user_input["q"] + ")")
+            group_and_numbers = get_grp_and_num(user_input)
             print_grp = "prints(\"group:\",G)\n"
             get_nice_x= "set x_K=get_nice_x_from_group_and_integers(" + group_and_numbers + "\n"
             print_x_K="prints(\"x_K=\",x_K)\n"
             print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
-            ds_param_asstring = make_dsparam_string(ds_param_text)
+            ds_param_asstring = make_param_string(ds_param_text)
             set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+ds_param_asstring+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(dsparam))\n"
             lkt="prints(\"LKT:\", highest_weights(LKT(dsparam),KGB(G,x_K))[0])\n"
             lkt_dim="prints(\"LKT_dimension:\", dimension(highest_weights(LKT(dsparam))[0]))\n"
             atlas_input = command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_dsparam + parameter+ inf_char + lkt + lkt_dim
+        if user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:information_on_parameter\")\n"
+            define_grp = set_group(user_input) + '\n'
+            print_grp = "prints(\"group:\",G)\n"
+            group_and_numbers = get_grp_and_num(user_input)
+            get_nice_x = "set x_K=get_nice_x_from_group_and_integers("+group_and_numbers+"\n"
+            print_x_K = "prints(\"x_K=\",x_K)\n"
+            print_rho_K = "prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
+            set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
+            parameter = "prints(\"parameter=\",psparam)\n"
+            inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(psparam))\n"
+            lkt = "prints(\"LKT:\", highest_weights(LKT(psparam),KGB(G,x_K))[0])\n"
+            lkt_dim="prints(\"LKT_dimension:\", dimension(highest_weights(LKT(psparam))[0]))\n"
+            atlas_input =  command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_psparam + parameter+ inf_char + lkt + lkt_dim
     elif user_input['show'] == 'Branch_to_K':
         # if user want to see branch to K
         if user_input['rep'] == 'ds':
@@ -128,7 +144,7 @@ def get_atlasinput(user_input):
             print_x_K="prints(\"x_K=\",x_K)\n"
             print_rho_K="prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
             ds_param_text = user_input['dsparam']
-            ds_param_asstring = make_dsparam_string(ds_param_text)
+            ds_param_asstring = make_param_string(ds_param_text)
             set_dsparam = "set dsparam=discrete_series(KGB(G,x_K),"+ds_param_asstring+")\n"
             parameter = "prints(\"parameter=\", dsparam)\n"
             tag = "prints(\"Value:\")\n"
@@ -141,7 +157,7 @@ def get_atlasinput(user_input):
             command = "prints(\"menu_item:unitarity\")\n"
             define_grp = set_group(user_input)
             ds_param_text = user_input['dsparam']
-            ds_param_asstring = make_dsparam_string(ds_param_text)
+            ds_param_asstring = make_param_string(ds_param_text)
             set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
             print_rep = "dsparam\n";
             is_unitary = "is_unitary(dsparam)\n"
@@ -150,7 +166,7 @@ def get_atlasinput(user_input):
 #            command = "prints(\"menu_item:unitarity\")\n"
 #            define_grp = set_group(user_input)
 #            ds_param_text = user_input['dsparam']
-#            ds_param_asstring = make_dsparam_string(ds_param_text)
+#            ds_param_asstring = make_param_string(ds_param_text)
 #            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
 #            print_rep = "print(\"p=\",dsparam)\n";
 #            is_unitary = "is_unitary(dsparam)\n"
@@ -195,14 +211,28 @@ def str_to_intorfrac(s):
         d = int(l[1])
         return str(n)+'/'+str(d)
 
-def make_dsparam_string(dsparam_text):
+def make_param_string(param_text):
     # the input is an array of strings, for example ['3/2','1/2']
     # the output should be a string that is an array '[3/2,1/2]'
     s = '['
-    for i in range(len(dsparam_text)):
-        s = s+str_to_intorfrac(dsparam_text[i])
+    for i in range(len(param_text)):
+        s = s+str_to_intorfrac(param_text[i])
         s = s+','
     # remove the last comma in string, we don't need that
     s = s[:-1]+']'
     return s
-    
+
+def epsilon_to_lambda(user_input):
+    # convert ['pos','neg'] to the string [0,1]+rho(G)
+    user_input_epsilon = user_input["epsilon"]
+    s = '['
+    for pm in user_input_epsilon:
+        if pm == 'pos':
+            s = s+'0'
+            s = s+','
+        elif pm == 'neg':
+            s = s+'1'
+            s = s+','
+    s = s[:-1]+']'
+    s = s+"+rho(G)"
+    return s
