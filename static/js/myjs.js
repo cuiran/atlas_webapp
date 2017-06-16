@@ -9,7 +9,7 @@ function getGrps(){
 var struc;
 var grps;
 var reps = [
-    {"id":"finite","name":"Finite Dimensional"},
+//    {"id":"finite","name":"Finite Dimensional"},
     {"id":"ds","name":"Discrete Series"},
     {"id":"minimal_split_ps","name":"Minimal Principal Series (split groups)"}
     ];

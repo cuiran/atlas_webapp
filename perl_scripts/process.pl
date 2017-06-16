@@ -411,38 +411,93 @@ sub information_on_parameter{
     $output =~ s/\\n/X/g;
     $output =~ s/\"//g;
     my @data = split "X", $output;
-#    print "size:", scalar(@data);
-#    print join "<P>", @data;
-    if (scalar(@data)==12){
-	($menu_item,$n,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
-    }	elsif(scalar(@data)==13){
-	($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+
+    if ($input =~ /dsparam/){
+	print("This representation is in the discrete series<P>");
+	print "size:", scalar(@data);
+	print join "<P>", @data;
+	if (scalar(@data)==12){
+	    ($menu_item,$n,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+	}	elsif(scalar(@data)==13){
+	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}else{
 	    print("Not a valid discrete series parameter");exit();
 	}
 
-    if ($input =~ /dsparam/){
-	print("This representation is in the discrete series<P>")
+	$parameter=~ s/.*\(//;
+	$parameter=~ s/\).*//;
+	my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+	print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+	print("<strong>x</strong>=",$x,"<BR>");
+	print("<strong>lambda</strong>=",$lambda,"<BR>");
+	print("<strong>nu</strong>=",$nu,"<BR>");
+	$infinitesimal_character =~ s/.*=//g;
+	print("<strong>infinitesimal character</strong>: ", $infinitesimal_character,"<BR>");
+	$x_K =~ s/.*=//;
+	$rho_K =~ s/.*=//;
+	print("<strong>x_K=</strong>", $x_K,"<BR>");
+	print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+	$lkt =~ s/.*\[//;
+	$lkt =~ s/\].*//;
+	print("<strong>Lowest K-type</strong>: [", $lkt,"]<BR>");
+	$lkt_dimension =~ s/.*://g;
+	print("<strong>Dimension of lowest K-type</strong>: ", $lkt_dimension,"<BR>");
+    }
+
+
+    elsif ($input =~ /psparam/){
+	print("This is a principal series representation of a split group.<P>");
+
+	print "size:", scalar(@data);
+	print join "<P>", @data;
+	if (scalar(@data)==12){
+	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+	}
+	elsif(scalar(@data)==17){
+	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
+	}else{
+	    print("Not a valid principal series parameter");exit();
+	}
+
+	$parameter=~ s/.*\(//;
+	$parameter=~ s/\).*//;
+	my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
+	print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
+	print("<strong>x</strong>=",$x,"<BR>");
+	print("<strong>lambda</strong>=",$lambda,"<BR>");
+	print("<strong>nu</strong>=",$nu,"<BR>");
+	$infinitesimal_character =~ s/.*=//g;
+	print("<strong>infinitesimal character</strong>: ", $infinitesimal_character,"<BR>");
+	$x_K =~ s/.*=//;
+	$rho_K =~ s/.*=//;
+	print("<strong>x_K=</strong>", $x_K,"<BR>");
+	print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+#	print("LKTS:", $lkt,"<P>");
+#	print("dimension:", $lkt_dimension,"<P>");
+	$lkt =~ s/.*:\[//;
+	$lkt =~ s/\]$//;
+#	print "\$lkt=",$lkt,"<P>";
+	my @lkts = split '\),\(', $lkt;
+	print("<strong>Lowest K-type(s): </strong>");
+	my @mus;
+	foreach  my $mu  (@lkts){ 
+	    $mu =~ s/.*\[/[/g;
+	    push @mus, $mu;
+	}
+	print(join ", ", @mus);
+	print "<br>";
+	$lkt_dimension =~ s/\]//g;
+	$lkt_dimension =~ s/\[//g;
+	$lkt_dimension =~ s/.*://g;
+	my @dims=split ',', $lkt_dimension;
+	
+	print("<strong>Dimension(s) of lowest K-type(s)</strong>: ");
+
+	print(join ",", @dims);
+
+
     };
 
-    $parameter=~ s/.*\(//;
-    $parameter=~ s/\).*//;
-    my ($x,$lambda,$nu) = $parameter =~ /.*x=([0-9]*).*lambda=(.*),nu=(.*)/;
-    print("<P><strong>p=</strong>parameter(",$x,",",$lambda,",",$nu,")<BR>");
-    print("<strong>x</strong>=",$x,"<BR>");
-    print("<strong>lambda</strong>=",$lambda,"<BR>");
-    print("<strong>nu</strong>=",$nu,"<BR>");
-    $infinitesimal_character =~ s/.*=//g;
-    print("<strong>infinitesimal character</strong>: ", $infinitesimal_character,"<BR>");
-    $x_K =~ s/.*=//;
-    $rho_K =~ s/.*=//;
-    print("<strong>x_K=</strong>", $x_K,"<BR>");
-    print("<strong>rho_K=</strong>", $rho_K,"<BR>");
-    $lkt =~ s/.*\[//;
-    $lkt =~ s/\].*//;
-    print("<strong>Lowest K-type</strong>: [", $lkt,"]<BR>");
-    $lkt_dimension =~ s/.*://g;
-    print("<strong>Dimension of lowest K-type</strong>: ", $lkt_dimension,"<BR>");
 
 
 }
@@ -531,47 +586,54 @@ sub branch_to_K{
     $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
-    print "<strong>Branch of irreducible representation to K</strong><P>";
 #    print("<P>output=",$output,"<P>");
-    if ($output =~ /Undefined/){
-	print("Not a valid discrete series parameter");exit();
-    }
-
-
     $output =~ s/\\n/X/g;
     $output =~ s/\"//g;
-    my ($preamble,$ktypes)=split 'Value:', $output;
-    
-    my @preamble_data = split 'X', $preamble;
-#    print "size:", scalar(@preamble_data);
-#    print "<P>Preamble data:", join "<P>", @preamble_data,"<P>";
-    my ($menu_item, $n,$p,$q, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam);
-    if (scalar(@preamble_data)==9) {
-	($menu_item, $n, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
-    }elsif (scalar(@preamble_data)==10){
-    ($menu_item, $p,$q, $G, $group, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam) = split 'X', $preamble;
-    }else{
-	print "Error parsing output";
-    }
-	
-    my @data = split "X", $ktypes;
-#    print("data:", join "<P>", @data);
-
-    my ($s,$x,$lambda,$dim,$height);
-
-        $x_K =~ s/.*=//;
-    $rho_K =~ s/.*=//;
-    
-    $dsparam =~ s/.*final //;
-
+    my @data = split "X", $output;
+#    print "size:", scalar(@data);
+#    my @data = split "X", $output;
     if ($input =~ /dsparam/){
-	print("This representation is in the discrete series<P>")
-    };
+	print "<strong>Branch of irreducible discrete series representation to K</strong><P>";
+	my ($menu_item,$n,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
 
-    print("<P><strong>p=</strong>$dsparam","<BR>");
+#	$parameter=~ s/.*\(//;
+#	$output =~ s/\\n/X/g;
+#	$output =~ s/\"//g;
+	my ($preamble,$ktypes)=split 'Value:', $output;
+    
+	my @preamble = split 'X', $preamble;
+#	print "size preamble:", scalar(@preamble);
+#	print "<P>Preamble:", join "<P>", @preamble,"<P>";
+#	print "end preamble<P>";
+	my ($menu_item, $n,$p,$q, $G, $group,$group_again, $Variable_x_K, $x_K, $rho_K, $var_dsparam,$dsparam);
 
-    print("<strong>x_K=</strong>", $x_K,"<BR>");
-    print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+	if (scalar(@preamble)==10){
+	    ($menu_item,$n,$G,$group,$group_again,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@preamble;
+	}	elsif(scalar(@preamble)==13){
+	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@preamble;
+	}else{
+	    print("Not a valid discrete series parameter");exit();
+	}
+
+	
+	my @data = split "X", $ktypes;
+#    print("data:", join "<P>", @data);
+	
+	my ($s,$x,$lambda,$dim,$height);
+	
+        $x_K =~ s/.*=//;
+	$rho_K =~ s/.*=//;
+	
+	$dsparam =~ s/.*final //;
+	
+	if ($input =~ /dsparam/){
+	    print("This representation is in the discrete series<P>")
+	};
+	
+	print("<P><strong>p=</strong>$dsparam","<BR>");
+	print("<strong>x_K=</strong>", $x_K,"<BR>");
+	print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+
 
 print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
     print("<TABLE BORDER=1><TR><TD>mult.</TD><TD>lambda</TD><TD>dim</TD><TD>height</TD></TR>");
@@ -583,6 +645,78 @@ print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid bla
 	print "<TR><TD>$s</TD><TD>$lambda</TD><TD>$dim</TD><TD>$height</TD></TR>";
     }
     print("</TABLE>");
+    }
+
+    elsif ($input =~ /psparam/){
+	print "<strong>Branch of principal series representation to K</strong><P>";
+	my ($menu_item,$n,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension);
+	my ($preamble,$branch_irr,$branch_std) = $output =~ /(.*)branch_irr(.*)branch_std(.*)/;
+#	print "preamble: $preamble<P>";
+#	print "branch_irr: $branch_irr<P>";
+#	print "branch_std: $branch_std<P>";
+
+    
+	my @preamble = split 'X', $preamble;
+#	print "size preamble:", scalar(@preamble);
+#	print "<P>Preamble:", join "<P>", @preamble,"<P>";
+#	print "end preamble<P>";
+	my ($menu_item, $n,$p,$q, $G, $group,$group_again, $Variable_x_K, $x_K, $rho_K, $var_psparam,$psparam);
+
+	if (scalar(@preamble)==11){
+	    ($menu_item,$n,$G,$group,$group_again,$Variable_x_K,$x_K,$rho_K,$param,$psparam,$infinitesimal_character)=@preamble;
+	}	elsif(scalar(@preamble)==12){
+	    ($menu_item,$p,$q,$G,$group,$group_again,$Variable_x_K,$x_K,$rho_K,$param,$psparam,$infinitesimal_character)=@preamble;
+	}else{
+	    print("Not a valid principal series parameter");exit();
+	}
+
+	
+	my ($s,$x,$lambda,$dim,$height);
+	
+        $x_K =~ s/.*=//;
+	$rho_K =~ s/.*=//;
+	
+	$psparam =~ s/.*final //;
+	
+	print("<P><strong>p=</strong>$psparam","<BR>");
+	print("<strong>x_K=</strong>", $x_K,"<BR>");
+	print("<strong>rho_K=</strong>", $rho_K,"<BR>");
+	
+	print "<P><strong>K-types of irreducible representation:</strong><P>";
+	my @ktypes = split "X", $branch_irr;
+print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
+    print("<TABLE BORDER=1><TR><TD>mult.</TD><TD>lambda</TD><TD>dim</TD><TD>height</TD></TR>");
+    foreach my $line (@ktypes){
+	next unless ($line =~ /KGB/);
+	my ($s,$x,$lambda,$dim,$height) =
+	    $line =~ / *\((.*)\)\*.*\#([0-9]*),(.*)\) *([0-9]*) *([0-9]*).*/;
+	$s =~ s/\+.*//g;
+	print "<TR><TD>$s</TD><TD>$lambda</TD><TD>$dim</TD><TD>$height</TD></TR>";
+    }
+    print("</TABLE>");
+
+	print "<P><P><strong>K-types of standard representation:</strong><P>";
+	@ktypes = split "X", $branch_std;
+print "<style>table{border:1px solid black;}td{padding:5px; border:1px solid black;}</style>";
+    print("<TABLE BORDER=1><TR><TD>mult.</TD><TD>lambda</TD><TD>dim</TD><TD>height</TD></TR>");
+    foreach my $line (@ktypes){
+	next unless ($line =~ /KGB/);
+	my ($s,$x,$lambda,$dim,$height) =
+	    $line =~ / *\((.*)\)\*.*\#([0-9]*),(.*)\) *([0-9]*) *([0-9]*).*/;
+	$s =~ s/\+.*//g;
+	print "<TR><TD>$s</TD><TD>$lambda</TD><TD>$dim</TD><TD>$height</TD></TR>";
+    }
+    print("</TABLE>");
+    }
+
+
+
+
+
+
+
+
+
     print "<P><P><strong>Key:</strong><BR>
 <UL>
 <LI>x_K: KGB element determining the positive roots of K
@@ -627,7 +761,7 @@ sub unitarity{
     print("<strong>x</strong>=",$x,"<BR>");
     print("<strong>lambda</strong>=",$lambda,"<BR>");
     print("<strong>nu</strong>=",$nu,"<BR>");
-    if ($unitary="true"){
+    if ($unitary=="true"){
 	print "This representation is unitary."}else{
 	print "This representation is <strong>not</strong> unitary."}
 }

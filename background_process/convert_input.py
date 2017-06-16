@@ -125,9 +125,9 @@ def get_atlasinput(user_input):
             set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
             parameter = "prints(\"parameter=\",psparam)\n"
             inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(psparam))\n"
-            lkt = "prints(\"LKT:\", highest_weights(LKT(psparam),KGB(G,x_K))[0])\n"
-            lkt_dim="prints(\"LKT_dimension:\", dimension(highest_weights(LKT(psparam))[0]))\n"
-            atlas_input =  command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_psparam + parameter+ inf_char + lkt + lkt_dim
+            lkts = "prints(\"LKTs:\", for mu in LKTs(psparam) do highest_weights(mu,KGB(G,x_K))[0] od)\n"
+            lkt_dims="prints(\"LKT_dimensions:\", for mu in LKTs(psparam) do dimension(highest_weights(mu)[0]) od)\n"
+            atlas_input =  command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_psparam + parameter+ inf_char + lkts + lkt_dims
     elif user_input['show'] == 'Branch_to_K':
         # if user want to see branch to K
         if user_input['rep'] == 'ds':
@@ -150,6 +150,21 @@ def get_atlasinput(user_input):
             tag = "prints(\"Value:\")\n"
             branch = "print_branch_irr_long(dsparam,KGB(G,x_K),3*height(dsparam))\n";
             atlas_input = command+define_grp+print_grp + get_nice_x + print_x_K + print_rho_K + set_dsparam+parameter+tag+branch
+        if user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:Branch_to_K\")\n"
+            define_grp = set_group(user_input) + '\n'
+            print_grp = "prints(\"group:\",G)\n"
+            group_and_numbers = get_grp_and_num(user_input)
+            get_nice_x = "set x_K=get_nice_x_from_group_and_integers("+group_and_numbers+"\n"
+            print_x_K = "prints(\"x_K=\",x_K)\n"
+            print_rho_K = "prints(\"rho_K=\",rho_K(KGB(G,x_K)))\n"
+            set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
+            parameter = "prints(\"parameter=\",psparam)\n"
+            inf_char = "prints(\"infinitesimal character=\", infinitesimal_character(psparam))\n"
+
+            branch_irr = "prints(\"branch_irr\");print_branch_irr_long(psparam,KGB(G,x_K),3*height(psparam)+20)\n";
+            branch_std = "prints(\"branch_std\");print_branch_std_long(psparam,KGB(G,x_K),3*height(psparam)+20)\n";
+            atlas_input =  command + define_grp + print_grp  +  get_nice_x+ print_x_K + print_rho_K + set_psparam + parameter+ inf_char + branch_irr + branch_std
     elif user_input['show'] == 'Unitarity':
         # if user want to see unitarity
         if user_input['rep'] == 'ds':
