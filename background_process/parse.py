@@ -33,6 +33,10 @@ def parse_output(user_input,atlas_output):
                 parsed_out = trim(atlas_output)
     elif user_input['show']=='Unitarity':
         parsed_out = trim(atlas_output)
+    elif user_input('show')=='character_formula':
+        parsed_out = trim(atlas_output)
+    elif user_input('show')=='composition_series':
+        parsed_out = trim(atlas_output)
     return parsed_out
 
 def trim(atlas_output):

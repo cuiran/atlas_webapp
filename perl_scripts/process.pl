@@ -414,8 +414,8 @@ sub information_on_parameter{
 
     if ($input =~ /dsparam/){
 	print("This representation is in the discrete series<P>");
-	print "size:", scalar(@data);
-	print join "<P>", @data;
+#	print "size:", scalar(@data);
+#	print join "<P>", @data;
 	if (scalar(@data)==12){
 	    ($menu_item,$n,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}	elsif(scalar(@data)==13){
@@ -447,13 +447,12 @@ sub information_on_parameter{
 
     elsif ($input =~ /psparam/){
 	print("This is a principal series representation of a split group.<P>");
-
 	print "size:", scalar(@data);
 	print join "<P>", @data;
-	if (scalar(@data)==12){
+	if (scalar(@data)==13){
 	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}
-	elsif(scalar(@data)==17){
+	elsif(scalar(@data)==14){
 	    ($menu_item,$p,$q,$G,$group,$x,$x_K,$rho_K,$param,$parameter,$infinitesimal_character,$lkt,$lkt_dimension)=@data;
 	}else{
 	    print("Not a valid principal series parameter");exit();
@@ -511,7 +510,8 @@ sub composition_series{
     print "<h4>Atlas Output</h4>";
     $output =~ s/\\n/X/g;
     $output =~ s/\"//g;
-    my ($preamble,$cs)=split 'Value:', $output;
+#    print "output:", $output;
+    my ($preamble,$cf)=split 'compositionSeries:', $output;
 #    print "preamble=", $preamble,"<P>";
 #    print "cs=", $cs;
     my ($menu_item,$n,$G,$junk,$parameter)= split 'X', $preamble;
@@ -524,7 +524,7 @@ sub composition_series{
     print("<strong>lambda</strong>=",$lambda,"<BR>");
     print("<strong>nu</strong>=",$nu,"<BR>");
     
-    my @terms= split 'X', $cs;
+    my @terms= split 'X', $cf;
     print "<strong>Composition Series</strong><P>";
     print "<table border=1><tr><td>mult</td><td>x</td><td>lambda</td><td>nu</td></tr>";
     foreach my $term (@terms){
@@ -542,16 +542,21 @@ sub composition_series{
 
 sub character_formula{
     my $io=shift;
+#    print "SUB CHARACTER FORMULA";
+#    print "IO:", $io;
     my ($input,$output)=split("output:",$io);
     $input =~ s/.*input://;
     $output =~ s/\}$//;
+#    print "INPUT:", $input,"<P>";
+#    print "OUTPUT:", $output,"<P>";
     show_input($input);
     print "<h4>Atlas Output</h4>";
     $output =~ s/\\n/X/g;
     $output =~ s/\"//g;
-    my ($preamble,$cs)=split 'Value:', $output;
+#    print "output: $output<P>";
+    my ($preamble,$cf)=split 'characterFormula:', $output;
 #    print "preamble=", $preamble,"<P>";
-#    print "cs=", $cs;
+#    print "cf=", $cf;
     my ($menu_item,$n,$G,$junk,$parameter)= split 'X', $preamble;
 
     $parameter=~ s/.*\(//;
@@ -562,7 +567,7 @@ sub character_formula{
     print("<strong>lambda</strong>=",$lambda,"<BR>");
     print("<strong>nu</strong>=",$nu,"<BR>");
     
-    my @terms= split 'X', $cs;
+    my @terms= split 'X', $cf;
     print "<strong>Character Formula</strong><P>";
     print "<table border=1><tr><td>mult</td><td>x</td><td>lambda</td><td>nu</td></tr>";
     foreach my $term (@terms){
@@ -736,7 +741,7 @@ sub unitarity{
     $output =~ s/\}$//;
     show_input($input);
     print "<h4>Atlas Output</h4>";
-#    print("<P>output=",$output,"<P>");
+    print("<P>output=",$output,"<P>");
 
 #output="menu_item:unitarity\nVariable n: int\nVariable G: RealForm\nVariable dsparam: Param\nValue: final parameter(x=0,lambda=[2]/1,nu=[0]/1)\nValue: true"
     $output =~ s/\\n/X/g;
@@ -761,9 +766,10 @@ sub unitarity{
     print("<strong>x</strong>=",$x,"<BR>");
     print("<strong>lambda</strong>=",$lambda,"<BR>");
     print("<strong>nu</strong>=",$nu,"<BR>");
-    if ($unitary=="true"){
-	print "This representation is unitary."}else{
-	print "This representation is <strong>not</strong> unitary."}
+    print("u:$unitary");
+    if ($unitary =~ /true/){
+	print "This representation is <strong>unitary</strong>."}else{
+	print "This representation is <strong>not unitary</strong>."}
 }
 
 sub show_input{

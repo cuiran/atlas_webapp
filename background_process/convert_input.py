@@ -177,28 +177,53 @@ def get_atlasinput(user_input):
             print_rep = "dsparam\n";
             is_unitary = "is_unitary(dsparam)\n"
             atlas_input = command+ define_grp+set_dsparam+print_rep+is_unitary
-#        elif user_input['rep'] == 'minimal_split_ps':
-#            command = "prints(\"menu_item:unitarity\")\n"
-#            define_grp = set_group(user_input)
-#            ds_param_text = user_input['dsparam']
-#            ds_param_asstring = make_param_string(ds_param_text)
-#            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
-#            print_rep = "print(\"p=\",dsparam)\n";
-#            is_unitary = "is_unitary(dsparam)\n"
-#            atlas_input =command+ define_grp+set_dsparam+is_unitary
-#    elif user_input['show'] == 'character_formula':
-#        if user_input['rep'] == 'ds':
-#            command = "prints(\"menu_item:character_formula\")\n"
-#            define_grp = set_group(user_input)
-#            define_rep = "set p=trivial(G)\n"
-#            print_rep = "print(\"p=\",p)\n";
-#            print_composition_series="print_character_formula(p)\n"
-#            atlas_input = command+define_grp+define_rep+print_rep+print_composition_series
-#        elif user_input['rep'] == 'minimal_split_ps':
-#            command = "prints(\"menu_item:character_formula\")\n"
-#            define_grp = set_group(user_input)
-#            define_rep = "set p=trivial(G)\n"
-#            atlas_input = command+define_grp+define_rep
+        elif user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:unitarity\")\n"
+            define_grp = set_group(user_input) + '\n'
+            set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
+            parameter = "prints(\"parameter=\",psparam)\n"
+            print_rep = "psparam\n";
+            is_unitary = "is_unitary(psparam)\n"
+            atlas_input = command+ define_grp+set_psparam+print_rep+is_unitary
+    elif user_input['show'] == 'character_formula':
+        if user_input['rep'] == 'ds':
+            command = "prints(\"menu_item:character_formula\")\n"
+            define_grp = set_group(user_input)
+            ds_param_text = user_input['dsparam']
+            ds_param_asstring = make_param_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
+            print_rep = "dsparam\n";
+            print_character_formula="prints(\"characterFormula:\");print_character_formula(dsparam)\n"
+            atlas_input = command+define_grp+set_dsparam+print_rep+print_character_formula
+        elif user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:character_formula\")\n"
+            define_grp = set_group(user_input)
+            set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
+            parameter = "prints(\"parameter=\",psparam)\n"
+            print_rep = "psparam\n";
+            print_character_formula="prints(\"characterFormula:\");print_character_formula(psparam)\n"
+            atlas_input = command+define_grp+set_psparam+print_rep+print_character_formula
+
+
+    elif user_input['show'] == 'composition_series':
+        if user_input['rep'] == 'ds':
+            command = "prints(\"menu_item:composition_series\")\n"
+            define_grp = set_group(user_input)
+            ds_param_text = user_input['dsparam']
+            ds_param_asstring = make_param_string(ds_param_text)
+            set_dsparam = "set dsparam=discrete_series(G,"+ds_param_asstring+")\n"
+            print_rep = "dsparam\n";
+            print_composition_series="prints(\"compositionSeries:\");print_composition_series(dsparam)\n"
+            atlas_input = command+define_grp+set_dsparam+print_rep+print_composition_series
+        elif user_input['rep'] == 'minimal_split_ps':
+            command = "prints(\"menu_item:composition_series\")\n"
+            define_grp = set_group(user_input)
+            set_psparam = "set psparam=minimal_principal_series(G,"+epsilon_to_lambda(user_input)+","+make_param_string(user_input["nu"])+")"+"\n"
+            parameter = "prints(\"parameter=\",psparam)\n"
+            print_rep = "psparam\n";
+            print_composition_series="prints(\"compositionSeries:\");print_composition_series(psparam)\n"
+            atlas_input = command+define_grp+set_psparam+print_rep+print_composition_series
+
 #    elif user_input['show'] == 'composition_series':
 #        if user_input['rep'] == 'ds':
 #            command = "prints(\"menu_item:composition_series\")\n"
