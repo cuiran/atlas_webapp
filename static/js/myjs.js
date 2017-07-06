@@ -95,7 +95,7 @@ function addSpecify(item){
         const dropdown = dropdown_const(first_spec);
         $('#specify').append(div);
         $('#'+first_spec+'_div').append(dropdown);
-        document.getElementById("group").setAttribute("onchange","changeSpecify(\'group\',\'"+item.id+"\')");
+        document.getElementById("group").setAttribute("onchange","changeSpecify(\'group\',\'"+item.id+"\'),clearPrevious([\'atlas_input_output\'])");
         populateGroupDropdown();
     }
     $('.selectpicker').selectpicker('refresh');
@@ -173,18 +173,21 @@ function changeSpecify(changed_item, topic_item){
             }
         })
     } else if (changed_item === "n"){
+        deactivateActiveShow();
         if (topic_item === "rep_thy"){
             addRepCat(changed_item,topic_item);
         } else if (topic_item === "str_thy"){
             displayNotice()
         }
     } else if (changed_item === "q"){
+        deactivateActiveShow();
         if (topic_item === "rep_thy"){
             addRepCat(changed_item,topic_item);
         } else if (topic_item === "str_thy"){
             displayNotice()
         }
     } else if (changed_item === "rep"){
+        deactivateActiveShow();
         addRepParam(changed_item,topic_item);
     }
 }
@@ -203,7 +206,7 @@ function addGrpParam(param_list,topic_item){
                 $('#n').append($('<option>').attr("value",i).text("\$n="+i+"\$"));
             }
         }
-        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","deactivateActiveShow","changeSpecify(\'n\',\'"+topic_item+"\')"]);
+        document.getElementById('n').setAttribute("onchange",["clearElements(getIdsBelow(\'n_div\',\'specify\'))","deactivateActiveShow","changeSpecify(\'n\',\'"+topic_item+"\')","clearPrevious([\'atlas_input_output\'])"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,'n']);
     } else if (param_list.length === 2){
         addDropdown("p","specify");
@@ -224,7 +227,7 @@ function addQ(topic_item){
     for (var i=1; i<9-p_val; i++){
         $('#q').append($('<option>').attr("value",i).text("\$q="+i+"\$"));
     }
-    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'q\',\'"+topic_item+"\')"]);
+    document.getElementById('q').setAttribute("onchange",["clearElements(getIdsBelow(\'q_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'q\',\'"+topic_item+"\')","clearPrevious([\'atlas_input_output\'])"]);
     MathJax.Hub.Queue(["Typeset",MathJax.Hub,"q"]);
     $('.selectpicker').selectpicker('refresh');
 }
@@ -237,7 +240,7 @@ function addRepCat(changed_item,topic_item){
     $.each(reps,function(i,item){
         $('#rep').append($('<option>').attr("value",item.id).text(item.name));
     })
-    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'rep\',\'"+topic_item+"\')"]);
+    document.getElementById('rep').setAttribute("onchange",["clearElements(getIdsBelow(\'rep_div\',\'specify\'))","deactivateActiveShow()","changeSpecify(\'rep\',\'"+topic_item+"\')","clearPrevious([\'atlas_input_output\'])"]);
     $('.selectpicker').selectpicker('refresh');
 }
 
@@ -434,10 +437,18 @@ function showClickReaction(item_clicked,topic_item){
     return function(){
         clearPrevious(['further','atlas_input_output']);
         highlightShowButton(item_clicked,topic_item);
+        if (!item_clicked.further_require){
+            displayCalculating();
+        }
         processShowClick(item_clicked,topic_item);
         var val_dict = get_val_dict();
         ajax_post(val_dict);
     }
+}
+
+// display message "Calculating..." in the atlas_input_output section
+function displayCalculating(){
+    $('#atlas_input_output').append("<h3 id=\'notice_calculating\'>Calculating...</h3>");
 }
 
 // add elements to further specs if needed, if not then call server for results
@@ -631,7 +642,7 @@ function addCartanOptions(output){
         for (var i=0;i<Cartan_list.length/2;i++){
             $('#Cartan').append($("<option>").attr({"value":i,"title":"Cartan "+i}).text(Cartan_list[2*i+1]))
         }
-        setOnchangeFuncs("Cartan","clearPrevious([\'atlas_input_output\']),furtherClickReaction(\'Cartan\')")
+        setOnchangeFuncs("Cartan","clearPrevious([\'atlas_input_output\']),displayCalculating(),furtherClickReaction(\'Cartan\')")
         $('.selectpicker').selectpicker('refresh');
     }
 }
