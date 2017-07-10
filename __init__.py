@@ -26,6 +26,10 @@ perl_scripts_dir = "/var/www/web_interface/atlas_app/perl_scripts/"
 def main_page():
 	return render_template('main.html')
 
+@app.route("/bug_discuss", methods=['GET'])
+def report_bug():
+    return render_template('bug_discuss.html')
+
 @app.route("/runatlas", methods=['GET','POST'])
 def atlas_process():
     user_input = json.loads(request.data)
